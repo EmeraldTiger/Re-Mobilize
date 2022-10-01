@@ -1058,3 +1058,14 @@ void(entity client, float density, vector color) csf_set;
 .string a_red_mdl;
 
 .entity infight_activator;
+
+// Re:Mobilize fields
+
+// trampoline-related
+.float cushion;
+
+.float cushionsounds;
+.string cushionnoise;
+
+.float elasticity;
+.float maxbounce;

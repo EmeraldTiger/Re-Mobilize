@@ -767,6 +767,9 @@ Called every frame before physics are run
 void() PlayerPreThink =
 {
 	local float do_ladder_physics;
+	
+	// Re:Mobilize: Need to reset cushion state, otherwise cushion sounds will continue on normal surfaces
+	self.cushion = 0;
 
 	if (intermission_running)
 	{
@@ -1040,6 +1043,44 @@ void() PlayerPostThink =
 // do weapon stuff
 
 	W_WeaponFrame ();
+	
+// Re:Mobilize: Cushion sounds for trampolines (landing on them without pressing jump)
+
+if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0)) 
+{
+		if (self.cushion) 
+		{
+			if (self.cushionnoise!="") {
+				sound (self, CHAN_AUTO, self.cushionnoise, 1, ATTN_NORM);
+			}
+			else if (self.cushionsounds==1)
+			{
+				sound (self, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
+			}
+			else if (self.cushionsounds==2)
+			{
+				sound (self, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
+			}
+			else if (self.cushionsounds==3)
+			{
+				sound (self, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
+			}
+			else if (self.cushionsounds==4)
+			{
+				sound (self, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
+			}
+			else if (self.cushionsounds==5)
+			{
+				sound (self, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
+			}
+			else
+			{
+				sound (self, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
+			}
+			
+		self.jump_flag = 0;
+		}
+}
 
 // check to see if player landed and play landing sound
 	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) && (self.health > 0))
@@ -1053,8 +1094,11 @@ void() PlayerPostThink =
 			self.deathtype = "";
 			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
 		}
-		else
-			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+		else {
+			if (!self.cushion) {
+				sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+			}
+		}
 
 		self.jump_flag = 0;
 	}

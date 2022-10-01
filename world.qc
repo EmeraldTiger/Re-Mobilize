@@ -476,6 +476,15 @@ void() worldspawn =
 	precache_sound ("items/r_item1.wav");
 	precache_sound ("dump/armsh1.wav"); // DropShard -- dumptruck_ds
 	precache_model ("progs/armshr.mdl");
+	
+// Re:Mobilize precaches
+
+	precache_sound ("misc/cushion1.wav");
+	precache_sound ("misc/cushion2.wav");
+	precache_sound ("misc/cushion3.wav");
+	precache_sound ("misc/cushion4.wav");
+	precache_sound ("misc/cushion5.wav");
+	precache_sound ("misc/cushion6.wav");
 
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
