@@ -1069,3 +1069,17 @@ void(entity client, float density, vector color) csf_set;
 
 .float elasticity;
 .float maxbounce;
+
+// wiremesh-related
+
+.float onWiremesh;
+
+.float meshspeed;
+
+.float meshsounds;
+.string meshnoise;
+.string meshnoise2;
+.string meshnoise3;
+.string meshnoise4;
+
+.float ladder_step_finished;

@@ -485,6 +485,28 @@ void() worldspawn =
 	precache_sound ("misc/cushion4.wav");
 	precache_sound ("misc/cushion5.wav");
 	precache_sound ("misc/cushion6.wav");
+	
+	precache_sound ("misc/mesh1.wav");
+	precache_sound ("misc/mesh2.wav");
+	precache_sound ("misc/mesh3.wav");
+	precache_sound ("misc/mesh4.wav");
+	
+	precache_sound ("misc/vines1.wav");
+	precache_sound ("misc/vines2.wav");
+	precache_sound ("misc/vines3.wav");
+	precache_sound ("misc/vines4.wav");
+	
+	precache_sound ("misc/sticky1.wav");
+	precache_sound ("misc/sticky2.wav");
+	precache_sound ("misc/sticky3.wav");
+	precache_sound ("misc/sticky4.wav");
+	
+	precache_sound ("misc/retro1.wav");
+	
+	precache_sound ("misc/wood1.wav");
+	precache_sound ("misc/wood2.wav");
+	precache_sound ("misc/wood3.wav");
+	precache_sound ("misc/wood4.wav");
 
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.

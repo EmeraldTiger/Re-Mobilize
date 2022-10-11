@@ -621,6 +621,26 @@ void() PlayerJump =
 	self.velocity_z = self.velocity_z + 270;
 };
 
+/*
+===========
+PlayerMesh
+============
+*/
+void() PlayerMesh =
+{
+   local vector start, end;
+
+   makevectors (self.v_angle);
+   
+   self.velocity = v_forward * self.meshspeed;
+   
+   makevectors (self.angles);
+	start = self.origin;
+	normalize(v_forward);
+	end = start + v_forward*100;
+	traceline (start, end, TRUE, self);
+}
+
 
 /*
 ===========
@@ -767,6 +787,9 @@ Called every frame before physics are run
 void() PlayerPreThink =
 {
 	local float do_ladder_physics;
+	local float do_wiremesh_physics;
+	
+	local float playedsound;
 	
 	// Re:Mobilize: Need to reset cushion state, otherwise cushion sounds will continue on normal surfaces
 	self.cushion = 0;
@@ -792,6 +815,12 @@ void() PlayerPreThink =
 		do_ladder_physics = TRUE;
 		self.gravity = 0.0000001;	// not zero, because zero means "default"
 		self.onladder = 0;
+	}
+	else if (self.onWiremesh) // Re:Mobilize
+	{
+		do_wiremesh_physics = TRUE;
+		self.gravity = 0.0000001;	// not zero, because zero means "default"
+		self.onWiremesh = 0;
 	}
 	else
 	{
@@ -839,6 +868,128 @@ if (do_ladder_physics)
 			self.ladder_step_finished = time + 0.3;
 		}
 		*/
+	}
+	else
+	{
+		self.flags = self.flags | FL_JUMPRELEASED;
+		self.velocity = 0.9 * self.velocity;
+		self.velocity_z = 0;
+	}
+}
+else if (do_wiremesh_physics)
+{
+
+	if (self.button2)
+	{
+		PlayerMesh ();
+		
+		playedsound = 0;
+		
+		if (self.meshnoise != "" || self.meshnoise2 != "" || self.meshnoise3 != "" || self.meshnoise4 != "") {
+			if (time > self.ladder_step_finished) {
+				if (random() > 0.5) {
+					if (random() > 0.5 && self.meshnoise != "") {
+						sound (self, CHAN_AUTO, self.meshnoise, 1, ATTN_NORM);
+						playedsound = 1;
+					}
+					else if (self.meshnoise2 != "") {
+						sound (self, CHAN_AUTO, self.meshnoise2, 1, ATTN_NORM);
+						playedsound = 1;
+					}
+				}
+				else {
+					if (random() > 0.5 && self.meshnoise3 != "") {
+						sound (self, CHAN_AUTO, self.meshnoise3, 1, ATTN_NORM);
+						playedsound = 1;
+					}
+					else if (self.meshnoise4 != "") {
+						sound (self, CHAN_AUTO, self.meshnoise4, 1, ATTN_NORM);
+						playedsound = 1;
+					}
+			}
+			if (playedsound) {
+				self.ladder_step_finished = time + 0.5;
+			}
+			}
+		}
+		else if (self.meshsounds==1) {
+			
+			if (time > self.ladder_step_finished) {
+				if (random() > 0.5)
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/vines1.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/vines2.wav", 1, ATTN_NORM);
+				else
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/vines3.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/vines4.wav", 1, ATTN_NORM);
+				self.ladder_step_finished = time + 0.5;
+			}
+			
+		}
+		else if (self.meshsounds==2) {
+			
+			if (time > self.ladder_step_finished) {
+				if (random() > 0.5)
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/sticky1.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/sticky2.wav", 1, ATTN_NORM);
+				else
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/sticky3.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/sticky4.wav", 1, ATTN_NORM);
+				self.ladder_step_finished = time + 0.5;
+			}
+			
+		}
+		else if (self.meshsounds==3) {
+			
+			if (time > self.ladder_step_finished) {
+				sound (self, CHAN_AUTO, "misc/retro1.wav", 1, ATTN_NORM);
+				self.ladder_step_finished = time + 0.3;
+			}
+			
+		}
+		else if (self.meshsounds==4) {
+			
+			if (time > self.ladder_step_finished) {
+				if (random() > 0.5)
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/wood1.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/wood2.wav", 1, ATTN_NORM);
+				else
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/wood3.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/wood4.wav", 1, ATTN_NORM);
+				self.ladder_step_finished = time + 0.5;
+			}
+			
+		}
+		else {
+			
+			if (time > self.ladder_step_finished) {
+				if (random() > 0.5)
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/mesh1.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/mesh2.wav", 1, ATTN_NORM);
+				else
+					if (random() > 0.5)
+						sound (self, CHAN_AUTO, "misc/mesh3.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "misc/mesh4.wav", 1, ATTN_NORM);
+				self.ladder_step_finished = time + 0.5;
+			}
+			
+		}
+			
+		
 	}
 	else
 	{

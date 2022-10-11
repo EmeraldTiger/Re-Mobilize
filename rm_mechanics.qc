@@ -9,6 +9,12 @@ Invisible trampoline entity. Reflects the player's velocity when touched.
 
 Keys:
 
+"elasticity" How much velocity is boosted after a bounce (ignoring gravity); default of 1 is perfectly elastic, values less than 1 will result in lower bounces, and values higher than 1 will provide 
+a higher boost that is not physically possible. Small changes in elasticity greatly affect velocity; values between 0.9 and 1.1 are recommended, and the default of 1 should be used in almost all cases
+
+"maxbounce" The maximum vertical velocity that a player can achieve using the trampoline. Use of this is highly recommended if elasticity > 1, as otherwise the player will continue to gain upwards 
+speed indefinitely. Default of 0 means no limit.
+
 */
 
 void() trampoline_touch =
@@ -26,6 +32,7 @@ void() trampoline_touch =
 	
 	vector up = '0 0 1';
 	
+	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion=1;
 	
 	other.cushionnoise = self.noise2;
@@ -92,4 +99,89 @@ void() trigger_trampoline =
 		self.sounds = 0;
 	if (!self.maxbounce)
 		self.maxbounce = 0;
+};
+
+/*
+===============================================================================
+trigger_wiremesh
+===============================================================================
+*/
+
+/*QUAKED trigger_wiremesh (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
+invisible wiremesh entity. Very similar functionally to a ladder, but can be climbed "sideways" and "upside down" as if hanging from the ceiling, making it more versatile.
+
+Keys:
+
+"speed" the speed at which the player can travel across the mesh
+*/
+
+void() wiremesh_touch =
+{
+	// from Copper -- dumptruck_ds
+	if (!CheckValidTouch()) return;
+	
+	other.onWiremesh = 1;
+	other.meshspeed = self.speed;
+	other.meshsounds = self.sounds;
+	
+	if (self.noise != "") {
+		other.meshnoise = self.noise;
+	}
+	else {
+		other.meshnoise = "";
+	}
+	
+	if (self.noise2 != "") {
+		other.meshnoise2 = self.noise2;
+	}
+	else {
+		other.meshnoise2 = "";
+	}
+	
+	if (self.noise3 != "") {
+		other.meshnoise3 = self.noise3;
+	}
+	else {
+		other.meshnoise3 = "";
+	}
+	
+	if (self.noise4 != "") {
+		other.meshnoise4 = self.noise4;
+	}
+	else {
+		other.meshnoise4 = "";
+	}
+	
+	
+	
+}
+
+void() trigger_wiremesh =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	InitTrigger ();
+	
+	if (self.noise != "") {
+		precache_sound(self.noise);
+	}
+	
+	if (self.noise2 != "") {
+		precache_sound(self.noise2);
+	}
+	
+	if (self.noise3 != "") {
+		precache_sound(self.noise3);
+	}
+	
+	if (self.noise4 != "") {
+		precache_sound(self.noise4);
+	}
+	
+	self.touch = wiremesh_touch;
+	if (!self.speed)
+		self.speed = 300;
+	if (!self.sounds)
+		self.sounds = 0;
 };
