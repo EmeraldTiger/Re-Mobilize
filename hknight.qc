@@ -332,7 +332,7 @@ void() HellKnightLightning =
 		}
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
+	WriteByte (MSG_BROADCAST, TE_LIGHTNING2); // Re:Mobilize: TE beam models were re-arranged
 	WriteEntity (MSG_BROADCAST, self);
 	WriteCoord (MSG_BROADCAST, org_x);
 	WriteCoord (MSG_BROADCAST, org_y);
