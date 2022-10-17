@@ -463,7 +463,7 @@ void () func_breakable = {
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setmodel (self, self.model);
-	self.mdl_debris = "progs/debris.mdl";
+	if(self.mdl_debris == "") self.mdl_debris = "progs/debris.mdl";
 	precache_model (self.mdl_debris);
 	precache_sound ("blob/hit1.wav");
 

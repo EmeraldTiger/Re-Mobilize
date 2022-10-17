@@ -228,7 +228,7 @@ void fall_break_fields ()
 {
 	break_template_setup();
 
-	self.mdl_debris = "progs/debris.mdl";
+	if(self.mdl_debris == "") self.mdl_debris = "progs/debris.mdl";
 	precache_model (self.mdl_debris);
 
 	if (self.noise1 != "") precache_sound(self.noise1);
