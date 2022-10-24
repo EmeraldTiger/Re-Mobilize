@@ -1295,7 +1295,13 @@ if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0))
 		else if (self.jump_flag < -650)
 		{
 			self.deathtype = "falling";
-			T_Damage (self, world, world, 5);
+			// Can't die from fall damage anymore
+			if (self.health <= 5) {
+				T_Damage (self, world, world, self.health - 1);
+			}
+			else {
+				T_Damage (self, world, world, 5);
+			}
 			self.deathtype = "";
 			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
 		}
