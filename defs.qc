@@ -366,6 +366,7 @@ float	TE_KNIGHTSPIKE	= 8;
 float	TE_LIGHTNING3	= 9;
 float	TE_LAVASPLASH	= 10;
 float	TE_TELEPORT		= 11;
+float	TE_BEAM		= 13;
 
 // sound channels
 // channel 0 never willingly overrides
@@ -1083,3 +1084,27 @@ void(entity client, float density, vector color) csf_set;
 .string meshnoise4;
 
 .float ladder_step_finished;
+
+// lighthook-related
+
+.float hookable;
+.string noise5;
+.float disable_event;
+.float locked_on;
+.float hook_out;
+.float hookstyle;
+.float hooksounds;
+.float pullspeed;
+.vector hookpoint;
+.float launchtime;
+.float hook_finished;
+
+.string hooknoise1;
+.string hooknoise2;
+.string hooknoise3;
+.string hooknoise4;
+.string hooknoise5;
+
+.float anchored;
+.entity nexthook;
+.float prepared;

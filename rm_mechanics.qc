@@ -185,3 +185,121 @@ void() trigger_wiremesh =
 	if (!self.sounds)
 		self.sounds = 0;
 };
+
+/*
+===============================================================================
+func_hook
+===============================================================================
+*/
+
+/*QUAKED func_hook (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
+A lightpanel surface that the player can latch onto via the lighthook. Hooking is instantaneous, but pull speed is still finite.
+
+Keys:
+
+"speed" Speed at which the lighthook pulls the player (not the hook itself, which is infinitely fast); default 500.
+
+"targetname" By default, lightpanels are enabled and ready-to-use on map startup. If a targetname is specified, the lightpanel will be disabled on map start, and must be activated by an external trigger.
+
+"style" Determines the color of the lighthook beam. Default is 0.
+
+0. Yellow (default)
+1. Blue
+2. Orange
+
+*/
+
+void() func_hook_use = {
+	// change to alternate textures
+	self.frame = 1 - self.frame;
+	if (!self.hookable) {
+		self.hookable = 1;
+		if (self.noise4 != "")
+		{
+			sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
+		}
+		else {
+			sound (self, CHAN_ITEM, "misc/laser_on.wav", 1, ATTN_NORM);
+		}
+		activator.disable_event = 0;
+		
+	}
+	else {
+		self.hookable = 0;
+		if (self.noise5 != "")
+		{
+			sound (self, CHAN_ITEM, self.noise5, 1, ATTN_NORM);
+		}
+		else {
+			sound (self, CHAN_ITEM, "misc/laseroff.wav", 1, ATTN_NORM);
+		}
+		activator.disable_event = 1;
+	}
+};
+
+void() func_hook =
+{
+	
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+		
+	self.movetype = MOVETYPE_PUSH;
+	self.solid = SOLID_BSP;
+	if (self.targetname) {
+		self.hookable = 0;
+		self.frame = 0;
+	}
+	else {
+		self.hookable = 1;
+		self.frame = 1;
+	}
+	
+	// medieval sounds
+	if (self.sounds == 1) 
+	{
+		precache_sound("grapple/mhookactive.wav");
+		precache_sound("grapple/mhookattach.wav");
+		precache_sound("grapple/mhookdetach.wav");
+	}
+	
+	// enable noise
+	if (self.noise4 != "") {
+		precache_sound(self.noise4);
+	}
+		
+	// disable noise
+	if (self.noise5 != "") {
+		precache_sound(self.noise5);
+	}
+	
+	precache_sound ("misc/laser_on.wav");
+	precache_sound ("misc/laseroff.wav");
+	self.use = func_hook_use;
+	
+	if (!self.speed) {
+		self.speed = 500;
+	}
+	
+	if (!self.style) {
+		self.style = 0;
+	}
+	
+	// attach noise
+	if (self.noise != "") {
+		precache_sound(self.noise);
+	}
+	
+	// detach noise
+	if (self.noise2 != "") {
+		precache_sound(self.noise2);
+	}
+	
+	// active noise
+	if (self.noise3 != "") {
+		precache_sound(self.noise3);
+	}
+		
+	setmodel (self, self.model);
+	self.classname = "func_hook";
+	
+};

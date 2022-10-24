@@ -776,6 +776,53 @@ void() CheckWaterJump =
 	}
 };
 
+void() CheckGrapple =
+{
+	
+	local vector player_offset;
+	player_offset = self.origin + self.view_ofs;
+	
+	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
+	
+	local	entity new;
+	local	float dist;
+	local	vector panel_origin;
+	local	vector player_aim;
+
+	if ((trace_ent.classname=="func_hook") && trace_ent.hookable && !trace_ent.locked_on) {
+		new = spawn();
+		new.origin_x = trace_endpos[0];
+		new.origin_y = trace_endpos[1];
+		new.origin_z = trace_endpos[2];
+		panel_origin = new.origin;
+		dist = vlen(trace_endpos - self.origin);
+		new.angles = vectoangles(trace_endpos - self.origin);
+		
+		player_aim = player_offset + (v_forward * 200);
+		new.origin = player_aim;
+		
+		new.angles[2] = (time * 100) % 360;
+		new.alpha = (dist / 300) - (0.5);
+		if (trace_ent.mdl!="") {
+			setmodel (new, trace_ent.mdl);
+		}
+		else {
+			setmodel (new, "progs/tracer1.mdl");
+		}
+		setsize (new, '0 0 0', '0 0 0');
+		new.think = SUB_Remove;
+		new.ltime = time;
+		new.nextthink = time + 0.02;
+	}
+	
+	
+	if (self.impulse==24 && !self.hook_out) {
+		W_FireGrapple();
+	}
+
+
+}
+
 
 /*
 ================
@@ -1020,6 +1067,13 @@ else
 	{
 		self.flags = self.flags | FL_FLY;
 	}
+	
+	// Re:Mobilize: Lighthook
+	
+	CheckGrapple();
+	
+	if (self.hook_out)
+		GrappleService();
 };
 
 /*

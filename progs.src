@@ -70,3 +70,4 @@ mobot.qc // Using "bot" creation code for func_monster_spawner
 
 // Re:Mobilize
 rm_mechanics.qc // Functions for Re:Mobilize mechanics
+lighthook.qc // Copied from Rogue's doegrapple and adapted for the lighthook
