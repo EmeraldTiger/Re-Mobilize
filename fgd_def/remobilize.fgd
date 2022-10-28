@@ -20,6 +20,8 @@
 // BUT NOT IN THE ENTITY TAB
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Modified (again) by EmeraldTiger for Re:Mobilize
+
 //
 // worldspawn
 //
@@ -1606,6 +1608,82 @@ When player is touching this entity, she can climb by pushing jump."
 	angle(integer) : "the direction player must be facing to climb ladder"
 ]
 
+@SolidClass base(Appearflags) = trigger_trampoline : "Invisible trampoline entity.
+
+Player will bounce off of this like a trampoline, reflecting velocity."
+[
+	elasticity(string) : "How much velocity is boosted after a bounce (ignoring gravity); default of 1 is perfectly elastic, values less than 1 will result in lower bounces, and values higher than 1 will provide a higher boost that is not physically possible. Small changes in elasticity greatly effect velocity; values between 0.9 and 1.1 are recommended, and the default of 1 should be used in almost all cases. If greater than 1, you are strongly urged to set maxbounce as well." : "1"
+	
+	maxbounce(string) : "The maximum vertical velocity that a player can achieve using the trampoline. Use of this is highly recommended if elasticity > 1, as otherwise the player will continue to gain upwards speed indefinitely. Default means no limit." : "0"
+	
+	sounds(choices) : "Sound" : 0 =
+	[
+		0: "Default (Metal)"
+		1: "Cloth/Tapestry"
+		2: "Cartoon"
+		3: "Retro"
+		4: "Wood"
+		5: "Flesh"
+	]
+	
+	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
+	noise2(string) : "Sound file for the 'landing (no bounce)' sound (if set, overrides 'sounds')"
+]
+
+@SolidClass base(Appearflags) = trigger_wiremesh : "Invisible wiremesh entity.
+
+Player can move freely inside of this entity's volume, on walls and ceilings."
+[
+	speed(string) : "Speed at which the player travels along the wiremesh; default 300." : "300"
+
+	sounds(choices) : "Sound" : 0 =
+	[
+		0: "Default (Metal)"
+		1: "Vines/Plants"
+		2: "Sticky Substance"
+		3: "Retro"
+		4: "Wood"
+	]
+	
+	noise(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise2, noise3, and noise4."
+	
+	noise2(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise3, and noise4."
+	
+	noise3(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise4."
+	
+	noise4(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise3."
+]
+
+@SolidClass base(Appearflags, Targetname) = func_hook : "A lighthook panel; a player that is looking directly at the surface of this can latch onto it with the lighthook (default RMB)"
+[
+	speed(string) : "Speed at which the lighthook pulls the player (not the hook itself, which is infinitely fast); default 500." : "500"
+	
+	style(choices) : "Color of the lighthook beam" : 0 =
+	[
+		0: "Yellow (default)"
+		1: "Blue"
+		2: "Orange"
+	]
+	
+	sounds(choices) : "Preset sounds for lighthooks" : 0 =
+	[
+		0: "Electric (default)"
+		1: "Magical"
+	]
+	
+	noise(string) : "Sound file for the 'attach' sound."
+	
+	noise2(string) : "Sound file for the 'active' sound."
+	
+	noise3(string) : "Sound file for the 'detach' sound."
+	
+	noise4(string) : "Sound file for the 'enable' sound."
+	
+	noise5(string) : "Sound file for the 'disable' sound."
+	
+	mdl(string) : "Model file for the tracer."
+]
+
 @SolidClass base(Appearflags, Targetname) = trigger_monsterface : "Running monsters that do not see their target and touch this will face in the direction of the trigger's angle instead of the unseen target. Use this trigger to make monsters leave their sniping spot and execute complex maneuvers."
 [
 	angle(integer) : "Turn, face and move in this direction"
@@ -2835,6 +2913,7 @@ speed(integer) : "use with cnt 1 only, speed as to how fast something falls per 
 lip(integer) : "use with cnt 0 and 2, maximum fall speed that can be achieved, caps 'speed' variable." : -800
 noise(string) : "the sound to make when touched / activated" : : "the sound to make when touched / activated"
 noise2(string) : "the sound to make before it's removed" :: "the sound to make before it's removed"
+mdl_debris(string) : "Path to custom debris model"
 wait(integer) : "Wait this long before falling"
 pain_finished(integer) : "fade out speed, default 0.01 higher numbers fade out faster, -1 stays forever"
 avelocity(string) : "spin when activated using X, Y, Z vector coordinates" : : "spin when activated using X, Y, Z vector coordinates. cnt 2 ignores avelocity Use an origin brush for proper spin!
@@ -2864,6 +2943,7 @@ Use spawnflag 2 for an explosion, dmg is amount of damage inflicted" [
 	        4 : "Use custom mdls or bsp models" : 0 : "Uses models specified in break_template1, 2, etc"
 	    ]
 	    noise1(string) : "Path to custom break sound"
+		mdl_debris(string) : "Path to custom debris model"
 			style(choices) : "Built-in debris style" : 0 =
 				[
 				0 : "Green Metal (default)"
