@@ -44,6 +44,7 @@ void() SetChangeParms =
 	parm7 = self.ammo_cells;
 	parm8 = self.weapon;
 	parm9 = self.armortype * 100;
+	parm10 = self.visitflag;
 };
 
 void() SetNewParms =
@@ -92,6 +93,43 @@ void() DecodeLevelParms =
 	self.ammo_cells = parm7;
 	self.weapon = parm8;
 	self.armortype = parm9 * 0.01;
+	self.visitflag = parm10;
+	
+	//Inky 20221029 Handling visited maps
+	if (world.model == "maps/start.bsp")
+	{
+		//Identify all the trigger_changelevel entities and give them a unique visitflag id.
+		float num, fv;
+		entity portal,marker;
+		
+		entity oself = self;
+		
+		//Start the loop
+		num = 1;
+		portal = find (world, classname, "trigger_changelevel");
+		
+		while (portal != world && num <= 24) //24 is the maximum number of flag values a float can hold
+		{
+			fv = flag_value(num);
+			if (parm10 & fv)
+			{
+				//The destination map was visited already, let's fire its targets
+				self = portal;
+				SUB_UseTargets();
+			}
+			else
+			{
+				//The destination map was not visited yet. Let's give it a visitflag value so that it can notify the server when it's visited.
+				portal.visitflag = num;
+			}
+			
+			//Next one
+			num++;
+			portal = find (portal, classname, "trigger_changelevel");
+		}
+		
+		self = oself;
+	}
 };
 
 void(entity client, string savename) autosave =
@@ -221,8 +259,8 @@ entity() SelectSpawnPoint =
 		}
 	}
 
-	if (serverflags)
-	{	// return with a rune to start
+	if (serverflags || (world.model == "maps/start.bsp" && parm10 > 0))
+	{	// return with a rune to start or after having visited a map
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
 			return spot;
