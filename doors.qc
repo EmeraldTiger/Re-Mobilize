@@ -766,7 +766,7 @@ void () fd_secret_use =
 	else
 		self.dest1 = self.origin + v_right * (self.t_width * temp);
 
-	self.dest2 = self.dest1 + v_forward * self.t_length;
+	self.dest2 = self.dest1 + v_forward * (self.t_length - self.lip);
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move1);
 	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 };
@@ -875,6 +875,8 @@ always_shoot = even if targeted, keep shootable
 t_width = override WIDTH to move back (or height if going down)
 t_length = override LENGTH to move sideways
 "dmg" damage to inflict when blocked (2 default)
+"speed"	movement speed (50 default)
+"lip"	lip remaining at end of move (0 default)
 
 If a secret door has a targetname, it will only be opened by it's botton or trigger, not by damage.
 "sounds"
@@ -930,7 +932,7 @@ void () func_door_secret =
 
 	self.touch = secret_touch;
 	self.blocked = secret_blocked;
-	self.speed = 50;
+	if (!self.speed) self.speed = 50;
 	self.use = fd_secret_use;
 	if ( !self.targetname || self.spawnflags&SECRET_YES_SHOOT)
 	{
