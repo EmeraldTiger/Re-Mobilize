@@ -101,6 +101,7 @@ void() make_breakable_templates_debris = {
 	if (self.break_template1 != "") {
 		while (i < self.brk_obj_count1) {
 			new = spawn();
+			new.alpha = self.alpha;
 			new.model = self.break_template1;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -125,6 +126,7 @@ void() make_breakable_templates_debris = {
 	if (self.break_template2 != "") {
 		while (i < self.brk_obj_count2) {
 			new = spawn();
+			new.alpha = self.alpha;
 			new.model = self.break_template2;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -149,6 +151,7 @@ void() make_breakable_templates_debris = {
 	if (self.break_template3 != "") {
 		while (i < self.brk_obj_count3) {
 			new = spawn();
+			new.alpha = self.alpha;
 			new.model = self.break_template3;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -173,6 +176,7 @@ void() make_breakable_templates_debris = {
 	if (self.break_template4 != "") {
 		while (i < self.brk_obj_count4) {
 			new = spawn();
+			new.alpha = self.alpha;
 			new.model = self.break_template4;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -197,6 +201,7 @@ void() make_breakable_templates_debris = {
 	if (self.break_template5 != "") {
 		while (i < self.brk_obj_count5) {
 			new = spawn();
+			new.alpha = self.alpha;
 			new.model = self.break_template5;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -229,6 +234,7 @@ void() make_breakable_debris = {
 		local	entity new;
 
 		new = spawn();
+		new.alpha = self.alpha;
 		new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 		new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
 		new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
