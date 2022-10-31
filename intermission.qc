@@ -314,6 +314,36 @@ void() execute_changelevel =
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
 
+float flag_value(float d) //Inky 20221025 Used for trigger_serverflags
+{
+	switch(d)
+	{
+		case  1: return 1; break;
+		case  2: return 2; break;
+		case  3: return 4; break;
+		case  4: return 8; break;
+		case  5: return 16; break;
+		case  6: return 32; break;
+		case  7: return 64; break;
+		case  8: return 128; break;
+		case  9: return 256; break;
+		case 10: return 512; break;
+		case 11: return 1024; break;
+		case 12: return 2048; break;
+		case 13: return 4096; break;
+		case 14: return 8192; break;
+		case 15: return 16384; break;
+		case 16: return 32768; break;
+		case 17: return 65536; break;
+		case 18: return 131072; break;
+		case 19: return 262144; break;
+		case 20: return 524288; break;
+		case 21: return 1048576; break;
+		case 22: return 2097152; break;
+		case 23: return 4194304; break;
+		case 24: return 8388608; break;
+	}
+}
 
 void() changelevel_touch =
 {
@@ -341,6 +371,13 @@ void() changelevel_touch =
 	sigil_touch2();
 	}
 
+	//Inky 20221029
+	if (self.visitflag >= 1 && self.visitflag <= 24)
+	{
+		float fv = flag_value(self.visitflag);
+		other.visitflag = other.visitflag | fv;
+	}
+	
 	if ( (self.spawnflags & 1) && (deathmatch == 0) )
 	{	// NO_INTERMISSION
 		GotoNextMap();

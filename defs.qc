@@ -1108,3 +1108,6 @@ void(entity client, float density, vector color) csf_set;
 .float anchored;
 .entity nexthook;
 .float prepared;
+
+//Inky 20221029 Visited maps handling
+.float visitflag;
