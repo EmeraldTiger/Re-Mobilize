@@ -1524,8 +1524,8 @@ void() trigger_filter_use = {
 	float targfloat;
 	string targstring;
 
-	float fieldtype, op, result;
-
+	float fieldtype = 0, op = 0, result = 0;
+	
 	if (self.include != "") {
 		targ = find(world, targetname, self.include);
 		if (!targ) targ = find(world, targetname2, self.include);
