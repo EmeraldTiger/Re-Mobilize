@@ -349,11 +349,10 @@ void() GrappleService =
 		self.disable_event = 0;
 		self = self.hook;
 		GrappleReset();
+		return;
 	}
 	
 	traceline(self.origin, self.hook.origin, FALSE, self.owner);
-	
-	dprint(trace_ent.classname);
 	
 	// check for this in case the lighthook is severed by a moving brush
 	if (trace_ent.classname != "worldspawn")
