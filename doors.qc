@@ -776,6 +776,7 @@ void(entity attacker, float damage) fd_secret_pain = { fd_secret_use(); };
 // Wait after first movement...
 void () fd_secret_move1 =
 {
+	self.state = /*Half way*/1;
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move2;
 	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
@@ -791,6 +792,7 @@ void () fd_secret_move2 =
 // Wait here until time to go back...
 void () fd_secret_move3 =
 {
+	self.state = /*Open*/2;
 	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 	if (!(self.spawnflags & SECRET_OPEN_ONCE))
 	{
@@ -809,6 +811,7 @@ void () fd_secret_move4 =
 // Wait 1 second...
 void () fd_secret_move5 =
 {
+	self.state = /*Half way back*/3;
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move6;
 	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
@@ -822,6 +825,7 @@ void () fd_secret_move6 =
 
 void () fd_secret_done =
 {
+	self.state = /*Closed*/0;
 	if (!self.targetname || self.spawnflags&SECRET_YES_SHOOT)
 	{
 		self.health = 10000;
@@ -926,6 +930,7 @@ void () func_door_secret =
 	self.angles = '0 0 0';
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+	self.state = /*Closed*/0;
 	//self.classname = "door";
 	setmodel (self, self.model);
 	setorigin (self, self.origin);
