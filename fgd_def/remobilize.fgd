@@ -370,9 +370,13 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 	[
 		16384 : "Respawn with DM effects" : 0
 	]
-	ritem(integer) : "Timed respawn item if set to 1, triggered respawn if set to 2"
-	respawndelay(integer) : "Respawn time"
-	respawncount(integer) : "How many respawns?"
+	ritem(choices) : "Respawn type" =
+	[
+		1 : "Automatic/Timed (use respawndelay and/or respawncount)"
+		2 : "Manually Triggered"
+	]
+	respawndelay(integer) : "Duration between respawns (0 = use the per-entity-type default duration)"
+	respawncount(integer) : "How many respawns? (0 = no limit)" : 0
 ]
 
 @BaseClass size(0 0 0, 32 32 56) color(80 0 200) base(RespawnableItem, CustomMdlsAmmo) =
