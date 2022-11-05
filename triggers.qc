@@ -1596,6 +1596,26 @@ void() trigger_filter_use = {
 			fieldtype = FILTER_FIELDTYPE_STRING;
 			targstring = targ.type;
 			break;
+
+		case /*ammo_shells*/14:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.ammo_shells;
+			break;
+			
+		case /*ammo_nails*/15:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.ammo_nails;
+			break;
+			
+		case /*ammo_rockets*/16:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.ammo_rockets;
+			break;
+			
+		case /*ammo_cells*/17:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.ammo_cells;
+			break;
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
