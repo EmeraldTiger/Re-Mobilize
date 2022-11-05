@@ -20,6 +20,8 @@ void() SUB_regen =
 	else
 		spawn_tfog (self.origin + self.particles_offset);	// play teleport sound and display particles
 	setorigin (self, self.origin);
+	
+	self.use = SUB_Null;
 };
 
 // Supa, Quoth respawning items support Respawn item like in DM if 'ritem' TRUE,
@@ -35,19 +37,23 @@ void(entity whatitem, float defaultdelay) CheckItemRespawn =
 {
 	if (!whatitem.ritem)	// respawn item if true, otherwise abort
 		return;
+	else if(whatitem.ritem == 1)
+	{
+		whatitem.cnt = whatitem.cnt + 1;	// inc before check to account for zero indexing
 
-	whatitem.cnt = whatitem.cnt + 1;	// inc before check to account for zero indexing
+		if (whatitem.respawncount)	// limited respawns
+		if (whatitem.respawncount < whatitem.cnt)
+			return;
 
-	if (whatitem.respawncount)	// limited respawns
-	if (whatitem.respawncount < whatitem.cnt)
-		return;
+		// okay, we're clear to set up a respawn
 
-	// okay, we're clear to set up a respawn
-
-	if (whatitem.respawndelay)	// custom respawn delay?
-		whatitem.nextthink = time + whatitem.respawndelay;
-	else
-		whatitem.nextthink = time + defaultdelay;
+		if (whatitem.respawndelay)	// custom respawn delay?
+			whatitem.nextthink = time + whatitem.respawndelay;
+		else
+			whatitem.nextthink = time + defaultdelay;
+	}
+	else if(whatitem.ritem == 2)
+		whatitem.use = SUB_regen;
 };
 
 
