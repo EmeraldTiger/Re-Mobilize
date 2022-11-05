@@ -25,7 +25,7 @@ mdl_body = Path to custom model
 particles_offset = When trigger spawning or respawning,
 a custom model may not display t_fog correctly. Adjust the origin coordinates here.
 snd_misc = Path to health pickup sound
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -45,7 +45,7 @@ mdl_body = Path to custom model
 particles_offset = When trigger spawning or respawning,
 a custom model may not display t_fog correctly. Adjust the origin coordinates here.
 snd_misc = Path to health pickup sound
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -65,7 +65,7 @@ mdl_body = Path to custom model
 particles_offset = Adjust origin of spawning particles when using mdl_body. When trigger spawning or respawning, a custom model may not display t-fog correctly. Adjust the origin here.
 snd_misc = Path to custom pickup sound
 obit_name = Custom name for this armor. Set a custom name for your armor. Just complete the sentence `You got` e.g. the Mega Armor! for `You got the Mega Armor!'
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 skin = skin index (default 0)
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -83,7 +83,7 @@ model ("progs/armor.mdl");
 mdl_body = Path to custom model
 particles_offset = Adjust origin of spawning particles when using mdl_body. When trigger spawning or respawning, a custom model may not display t-fog correctly. Adjust the origin here.
 snd_misc = Path to custom pickup sound
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -100,7 +100,7 @@ obit_name = Custom name for this armor. Set a custom name for your armor. Just c
 mdl_body = Path to custom model
 particles_offset = Adjust origin of spawning particles when using mdl_body. When trigger spawning or respawning, a custom model may not display t-fog correctly. Adjust the origin here.
 snd_misc = Path to custom pickup sound
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -119,7 +119,7 @@ model({ "path": ":progs/armor.mdl", "skin": 2 });
 mdl_body = Path to custom model
 particles_offset = Adjust origin of spawning particles when using mdl_body. When trigger spawning or respawning, a custom model may not display t-fog correctly. Adjust the origin here.
 snd_misc = Path to custom pickup sound
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -139,7 +139,7 @@ obit_name = Custom name for this armor. Set a custom name for your armor. Just c
 This is a pickup model that should be used when you want a player to spawn with only an axe and then later get the shotgun: (trigger_take_weapon or reset_items 2 in worldspawn).
 Single-barrelled Shotgun
 Shotgun
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -152,7 +152,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_shot.mdl");	}
 Double-barrelled Shotgun
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -165,7 +165,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_nailgun (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_nail.mdl");	}
 Nailgun
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -178,7 +178,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_supernailgun (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_nail2.mdl");	}
 Perforator
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -191,7 +191,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_grenadelauncher (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_rock.mdl");	}
 Grenade Launcher
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -204,7 +204,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_rocketlauncher (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_rock2.mdl");	}
 Rocket Launcher
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -217,7 +217,7 @@ effects = Add a visual effect to an entity
 /*QUAKED weapon_lightning (0 .5 .8) (-16 -16 0) (16 16 32) X X X X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 {	model("progs/g_light.mdl");	}
 Thunderbolt
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 alpha = Transparancy (.1 barely visible - .9 almost opaque)
@@ -233,7 +233,7 @@ effects = Add a visual effect to an entity
 }
 Box of 20 shells.
 LARGE_BOX is a box of 40 shells.
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 mdl_body - Path to custom body model
@@ -251,7 +251,7 @@ effects = Add a visual effect to an entity
 }
 Box of 25 nails.
 LARGE_BOX is a box of 50 nails.
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 mdl_body - Path to custom body model
@@ -267,7 +267,7 @@ effects = Add a visual effect to an entity
 {
 	model ( {{ spawnflags & 1 -> { "path" : "maps/b_rock1.bsp" }, "maps/b_rock0.bsp" }} );
 }
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 mdl_body - Path to custom body model
@@ -285,7 +285,7 @@ effects = Add a visual effect to an entity
 }
 Box of 6 cells.
 LARGE_BOX is a box of 12 cells.
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 mdl_body - Path to custom body model
@@ -403,7 +403,7 @@ effects = Add a visual effect to an entity
 {	model("progs/invulner.mdl");	}
 Pentagram of Protection
 Player is invulnerable for 30 seconds
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
@@ -420,7 +420,7 @@ effects = Add a visual effect to an entity
 {	model("progs/suit.mdl");	}
 Biosuit
 Player takes no damage from water or slime for 30 seconds
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 skin = skin index (default 0)
 mdl_body = Path to custom body model
@@ -437,7 +437,7 @@ effects = Add a visual effect to an entity
 {	model("progs/invisibl.mdl");	}
 Ring of Shadows
 Player is invisible for 30 seconds
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 skin = skin index (default 0)
 mdl_body = Path to custom body model
@@ -454,7 +454,7 @@ effects = Add a visual effect to an entity
 {	model("progs/quaddama.mdl");	}
 Quad Damage
 Player does 4x damage for 30 seconds
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 skin = skin index (default 0)
 mdl_body = Path to custom body model
@@ -498,7 +498,7 @@ e.g. For 'You got a bunch of rockets!' the netname key would be
 
 See the manual for information on skins and models for this entity.
 
-ritem = set to 1 to respawn
+ritem = set to 1 for a timed respawn, set to 2 for a triggered respawn
 respawndelay = wait time for next spawns
 respawncount = how many to respawn
 skin = skin index (default 0)
