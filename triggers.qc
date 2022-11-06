@@ -1799,3 +1799,64 @@ void() trigger_monsterface =
   trigger_monsterface_init();
   // InitTrigger();
 }
+
+/*QUAKED trigger_random
+Randomly triggers only one of its targets
+===================
+Use spawnflag 1 to prevent the triggered target from being chosen again if this entity is used again.
+
+You can adjust how likely a target will be fired by giving it a .impulse (it's its "weight" in terms of probabilities).
+If at least 1 target has an impulse, the others should have one too (defaulting to 1 anyway if not set).
+So in order to have every target get the same chance of being chosen, give them no .impulse and they'll all be 1.
+Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impulse is 6 so the 1st target will have half chances to be chosen, the 2nd 1/3 chances and the third 1/6 chances.
+*/
+void trigger_random_use ()
+{
+	local entity targ;
+
+	//First pass: count the number of current targets (might have changed since last time)
+	self.count=0;
+	if (self.target)
+	{
+		targ = world;
+		do
+		{
+			targ = find (targ, targetname, self.target);
+			if (!targ) break;
+			if(targ.estate == STATE_INACTIVE) continue;
+			if(targ.impulse) self.count += targ.impulse; else self.count += 1;
+		} while (1);
+	}
+
+	//Second pass: choose a random target and fire it
+	if (self.count>0)
+	{
+		//Choose a random target
+		float chosen_num, current_num;
+		chosen_num = rint(random(1,self.count));
+
+		//Find it
+		current_num = 0;
+		targ = world;
+		do
+		{
+			targ = find (targ, targetname, self.target);
+			if (!targ) break;
+			if(targ.estate == STATE_INACTIVE) continue;
+			if(targ.impulse) current_num += targ.impulse; else current_num += 1;
+		} while (current_num<chosen_num);
+
+		//Fire it
+		string oldtargetname = self.target;
+		self.target = targ.targetname = self.model;
+		SUB_UseTargets();
+		self.target = targ.targetname = oldtargetname;
+		if(self.spawnflags&/*Consume*/1) targ.estate = STATE_INACTIVE; //This target is no longer able to be fired
+	}
+}
+
+void trigger_random ()
+{
+	self.model="trigger_random by Inky";
+	self.use = trigger_random_use;
+}
