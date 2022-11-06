@@ -1,3 +1,5 @@
 
 *.zip
 config.cfg
+*.exe
+fteqcc.ini
