@@ -221,6 +221,8 @@ void () GrappleAnchor =
 
 void () W_FireGrapple =
 {
+	vector hooktarget_angle;
+	
 	if (self.hook_out) {// reject subsequent calls from player.qc
 		return;
 	}
@@ -240,6 +242,14 @@ void () W_FireGrapple =
 	
 	self.pullspeed = trace_ent.speed;
 	self.hookstyle = trace_ent.style;
+	
+	// if we have a hooktarget, aim specifically at this entity
+	if (trace_ent.hooktarget != "") {
+		self.hookent = find(world, targetname, trace_ent.hooktarget);
+	}
+	else {
+		self.hookent = 0;
+	}
 	
 	if (trace_ent.sounds) {
 		self.hooksounds = trace_ent.sounds;
@@ -290,10 +300,19 @@ void () W_FireGrapple =
 	newmis.classname = "hook";
 	
 
-	makevectors (self.v_angle);
-	newmis.velocity = trace_plane_normal * -5;
-	setorigin (newmis, trace_endpos);
-	newmis.angles = vectoangles(v_forward);
+	//makevectors (self.v_angle);
+	
+	if (self.hookent) {
+		hooktarget_angle = self.hookent.origin - self.origin;
+		newmis.velocity = 0;
+		setorigin (newmis, self.hookent.origin);
+		newmis.angles = vectoangles(hooktarget_angle);
+	}
+	else {
+		newmis.velocity = trace_plane_normal * -5;
+		setorigin (newmis, trace_endpos);
+		newmis.angles = vectoangles(v_forward);
+	}
 
 	newmis.touch = GrappleAnchor;
 	newmis.think = GrappleReset;
