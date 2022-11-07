@@ -1192,13 +1192,13 @@ void() take_weapon_use2 =
 	if
 	(
 		self.weapon == IT_AXE ||
-		self.weapon == IT_SHOTGUN && self.ammo_shells == 0 ||
-		self.weapon == IT_SUPER_SHOTGUN && self.ammo_shells == 0 ||
-		self.weapon == IT_NAILGUN && self.ammo_nails == 0 ||
-		self.weapon == IT_SUPER_NAILGUN && self.ammo_nails == 0 ||
-		self.weapon == IT_GRENADE_LAUNCHER && self.ammo_rockets == 0 ||
-		self.weapon == IT_ROCKET_LAUNCHER && self.ammo_rockets == 0 ||
-		self.weapon == IT_LIGHTNING && self.ammo_cells == 0
+		self.weapon == IT_SHOTGUN && ((!(self.items & IT_SHOTGUN)) || self.ammo_shells == 0) ||
+		self.weapon == IT_SUPER_SHOTGUN && ((!(self.items & IT_SUPER_SHOTGUN)) || self.ammo_shells == 0) ||
+		self.weapon == IT_NAILGUN && ((!(self.items & IT_NAILGUN)) || self.ammo_nails == 0) ||
+		self.weapon == IT_SUPER_NAILGUN && ((!(self.items & IT_SUPER_NAILGUN)) || self.ammo_nails == 0) ||
+		self.weapon == IT_GRENADE_LAUNCHER && ((!(self.items & IT_GRENADE_LAUNCHER)) || self.ammo_rockets == 0) ||
+		self.weapon == IT_ROCKET_LAUNCHER && ((!(self.items & IT_ROCKET_LAUNCHER)) || self.ammo_rockets == 0) ||
+		self.weapon == IT_LIGHTNING && ((!(self.items & IT_LIGHTNING)) || self.ammo_cells == 0)
 	)
 	{
 		self.weapon = W_BestWeapon();
