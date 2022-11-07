@@ -1134,6 +1134,83 @@ void() take_weapon_use =  //thanks to ShanJaq and Spike for their help on this.
 			W_BestWeapon();
 		}
 };
+
+void() take_weapon_use2 =
+{
+	if (!CheckValidTouch()) return;
+	if (!(other.flags & FL_CLIENT))	return;
+	
+	//Taking weapons...
+	
+	if(self.flags & IT_SHOTGUN)          other.items &= ~IT_SHOTGUN;
+	if(self.flags & IT_SUPER_SHOTGUN)    other.items &= ~IT_SUPER_SHOTGUN;
+	if(self.flags & IT_NAILGUN)          other.items &= ~IT_NAILGUN;
+	if(self.flags & IT_SUPER_NAILGUN)    other.items &= ~IT_SUPER_NAILGUN;
+	if(self.flags & IT_GRENADE_LAUNCHER) other.items &= ~IT_GRENADE_LAUNCHER;
+	if(self.flags & IT_ROCKET_LAUNCHER)  other.items &= ~IT_ROCKET_LAUNCHER;
+	if(self.flags & IT_LIGHTNING)        other.items &= ~IT_LIGHTNING;
+	
+	//Handling ammo...
+	
+	if(self.style == 0)
+	{
+		//Subtraction
+		if (self.ammo_shells  > 0) { if (other.ammo_shells  >= self.ammo_shells)  other.ammo_shells  -= self.ammo_shells;  else other.ammo_shells  = 0; }
+		if (self.ammo_nails   > 0) { if (other.ammo_nails   >= self.ammo_nails)   other.ammo_nails   -= self.ammo_nails;   else other.ammo_nails   = 0; }
+		if (self.ammo_rockets > 0) { if (other.ammo_rockets >= self.ammo_rockets) other.ammo_rockets -= self.ammo_rockets; else other.ammo_rockets = 0; }
+		if (self.ammo_cells   > 0) { if (other.ammo_cells   >= self.ammo_cells)   other.ammo_cells   -= self.ammo_cells;   else other.ammo_cells   = 0; }
+	}
+	else if(self.style == 1)
+	{
+		//Addition
+		if (self.ammo_shells  > 0) other.ammo_shells  += self.ammo_shells;
+		if (self.ammo_nails   > 0) other.ammo_nails   += self.ammo_nails;
+		if (self.ammo_rockets > 0) other.ammo_rockets += self.ammo_rockets;
+		if (self.ammo_cells   > 0) other.ammo_cells   += self.ammo_cells;
+	}
+	else if(self.style == 2)
+	{
+		//Reset
+		if (self.ammo_shells  > 0) other.ammo_shells  = self.ammo_shells;
+		if (self.ammo_nails   > 0) other.ammo_nails   = self.ammo_nails;
+		if (self.ammo_rockets > 0) other.ammo_rockets = self.ammo_rockets;
+		if (self.ammo_cells   > 0) other.ammo_cells   = self.ammo_cells;
+	}
+	
+	//Keep within reasonable bounds anytime
+	bound_other_ammo();
+	
+	//Readjust the items
+	if (other.ammo_shells  == 0) other.items = other.items - ( other.items & IT_SHELLS);
+	if (other.ammo_nails   == 0) other.items = other.items - ( other.items & IT_NAILS);
+	if (other.ammo_rockets == 0) other.items = other.items - ( other.items & IT_ROCKETS);
+	if (other.ammo_cells   == 0) other.items = other.items - ( other.items & IT_CELLS);
+	
+	//Change weapon if necessary
+	entity oself = self;
+	self = other;
+	if
+	(
+		self.weapon == IT_AXE ||
+		self.weapon == IT_SHOTGUN && ((!(self.items & IT_SHOTGUN)) || self.ammo_shells == 0) ||
+		self.weapon == IT_SUPER_SHOTGUN && ((!(self.items & IT_SUPER_SHOTGUN)) || self.ammo_shells == 0) ||
+		self.weapon == IT_NAILGUN && ((!(self.items & IT_NAILGUN)) || self.ammo_nails == 0) ||
+		self.weapon == IT_SUPER_NAILGUN && ((!(self.items & IT_SUPER_NAILGUN)) || self.ammo_nails == 0) ||
+		self.weapon == IT_GRENADE_LAUNCHER && ((!(self.items & IT_GRENADE_LAUNCHER)) || self.ammo_rockets == 0) ||
+		self.weapon == IT_ROCKET_LAUNCHER && ((!(self.items & IT_ROCKET_LAUNCHER)) || self.ammo_rockets == 0) ||
+		self.weapon == IT_LIGHTNING && ((!(self.items & IT_LIGHTNING)) || self.ammo_cells == 0)
+	)
+	{
+		self.weapon = W_BestWeapon();
+	}
+	W_SetCurrentAmmo();
+	self = oself;
+	
+	//Fire targets if any
+	multi_trigger();
+	self.estate = STATE_INACTIVE; //Prevent never ending touch
+};
+
 /*QUAKED trigger_take_weapon (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 
 Removes shotgun upon touch. You can also set "reset_items" in the worldspawn entity to accomplish an axe only start.
@@ -1143,9 +1220,23 @@ void() trigger_take_weapon =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	self.wait = -1;
-	trigger_multiple();
-	self.touch = take_weapon_use;
+	if (self.spawnflags > 0 || self.ammo_shells > 0 || self.ammo_nails > 0 || self.ammo_rockets > 0 || self.ammo_cells > 0)
+	{
+		//New Re:Mobilize behavior
+		self.flags = self.spawnflags; //Moving the settings to a safe field as spawnflags may conflict with standard trigger behavior (slot 2 already used for SPAWNFLAG_TURNS_OFF)
+		self.spawnflags = 0;
+		
+		trigger_multiple();
+		self.touch = take_weapon_use2;
+		/**/
+	}
+	else
+	{
+		//Vanilla progs_dump 3.0 behavior
+		self.wait = -1;
+		trigger_multiple();
+		self.touch = take_weapon_use;
+	}
 
 	SUB_CheckWaiting();
 };

@@ -2494,10 +2494,46 @@ MONSTER_ONLY(16) will only teleport monsters"
 @PointClass base(Trigger) = trigger_relay : "Trigger: Relay"
 [
 ]
-@SolidClass base(Appearflags, TriggerWait) = trigger_take_weapon : "Trigger: Remove shotgun on touch. Place at info_player_start for an axe only spawn.
+@SolidClass base(Appearflags, TriggerWait) = trigger_take_weapon : "
+Trigger: Remove weapon (and/or ammo) on touch.
 
-Make sure and add a weapon_shotgun to your map!"
-[]
+Classic progs_dump 3.0 behavior:
+Remove shotgun on touch. Place at info_player_start for an axe only spawn.
+Make sure and add a weapon_shotgun to your map!
+
+Enhanced Re:Mobilize behavior:
+Remove one or several weapons of your choice and/or control the player's ammo inventory.
+
+New behavior occurring if any of spawnflags, ammo_shells, ammo_nails, ammo_rockets or ammo_cells has a value > 0.
+Entity becoming inactive once the job done.
+
+spawnflags tells what weapon(s) to take from the player's inventory.
+style tells what to do with the ammo fields having a value > 0 (values <= 0 are ignored): add/subtract the value to the current inventory value or set the inventory value.
+
+If needed, the ammo values are cut off to always stay in the legal [0..100] range ([0..200] for nails).
+"
+[
+	spawnflags(flags) =
+	[
+		1: "Shotgun" : 0
+		2: "Double-Barreled Shotgun" : 0
+		4: "Nailgun" : 0
+		8: "Super Nailgun" : 0
+		16: "Grenade Launcher" : 0
+		32: "Rocket Launcher" : 0
+		64: "Thunderbolt" : 0
+	]
+	ammo_shells(integer) : "Ammo units to give or take" : 0
+	ammo_nails(integer) : "Ammo units to give or take" : 0
+	ammo_rockets(integer) : "Ammo units to give or take" : 0
+	ammo_cells(integer) : "Ammo units to give or take" : 0
+	style(choices) : "How to handle the ammo units" : 0 =[
+		0 : "Take them"
+		1 : "Give them"
+		2 : "Reset the inventory"
+	]
+]
+
 @SolidClass base(Angle, Appearflags, OneTargetname, TriggerWait) = trigger_monsterjump : "Trigger: Monster jump"
 [
 	speed(integer) : "Jump Speed" : 200
