@@ -972,6 +972,9 @@ float TRIGGER_CENTERPRINTALL = 1048576;
 float STATE_ACTIVE      = 0;
 float STATE_INACTIVE    = 1;
 float STATE_INVISIBLE = 8;
+//Re:Mobilize states
+float STATE_RM_CUSHIONED = 2;
+float STATE_RM_BOUNCING  = 4;
 
 .float prevstate;
 
@@ -1063,7 +1066,7 @@ void(entity client, float density, vector color) csf_set;
 // Re:Mobilize fields
 
 // trampoline-related
-.float cushion;
+.entity cushion;
 
 .float cushionsounds;
 .string cushionnoise;

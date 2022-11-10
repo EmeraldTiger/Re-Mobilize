@@ -1750,7 +1750,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		3 : "> (more than, valid for floats only)"
 		4 : ">= (more than or equal, valid for floats only)"
 		5 : "& (bitwise AND, valid for floats and flags)"
-		//6 : "| (bitwise OR, valid for floats and flags)"
+		6 : "| (bitwise OR, valid for floats and flags)"
 	]
 	count(integer) : "Float value to test"
 	aflag(flags) = []

@@ -1612,8 +1612,8 @@ void() trigger_filter_use = {
 	if (self.estate != STATE_ACTIVE) return;
 
 	entity targ;
-	float targfloat;
-	string targstring;
+	float targfloat = 0;
+	string targstring = "";
 
 	float fieldtype = 0, op = 0, result = 0;
 	

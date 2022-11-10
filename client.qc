@@ -310,6 +310,7 @@ void() PutClientInServer =
 	self.gravity = 0;
 	self.wantedgravity = 0;
 	self.onladder = 0;
+	self.onWiremesh = 0;
 	self.customkeys = 0;  // support for item_key_custom -- iw
 
 	// Setup cutscene stuff.  Legacy code from Zerstorer. --dumptruck_ds
@@ -878,7 +879,7 @@ void() PlayerPreThink =
 	local float playedsound;
 	
 	// Re:Mobilize: Need to reset cushion state, otherwise cushion sounds will continue on normal surfaces
-	self.cushion = 0;
+	self.cushion = world;
 
 	if (intermission_running)
 	{
@@ -1322,7 +1323,19 @@ if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0))
 				sound (self, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
 			}
 			
-		self.jump_flag = 0;
+			self.jump_flag = 0;
+			
+			//Fire trampoline targets on cushion landing
+			float ostate = self.state;
+			self.state = ostate | STATE_RM_CUSHIONED;
+			entity oactivator = activator;
+			activator = self;
+			entity oself = self;
+			self = self.cushion;
+			SUB_UseTargets();
+			self = oself;
+			activator = oactivator;
+			self.state = ostate;
 		}
 }
 
