@@ -38,10 +38,7 @@ void() trampoline_touch =
 	
 	other.cushionsounds = self.sounds;
 	
-	if (other.button2 || other.flags & FL_MONSTER 
-	|| (other.classname=="grenade")
-	|| (other.classname=="MultiGrenade")
-	|| (other.classname=="MiniGrenade") ) {
+	if (other.button2 || other.flags & FL_MONSTER || ((other.movetype == MOVETYPE_BOUNCE || other.movetype == MOVETYPE_FLYMISSILE) && other.solid == SOLID_BBOX)) {
 	
 		if (other.velocity[2] < minSpeed) {
 			vector playervel = other.velocity;
