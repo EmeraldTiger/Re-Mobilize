@@ -28,12 +28,11 @@ void() trampoline_touch =
 	|| (other.classname=="MiniGrenade")
 	|| (CheckValidTouch()))) return;
 	
-        vector surfNorm = trace_plane_normal;
-	
+    vector surfNorm = trace_plane_normal;
 	vector up = '0 0 1';
 	
 	// Player doesn't take any fall damage when landing on a trampoline
-	other.cushion=1;
+	other.cushion = self;
 	
 	other.cushionnoise = self.noise2;
 	
@@ -68,6 +67,14 @@ void() trampoline_touch =
 				sound (self, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
 			else
 				sound (self, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
+				
+			//Fire trampoline targets on bounce
+			entity bouncee = other;
+			float ostate = bouncee.state;
+			bouncee.state = ostate | STATE_RM_BOUNCING;
+			activator = other;
+			SUB_UseTargets();
+			bouncee.state = ostate;
 		}
 	}
 	
