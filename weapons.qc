@@ -901,6 +901,7 @@ void() GrenadeTouch =
 	self.count = time + .02;
 	if (self.velocity == '0 0 0')
 		self.avelocity = '0 0 0';
+	self.maxbounce++;
 };
 
 

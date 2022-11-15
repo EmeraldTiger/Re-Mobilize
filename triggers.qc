@@ -1707,6 +1707,11 @@ void() trigger_filter_use = {
 			fieldtype = FILTER_FIELDTYPE_FLOAT;
 			targfloat = targ.ammo_cells;
 			break;
+			
+		case /*maxbounce*/18:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.maxbounce;
+			break;
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {

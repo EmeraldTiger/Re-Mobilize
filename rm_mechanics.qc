@@ -23,9 +23,7 @@ void() trampoline_touch =
 	float minSpeed = -200;
 
 	// from Copper -- dumptruck_ds
-	if (!((other.flags & FL_MONSTER) || (other.classname=="grenade") 
-	|| (other.classname=="MultiGrenade")
-	|| (other.classname=="MiniGrenade")
+	if (!((other.flags & FL_MONSTER) || ((other.movetype == MOVETYPE_BOUNCE || other.movetype == MOVETYPE_FLYMISSILE) && other.solid == SOLID_BBOX)
 	|| (CheckValidTouch()))) return;
 	
     vector surfNorm = trace_plane_normal;
@@ -70,6 +68,7 @@ void() trampoline_touch =
 			//Fire trampoline targets on bounce
 			entity bouncee = other;
 			float ostate = bouncee.state;
+			bouncee.maxbounce++;
 			bouncee.state = ostate | STATE_RM_BOUNCING;
 			activator = other;
 			SUB_UseTargets();
