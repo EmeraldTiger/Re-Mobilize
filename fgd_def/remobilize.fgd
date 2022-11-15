@@ -1632,6 +1632,11 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
 	noise2(string) : "Sound file for the 'landing (no bounce)' sound (if set, overrides 'sounds')"
+	
+	spawnflags(Flags) =
+	[
+		1 : "Cushion only (no bounce)" : 0
+	]
 ]
 
 @SolidClass base(Appearflags) = trigger_wiremesh : "Invisible wiremesh entity.

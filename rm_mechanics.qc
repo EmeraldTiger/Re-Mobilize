@@ -38,6 +38,8 @@ void() trampoline_touch =
 	
 	other.cushionsounds = self.sounds;
 	
+	if(self.spawnflags & /*Cushion only (no bounce)*/1) return;
+	
 	if (other.button2 || other.flags & FL_MONSTER || ((other.movetype == MOVETYPE_BOUNCE || other.movetype == MOVETYPE_FLYMISSILE) && other.solid == SOLID_BBOX)) {
 	
 		if (other.velocity[2] < minSpeed) {
