@@ -20,7 +20,7 @@ speed indefinitely. Default of 0 means no limit.
 void() trampoline_touch =
 {
 	// Enforce a minimum velocity the player must fall so they won't just bounce endlessly
-	float minSpeed = -200;
+	float minSpeed = -fabs(self.speed);
 
 	// from Copper -- dumptruck_ds
 	if (!((other.flags & FL_MONSTER) || ((other.movetype == MOVETYPE_BOUNCE || (other.movetype == MOVETYPE_FLYMISSILE && other.classname != "spike")) && other.solid == SOLID_BBOX)
@@ -36,7 +36,7 @@ void() trampoline_touch =
 	
 	other.cushionsounds = self.sounds;
 	
-	if(self.spawnflags & /*Cushion only (no bounce)*/1) return;
+	if(self.speed == -1) return; //Cushion only (no bounce)
 	
 	if (other.button2 || other.flags & FL_MONSTER || ((other.movetype == MOVETYPE_BOUNCE || (other.movetype == MOVETYPE_FLYMISSILE && other.classname != "spike")) && other.solid == SOLID_BBOX)) {
 	
@@ -98,6 +98,8 @@ void() trigger_trampoline =
 		precache_sound(self.noise2);
 		
 	self.touch = trampoline_touch;
+	if (!self.speed)
+		self.speed = 200;
 	if (!self.elasticity)
 		self.elasticity = 1;
 	if (!self.sounds)
