@@ -23,7 +23,7 @@ void() trampoline_touch =
 	float minSpeed = -fabs(self.speed);
 
 	// from Copper -- dumptruck_ds
-	if (!((other.flags & FL_MONSTER) || ((other.movetype == MOVETYPE_BOUNCE || (other.movetype == MOVETYPE_FLYMISSILE && other.classname != "spike")) && other.solid == SOLID_BBOX)
+	if (!((other.flags & FL_MONSTER) || (other.classname=="grenade") || (other.classname=="MultiGrenade") || (other.classname=="MiniGrenade")	
 	|| (CheckValidTouch()))) return;
 	
     vector surfNorm = trace_plane_normal;
@@ -38,7 +38,7 @@ void() trampoline_touch =
 	
 	if(self.speed == -1) return; //Cushion only (no bounce)
 	
-	if (other.button2 || other.flags & FL_MONSTER || ((other.movetype == MOVETYPE_BOUNCE || (other.movetype == MOVETYPE_FLYMISSILE && other.classname != "spike")) && other.solid == SOLID_BBOX)) {
+	if (other.button2 || other.flags & FL_MONSTER || (other.classname=="grenade") || (other.classname=="MultiGrenade") || (other.classname=="MiniGrenade")) {
 	
 		if (other.velocity[2] < minSpeed) {
 			vector playervel = other.velocity;
