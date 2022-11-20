@@ -135,7 +135,7 @@ void() misc_model = {
  */
 void() misc_model_think = {
     self.nextthink = time + fabs(self.speed);
-    if (self.estate != STATE_ACTIVE) return;
+    if (self.estate != STATE_ACTIVE || self.state != STATE_ACTIVE) return;
     
     self.frame = self.frame + sign(self.speed);
 
