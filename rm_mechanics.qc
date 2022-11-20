@@ -20,12 +20,10 @@ speed indefinitely. Default of 0 means no limit.
 void() trampoline_touch =
 {
 	// Enforce a minimum velocity the player must fall so they won't just bounce endlessly
-	float minSpeed = -200;
+	float minSpeed = -fabs(self.speed);
 
 	// from Copper -- dumptruck_ds
-	if (!((other.flags & FL_MONSTER) || (other.classname=="grenade") 
-	|| (other.classname=="MultiGrenade")
-	|| (other.classname=="MiniGrenade")
+	if (!((other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX))	
 	|| (CheckValidTouch()))) return;
 	
     vector surfNorm = trace_plane_normal;
@@ -38,10 +36,9 @@ void() trampoline_touch =
 	
 	other.cushionsounds = self.sounds;
 	
-	if (other.button2 || other.flags & FL_MONSTER 
-	|| (other.classname=="grenade")
-	|| (other.classname=="MultiGrenade")
-	|| (other.classname=="MiniGrenade") ) {
+	if(self.speed == -1) return; //Cushion only (no bounce)
+	
+	if (other.button2 || other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) {
 	
 		if (other.velocity[2] < minSpeed) {
 			vector playervel = other.velocity;
@@ -71,6 +68,7 @@ void() trampoline_touch =
 			//Fire trampoline targets on bounce
 			entity bouncee = other;
 			float ostate = bouncee.state;
+			bouncee.maxbounce++;
 			bouncee.state = ostate | STATE_RM_BOUNCING;
 			activator = other;
 			SUB_UseTargets();
@@ -100,6 +98,8 @@ void() trigger_trampoline =
 		precache_sound(self.noise2);
 		
 	self.touch = trampoline_touch;
+	if (!self.speed)
+		self.speed = 200;
 	if (!self.elasticity)
 		self.elasticity = 1;
 	if (!self.sounds)

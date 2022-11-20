@@ -1632,6 +1632,10 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
 	noise2(string) : "Sound file for the 'landing (no bounce)' sound (if set, overrides 'sounds')"
+	speed(choices) : "Minimum absolute speed  (>0) required to activate the bounce effect" : 200 =
+	[
+		-1: "Cushion only (no bounce)"
+	]
 ]
 
 @SolidClass base(Appearflags) = trigger_wiremesh : "Invisible wiremesh entity.
@@ -1742,6 +1746,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		15 : "ammo_nails (float, use 'count' field)"
 		16 : "ammo_rockets (float, use 'count' field)"
 		17 : "ammo_cells (float, use 'count' field)"
+		18 : "maxbounce (float, use 'count' field)"
 	]
 	weapon(choices) : "Operation" : 0 = [
 		0 : "== (equal, valid for all fields)"
