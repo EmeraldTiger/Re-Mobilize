@@ -122,6 +122,8 @@ Keys:
 "speed" the speed at which the player can travel across the mesh
 */
 
+float FIRE_ON_MOVE = 1;
+
 void() wiremesh_touch =
 {
 	// from Copper -- dumptruck_ds
@@ -130,6 +132,15 @@ void() wiremesh_touch =
 	other.onWiremesh = 1;
 	other.meshspeed = self.speed;
 	other.meshsounds = self.sounds;
+	other.mesh = self;
+	
+	if (!(self.spawnflags & FIRE_ON_MOVE)) {
+		
+		if (time > self.mesh_event_wait) {
+			SUB_UseTargets();
+			self.mesh_event_wait = time + self.wait;
+		}
+	}
 	
 	if (self.noise != "") {
 		other.meshnoise = self.noise;
