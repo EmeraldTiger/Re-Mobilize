@@ -1630,6 +1630,11 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 		5: "Flesh"
 	]
 	
+	target(target_destination) : "Target"
+	target2(target_destination) : "Target"
+	target3(target_destination) : "Target"
+	target4(target_destination) : "Target"
+	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
 	noise2(string) : "Sound file for the 'landing (no bounce)' sound (if set, overrides 'sounds')"
 	speed(choices) : "Minimum absolute speed  (>0) required to activate the bounce effect" : 200 =
@@ -1642,6 +1647,10 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 
 Player can move freely inside of this entity's volume, on walls and ceilings."
 [
+	spawnflags(Flags) =
+[
+	1 : "Fire Targets when Moving" : 0
+]
 	speed(string) : "Speed at which the player travels along the wiremesh; default 300." : "300"
 
 	sounds(choices) : "Sound" : 0 =
@@ -1652,6 +1661,13 @@ Player can move freely inside of this entity's volume, on walls and ceilings."
 		3: "Retro"
 		4: "Wood"
 	]
+	
+	target(target_destination) : "Target"
+	target2(target_destination) : "Target"
+	target3(target_destination) : "Target"
+	target4(target_destination) : "Target"
+	
+	wait(float) : "Time between retriggers" : "0.5"
 	
 	noise(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise2, noise3, and noise4."
 	
