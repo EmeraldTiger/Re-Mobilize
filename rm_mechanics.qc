@@ -128,6 +128,16 @@ void() wiremesh_touch =
 	if (!CheckValidTouch()) return;
 	
 	other.onWiremesh = 1;
+	other.wiremesh = self;
+	
+	//Fire wiremesh targets on climbing mode change
+	if(!other.state & STATE_RM_CLIMBING)
+	{
+		other.state |= STATE_RM_CLIMBING;
+		activator = other;
+		SUB_UseTargets();
+	}
+	
 	other.meshspeed = self.speed;
 	other.meshsounds = self.sounds;
 	
@@ -158,9 +168,6 @@ void() wiremesh_touch =
 	else {
 		other.meshnoise4 = "";
 	}
-	
-	
-	
 }
 
 void() trigger_wiremesh =

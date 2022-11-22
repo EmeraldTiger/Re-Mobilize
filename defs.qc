@@ -973,8 +973,10 @@ float STATE_ACTIVE      = 0;
 float STATE_INACTIVE    = 1;
 float STATE_INVISIBLE = 8;
 //Re:Mobilize states
-float STATE_RM_CUSHIONED = 2;
-float STATE_RM_BOUNCING  = 4;
+float STATE_RM_CUSHIONED =  2; //Trampoline
+float STATE_RM_BOUNCING  =  4; //Trampoline
+float STATE_RM_CLIMBING  = 16; //Wiremesh
+
 
 .float prevstate;
 
@@ -1077,6 +1079,7 @@ void(entity client, float density, vector color) csf_set;
 // wiremesh-related
 
 .float onWiremesh;
+.entity wiremesh;
 
 .float meshspeed;
 
