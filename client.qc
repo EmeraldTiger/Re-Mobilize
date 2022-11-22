@@ -311,6 +311,7 @@ void() PutClientInServer =
 	self.wantedgravity = 0;
 	self.onladder = 0;
 	self.onWiremesh = 0;
+	self.wiremesh = world;
 	self.customkeys = 0;  // support for item_key_custom -- iw
 
 	// Setup cutscene stuff.  Legacy code from Zerstorer. --dumptruck_ds
@@ -874,7 +875,7 @@ Called every frame before physics are run
 void() PlayerPreThink =
 {
 	local float do_ladder_physics;
-	local float do_wiremesh_physics;
+	local float do_wiremesh_physics = FALSE;
 	
 	local float playedsound;
 	
@@ -913,6 +914,17 @@ void() PlayerPreThink =
 	{
 		do_ladder_physics = FALSE;
 		self.gravity = self.wantedgravity;
+		
+		//Fire wiremesh targets on climbing mode change
+		if(self.state & STATE_RM_CLIMBING)
+		{
+			self.state = self.state - (self.state & STATE_RM_CLIMBING);
+			activator = self;
+			entity oself = self;
+			self = self.wiremesh;
+			SUB_UseTargets();
+			self = oself;
+		}
 	}
 
 	// If just spawned in, try to recover previous fog values from own client entity, if any
