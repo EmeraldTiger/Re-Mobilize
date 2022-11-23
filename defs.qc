@@ -1089,11 +1089,7 @@ void(entity client, float density, vector color) csf_set;
 .string meshnoise3;
 .string meshnoise4;
 
-.entity mesh;
-
 .float ladder_step_finished;
-
-.float mesh_event_wait;
 
 // lighthook-related
 

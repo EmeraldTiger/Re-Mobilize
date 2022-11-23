@@ -984,13 +984,6 @@ else if (do_wiremesh_physics)
 		
 		playedsound = 0;
 		
-		activator = self;
-		
-		if (time > self.mesh_event_wait && (self.mesh.spawnflags & FIRE_ON_MOVE)) {
-			SUB_UseEntTargets(self.mesh);
-			self.mesh_event_wait = time + self.mesh.wait;
-		}
-		
 		if (self.meshnoise != "" || self.meshnoise2 != "" || self.meshnoise3 != "" || self.meshnoise4 != "") {
 			if (time > self.ladder_step_finished) {
 				if (random() > 0.5) {
