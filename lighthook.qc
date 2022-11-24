@@ -140,7 +140,7 @@ void () GrappleAnchor =
 		return;
 	}
 	
-	if (other.classname != "func_hook" || !other.hookable ) {
+	if (other.classname != "func_hook" || other.estate == STATE_INACTIVE ) {
 			if (self.currenthook) {
 				self.locked_on = 0;
 			}
@@ -236,7 +236,7 @@ void () W_FireGrapple =
 		
 	//traceline(self.origin, (self.origin + (v_forward * 100000)), FALSE, self);
 	
-	if (!(trace_ent.classname=="func_hook") || !trace_ent.hookable) {
+	if (!(trace_ent.classname=="func_hook") || trace_ent.estate == STATE_INACTIVE) {
 		return;
 	}
 	

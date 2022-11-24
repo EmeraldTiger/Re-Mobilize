@@ -226,8 +226,8 @@ Keys:
 void() func_hook_use = {
 	// change to alternate textures
 	self.frame = 1 - self.frame;
-	if (!self.hookable) {
-		self.hookable = 1;
+	if (self.estate == STATE_INACTIVE) {
+		self.estate = STATE_ACTIVE;
 		if (self.noise4 != "")
 		{
 			sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
@@ -239,7 +239,7 @@ void() func_hook_use = {
 		
 	}
 	else {
-		self.hookable = 0;
+		self.estate = STATE_INACTIVE;
 		if (self.noise5 != "")
 		{
 			sound (self, CHAN_ITEM, self.noise5, 1, ATTN_NORM);
@@ -260,11 +260,11 @@ void() func_hook =
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	if (self.targetname) {
-		self.hookable = 0;
+		self.estate = STATE_INACTIVE;
 		self.frame = 0;
 	}
 	else {
-		self.hookable = 1;
+		self.estate = STATE_ACTIVE;
 		self.frame = 1;
 	}
 	

@@ -1093,7 +1093,6 @@ void(entity client, float density, vector color) csf_set;
 
 // lighthook-related
 
-.float hookable;
 .string noise5;
 .float disable_event;
 .float locked_on;
@@ -1114,9 +1113,6 @@ void(entity client, float density, vector color) csf_set;
 .float anchored;
 .entity nexthook;
 .float prepared;
-
-.string hooktarget;
-.entity hookent;
 
 //Inky 20221029 Visited maps handling
 .float visitflag;
