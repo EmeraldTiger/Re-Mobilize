@@ -894,6 +894,20 @@ void() PlayerPreThink =
 			return;        // intermission or finale
 	}
 
+	if (!self.onWiremesh)
+	{
+		//Fire wiremesh targets on climbing mode change
+		if(self.state & STATE_RM_CLIMBING)
+		{
+			self.state = self.state - (self.state & STATE_RM_CLIMBING);
+			activator = self;
+			entity oself = self;
+			self = self.wiremesh;
+			SUB_UseTargets();
+			self = oself;
+		}
+	}
+
 	// note that this code block is here, before the tests which check
 	// whether the player is dead, so that the player's gravity will be
 	// correctly updated even if they e.g. fell off a ladder because
@@ -913,20 +927,10 @@ void() PlayerPreThink =
 	else
 	{
 		do_ladder_physics = FALSE;
+		do_wiremesh_physics = FALSE;
 		self.gravity = self.wantedgravity;
-		
-		//Fire wiremesh targets on climbing mode change
-		if(self.state & STATE_RM_CLIMBING)
-		{
-			self.state = self.state - (self.state & STATE_RM_CLIMBING);
-			activator = self;
-			entity oself = self;
-			self = self.wiremesh;
-			SUB_UseTargets();
-			self = oself;
-		}
 	}
-
+	
 	// If just spawned in, try to recover previous fog values from own client entity, if any
 	if (cleanUpClientStuff)
 		fog_setFromEnt(self, self);
