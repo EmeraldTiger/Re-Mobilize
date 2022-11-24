@@ -243,14 +243,6 @@ void () W_FireGrapple =
 	self.pullspeed = trace_ent.speed;
 	self.hookstyle = trace_ent.style;
 	
-	// if we have a hooktarget, aim specifically at this entity
-	if (trace_ent.hooktarget != "") {
-		self.hookent = find(world, targetname, trace_ent.hooktarget);
-	}
-	else {
-		self.hookent = 0;
-	}
-	
 	if (trace_ent.sounds) {
 		self.hooksounds = trace_ent.sounds;
 	}
@@ -302,17 +294,30 @@ void () W_FireGrapple =
 
 	//makevectors (self.v_angle);
 	
-	if (self.hookent) {
-		hooktarget_angle = self.hookent.origin - self.origin;
-		newmis.velocity = 0;
-		setorigin (newmis, self.hookent.origin);
-		newmis.angles = vectoangles(hooktarget_angle);
+	// if we have a target, make it the hook's source point for the light ray
+	entity targ = world;
+	vector ray_origin = '0 0 0';
+	
+	if (trace_ent.target != "")
+		targ = find(world, targetname, trace_ent.target);
+	if(targ)
+	{
+		if((targ.solid==SOLID_BSP||targ.solid==SOLID_TRIGGER||targ.solid==SOLID_NOT)&&targ.origin=='0 0 0')
+			ray_origin = (targ.absmax+targ.absmin)*0.5;
+		else
+			ray_origin = targ.origin;
+	}
+	
+	if (ray_origin != '0 0 0') {
+		hooktarget_angle = ray_origin - player_offset;
 	}
 	else {
-		newmis.velocity = trace_plane_normal * -5;
-		setorigin (newmis, trace_endpos);
-		newmis.angles = vectoangles(v_forward);
+		ray_origin = trace_endpos;
+		hooktarget_angle = v_forward;		
 	}
+	newmis.velocity = trace_plane_normal * -5;
+	setorigin (newmis, ray_origin);
+	newmis.angles = vectoangles(hooktarget_angle);
 
 	newmis.touch = GrappleAnchor;
 	newmis.think = GrappleReset;
