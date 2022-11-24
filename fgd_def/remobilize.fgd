@@ -1612,7 +1612,7 @@ When player is touching this entity, she can climb by pushing jump."
 	angle(integer) : "the direction player must be facing to climb ladder"
 ]
 
-@SolidClass base(Appearflags) = trigger_trampoline : "Invisible trampoline entity.
+@SolidClass base(Appearflags, Target) = trigger_trampoline : "Invisible trampoline entity.
 
 Player will bounce off of this like a trampoline, reflecting velocity."
 [
@@ -1638,7 +1638,7 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 	]
 ]
 
-@SolidClass base(Appearflags) = trigger_wiremesh : "Invisible wiremesh entity.
+@SolidClass base(Appearflags, Target) = trigger_wiremesh : "Invisible wiremesh entity.
 
 Player can move freely inside of this entity's volume, on walls and ceilings."
 [
@@ -1747,6 +1747,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		16 : "ammo_rockets (float, use 'count' field)"
 		17 : "ammo_cells (float, use 'count' field)"
 		18 : "maxbounce (float, use 'count' field)"
+		19 : "frame (float, use 'count' field)"
 	]
 	weapon(choices) : "Operation" : 0 = [
 		0 : "== (equal, valid for all fields)"
