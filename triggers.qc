@@ -1712,6 +1712,11 @@ void() trigger_filter_use = {
 			fieldtype = FILTER_FIELDTYPE_FLOAT;
 			targfloat = targ.maxbounce;
 			break;
+			
+		case /*frame*/19:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			targfloat = targ.frame;
+			break;
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
