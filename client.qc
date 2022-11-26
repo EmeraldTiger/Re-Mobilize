@@ -880,7 +880,7 @@ void() CheckGrapple =
 		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
-	if (self.impulse==24 && !self.hook_out) {
+	if (self.impulse==24 && !self.hook_out && !trace_ent.spawnflags & /*Aim only*/1) {
 		W_FireGrapple();
 		
 		//Fire lightpanel targets on hooking

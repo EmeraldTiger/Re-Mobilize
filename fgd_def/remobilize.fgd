@@ -1690,6 +1690,11 @@ Player can move freely inside of this entity's volume, on walls and ceilings."
 	noise5(string) : "Sound file for the 'disable' sound."
 	
 	mdl(string) : "Model file for the tracer."
+	
+	spawnflags(Flags) =
+	[
+		1 : "Aim only" : 0
+	]
 ]
 
 @SolidClass base(Appearflags, Targetname) = trigger_monsterface : "Running monsters that do not see their target and touch this will face in the direction of the trigger's angle instead of the unseen target. Use this trigger to make monsters leave their sniping spot and execute complex maneuvers."
