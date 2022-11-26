@@ -1662,7 +1662,7 @@ Player can move freely inside of this entity's volume, on walls and ceilings."
 	noise4(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise3."
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_hook : "A lighthook panel; a player that is looking directly at the surface of this can latch onto it with the lighthook (default RMB)"
+@SolidClass base(Appearflags, Targetname, Target) = func_hook : "A lighthook panel; a player that is looking directly at the surface of this can latch onto it with the lighthook (default RMB)"
 [
 	speed(string) : "Speed at which the lighthook pulls the player (not the hook itself, which is infinitely fast); default 500." : "500"
 	
