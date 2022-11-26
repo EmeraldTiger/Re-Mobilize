@@ -973,10 +973,13 @@ float STATE_ACTIVE      = 0;
 float STATE_INACTIVE    = 1;
 float STATE_INVISIBLE = 8;
 //Re:Mobilize states
-float STATE_RM_CUSHIONED =  2; //Trampoline
-float STATE_RM_BOUNCING  =  4; //Trampoline
-float STATE_RM_CLIMBING  = 16; //Wiremesh
-
+float STATE_RM_CUSHIONED =   2; //Trampoline
+float STATE_RM_BOUNCING  =   4; //Trampoline
+float STATE_RM_CLIMBING  =  16; //Wiremesh
+float STATE_RM_AIMING    =  32; //Lightpanel
+float STATE_RM_UNAIMING  =  64; //Lightpanel
+float STATE_RM_HOOKING   = 128; //Lightpanel
+float STATE_RM_UNHOOKING = 256; //Lightpanel
 
 .float prevstate;
 
@@ -1111,8 +1114,6 @@ void(entity client, float density, vector color) csf_set;
 .string hooknoise5;
 
 .float anchored;
-.entity nexthook;
-.float prepared;
 
 //Inky 20221029 Visited maps handling
 .float visitflag;

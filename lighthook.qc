@@ -51,9 +51,6 @@ void() GrappleReset =
 
 	if (self.enemy) {
 		self.enemy.anchored = 0;
-		if (self.enemy.nexthook) {
-			self.enemy.nexthook.prepared = 0;
-		}
 		if (self.enemy.locked_on) {
 			self.enemy.locked_on = 0;
 		}
@@ -75,7 +72,21 @@ void() GrappleReset =
 			}
 	}
 	
+	//Fire lightpanel targets on unhooking
+	if(self.owner.state & STATE_RM_HOOKING)
+	{
+		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_HOOKING);
+		self.owner.state |= STATE_RM_UNHOOKING;
+		activator = self.owner;
+		entity oself = self;
+		self = self.owner.rotatecontroller;
+		SUB_UseTargets();
+		self = oself;
+		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_UNHOOKING);
+	}
+	
 	remove(self);
+
 };
 
 void() GrappleTrack =
