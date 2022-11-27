@@ -824,7 +824,7 @@ void() CheckGrapple =
 	
 	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
 	
-	local	entity new;
+	local	entity new, oself;
 	local	float dist;
 	local	vector panel_origin;
 	local	vector player_aim;
@@ -854,13 +854,47 @@ void() CheckGrapple =
 		new.think = SUB_Remove;
 		new.ltime = time;
 		new.nextthink = time + 0.02;
+		
+		//Fire lightpanel targets on entering aiming mode
+		if(!self.state & STATE_RM_AIMING)
+		{
+			self.state |= STATE_RM_AIMING;
+			self.rotatecontroller = trace_ent; //The .rotatecontroller property is reused in the lightpanel context to keep trace of what lightpanel was aimed at upon exiting aiming state (see if case below)
+			activator = self;
+			oself = self;
+			self = trace_ent;
+			SUB_UseTargets();
+			self = oself;
+		}
+	}
+	else if(self.state & STATE_RM_AIMING && self.rotatecontroller) //Fire lightpanel targets on exiting aiming mode
+	{
+		self.state = self.state - (self.state & STATE_RM_AIMING);
+		self.state |= STATE_RM_UNAIMING;
+		activator = self;
+		oself = self;
+		self = self.rotatecontroller;
+		SUB_UseTargets();
+		self = oself;
+		self.rotatecontroller = world;
+		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
-	
-	if (self.impulse==24 && !self.hook_out) {
+	if (self.impulse==24 && !self.hook_out && !trace_ent.spawnflags & /*Aim only*/1) {
 		W_FireGrapple();
+		
+		//Fire lightpanel targets on hooking
+		if(self.state & STATE_RM_AIMING && (!self.state & STATE_RM_HOOKING))
+		{
+			self.state = self.state - (self.state & STATE_RM_AIMING);
+			self.state |= STATE_RM_HOOKING;
+			activator = self;
+			oself = self;
+			self = trace_ent;
+			SUB_UseTargets();
+			self = oself;
+		}
 	}
-
 
 }
 
