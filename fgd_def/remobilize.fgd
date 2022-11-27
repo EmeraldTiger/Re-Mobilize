@@ -2991,10 +2991,13 @@ If noise1 is not set it will default to various sounds in sound/break folder
 
 Use spawnflag 2 for an explosion, dmg is amount of damage inflicted" [
 	    spawnflags(flags) = [
-					1 :	"No Monster Damage" : 0 : "Only the player can break"
+			1 :	"No Monster Damage" : 0 : "Only the player can break"
 	        2 : "Explosion" : 0 : "Produces explosion effect and sound"
 	        4 : "Use custom mdls or bsp models" : 0 : "Uses models specified in break_template1, 2, etc"
+			8 : "Cascading destruction" : 0 : "Bouncing debris can break func_breakables in turn"
 	    ]
+		snd_hit(string) : "Path to custom impact sound for bouncing debris"
+		dmg_take(integer) : "Damage inflicted by each debris on touch"
 	    noise1(string) : "Path to custom break sound"
 		mdl_debris(string) : "Path to custom debris model"
 			style(choices) : "Built-in debris style" : 0 =
