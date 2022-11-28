@@ -91,6 +91,28 @@ func_breakable
 .float brk_obj_count4;
 .float brk_obj_count5;
 
+void() debris_touch =
+{
+	if (other.solid == SOLID_TRIGGER)
+		return;	// trigger field, do nothing
+
+	if (pointcontents(self.origin) == CONTENT_SKY)
+	{
+		remove(self);
+		return;
+	}
+
+	// hit something that bleeds
+	if (other.takedamage && self.dmg_take && (other.classname != "func_breakable" || self.spawnflags & /*Cascading destruction*/8))
+	{
+		spawn_touchblood (self.dmg_take);
+		T_Damage (other, world, self, self.dmg_take);
+		self.touch = SUB_Null;
+		remove(self);
+	}
+	else if(self.snd_hit)
+		sound (self, CHAN_WEAPON, self.snd_hit, 1, ATTN_NORM);
+};
 
 // template system from Qmaster -- dumptruck_ds
 void() make_breakable_templates_debris = {
@@ -110,7 +132,7 @@ void() make_breakable_templates_debris = {
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
-			new.solid = SOLID_NOT;
+			new.solid = SOLID_BBOX;
 			new.avelocity_x = random()*600;
 			new.avelocity_y = random()*600;
 			new.avelocity_z = random()*600;
@@ -118,6 +140,11 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
+			new.spawnflags = self.spawnflags;
+			new.skin = self.style;
+			new.snd_hit = self.snd_hit;
+			new.dmg_take = self.dmg_take;
+			new.touch = debris_touch;
 			i++;
 		}
 	}
@@ -135,7 +162,7 @@ void() make_breakable_templates_debris = {
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
-			new.solid = SOLID_NOT;
+			new.solid = SOLID_BBOX;
 			new.avelocity_x = random()*600;
 			new.avelocity_y = random()*600;
 			new.avelocity_z = random()*600;
@@ -143,6 +170,11 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
+			new.spawnflags = self.spawnflags;
+			new.skin = self.style;
+			new.snd_hit = self.snd_hit;
+			new.dmg_take = self.dmg_take;
+			new.touch = debris_touch;
 			i++;
 		}
 	}
@@ -160,7 +192,7 @@ void() make_breakable_templates_debris = {
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
-			new.solid = SOLID_NOT;
+			new.solid = SOLID_BBOX;
 			new.avelocity_x = random()*600;
 			new.avelocity_y = random()*600;
 			new.avelocity_z = random()*600;
@@ -168,6 +200,11 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
+			new.spawnflags = self.spawnflags;
+			new.skin = self.style;
+			new.snd_hit = self.snd_hit;
+			new.dmg_take = self.dmg_take;
+			new.touch = debris_touch;
 			i++;
 		}
 	}
@@ -185,7 +222,7 @@ void() make_breakable_templates_debris = {
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
-			new.solid = SOLID_NOT;
+			new.solid = SOLID_BBOX;
 			new.avelocity_x = random()*600;
 			new.avelocity_y = random()*600;
 			new.avelocity_z = random()*600;
@@ -193,6 +230,11 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
+			new.spawnflags = self.spawnflags;
+			new.skin = self.style;
+			new.snd_hit = self.snd_hit;
+			new.dmg_take = self.dmg_take;
+			new.touch = debris_touch;
 			i++;
 		}
 	}
@@ -210,7 +252,7 @@ void() make_breakable_templates_debris = {
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
 			new.movetype = MOVETYPE_BOUNCE;
-			new.solid = SOLID_NOT;
+			new.solid = SOLID_BBOX;
 			new.avelocity_x = random()*600;
 			new.avelocity_y = random()*600;
 			new.avelocity_z = random()*600;
@@ -218,6 +260,11 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
+			new.spawnflags = self.spawnflags;
+			new.skin = self.style;
+			new.snd_hit = self.snd_hit;
+			new.dmg_take = self.dmg_take;
+			new.touch = debris_touch;
 			i++;
 		}
 	}
@@ -251,76 +298,17 @@ void() make_breakable_debris = {
 		new.ltime = time;
 		new.nextthink = time + 10 + random()*10;
 		new.flags = 0;
+		new.spawnflags = self.spawnflags;
+		new.skin = self.style;
+		new.snd_hit = self.snd_hit;
+		new.dmg_take = self.dmg_take;
+		new.touch = debris_touch;
 
 		// randomly choose size
 		if (random() > 0.333)
 			new.frame = 1; //larger
 		else
 			new.frame = 2; //smaller
-
-		// choose skin based on "style" key
-		if (self.style == 1)
-			new.skin = 1;
-		if (self.style == 2)
-			new.skin = 2;
-		if (self.style == 3) // new debris skins start here - dumptruck_ds
-			new.skin = 3;
-		if (self.style == 4)
-		new.skin = 4;
-		if (self.style == 5)
-		new.skin = 5;
-		if (self.style == 6)
-		new.skin = 6;
-		if (self.style == 7)
-		new.skin = 7;
-		if (self.style == 8)
-		new.skin = 8;
-		if (self.style == 9)
-		new.skin = 9;
-		if (self.style == 10)
-		new.skin = 10;
-		if (self.style == 11)
-		new.skin = 11;
-		if (self.style == 12)
-		new.skin = 12;
-		if (self.style == 13)
-		new.skin = 13;
-		if (self.style == 14)
-		new.skin = 14;
-		if (self.style == 15)
-		new.skin = 15;
-		if (self.style == 16)
-		new.skin = 16;
-		if (self.style == 17)
-		new.skin = 17;
-		if (self.style == 18)
-		new.skin = 18;
-		if (self.style == 19)
-		new.skin = 19;
-		if (self.style == 20)
-		new.skin = 20;
-		if (self.style == 21)
-		new.skin = 21;
-		if (self.style == 22)
-		new.skin = 22;
-		if (self.style == 23)
-		new.skin = 23;
-		if (self.style == 24)
-		new.skin = 24;
-		if (self.style == 25)
-		new.skin = 25;
-		if (self.style == 26)
-		new.skin = 26;
-		if (self.style == 27)
-		new.skin = 27;
-		if (self.style == 28)
-		new.skin = 28;
-		if (self.style == 29)
-		new.skin = 29;
-		if (self.style == 30)
-		new.skin = 30;
-		if (self.style == 31)// new debris skins end here - dumptruck_ds
-		new.skin = 31;
 
 		i = i + 1;
 	}
@@ -472,6 +460,7 @@ void () func_breakable = {
 	if(self.mdl_debris == "") self.mdl_debris = "progs/debris.mdl";
 	precache_model (self.mdl_debris);
 	precache_sound ("blob/hit1.wav");
+	if (self.snd_hit) precache_sound (self.snd_hit);
 
 	if (self.noise1 != "") precache_sound(self.noise1);
 // adding new default sounds for "simple" breakables in 1.2.0 -- dumptruck_ds
