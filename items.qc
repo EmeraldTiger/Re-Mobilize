@@ -1436,6 +1436,26 @@ void() key_touch =
 // support for item_key_custom -- iw
 	GiveKeys (other, self.items, self.customkeys);
 
+// Custom keys inventory
+	if(self.customkeys)
+	{
+		if(!other.skip_id1_overrides)
+		{
+			//Player doesn't have any custom inventory yet. Let's build it on the fly.
+			other.skip_id1_overrides = 1;
+			
+			makevectors(other.v_angle);
+			
+			entity inv1, inv2, inv3, inv4, inv5;
+			inv1 = spawn();
+			inv1.classname = "inventory";
+			inv1.mdl = self.weaponmodel;
+			setmodel(inv1, inv1.mdl);
+			inv1.view_ofs = '200 150 120';
+			inv1.origin = other.origin + v_forward*inv1.view_ofs_x + v_right*inv1.view_ofs_y + v_up*inv1.view_ofs_z;
+		}
+	}
+
 	if (!coop)
 	{
 		self.solid = SOLID_NOT;
@@ -1632,10 +1652,15 @@ void() item_key_custom =
 		return;
 	}
 
+	if(self.weaponmodel)
+		precache_model (self.weaponmodel); //Model or sprite for custom inventory
+	else
+		self.weaponmodel = self.mdl;
+
 	precache_model (self.mdl);
 	setmodel (self, self.mdl);
 	self.mdl = "";  // this should not be referenced again
-
+	
 	self.netname = self.keyname;
 	self.keyname = "";  // this should not be referenced again
 

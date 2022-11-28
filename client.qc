@@ -1164,6 +1164,16 @@ else
 	
 	if (self.hook_out)
 		GrappleService();
+	
+	//Display custom keys inventory
+	if(self.skip_id1_overrides)
+	{
+		makevectors(self.v_angle);
+		
+		entity inv = find(world,classname,"inventory");
+		if(inv)
+			inv.origin = self.origin + v_forward*inv.view_ofs_x + v_right*inv.view_ofs_y + v_up*inv.view_ofs_z;
+	}
 };
 
 /*
