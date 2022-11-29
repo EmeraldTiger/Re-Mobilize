@@ -1117,3 +1117,7 @@ void(entity client, float density, vector color) csf_set;
 
 //Inky 20221029 Visited maps handling
 .float visitflag;
+
+//Inky 20221128 Custom keys inventory
+.entity inv1, inv2, inv3, inv4, inv5;
+.vector hud_origin, hud_offset;

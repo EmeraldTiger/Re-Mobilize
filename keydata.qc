@@ -219,4 +219,48 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			(client.items & item_flags);
 	client.customkeys = client.customkeys -
 			(client.customkeys & customkey_flags);
+			
+// Custom keys inventory
+	if(customkey_flags)
+	{
+		//Reassign the slots
+		if(client.inv1.customkeys & customkey_flags)
+		{
+			remove(client.inv1);
+			client.inv1 = client.inv2;
+			client.inv2 = client.inv3;
+			client.inv3 = client.inv4;
+			client.inv4 = client.inv5;
+			client.inv5 = world;
+		}
+		else if(client.inv2.customkeys & customkey_flags)
+		{
+			remove(client.inv2);
+			client.inv2 = client.inv3;
+			client.inv3 = client.inv4;
+			client.inv4 = client.inv5;
+			client.inv5 = world;
+		}
+		else if(client.inv3.customkeys & customkey_flags)
+		{
+			remove(client.inv3);
+			client.inv3 = client.inv4;
+			client.inv4 = client.inv5;
+			client.inv5 = world;
+		}
+		else if(client.inv4.customkeys & customkey_flags)
+		{
+			remove(client.inv4);
+			client.inv4 = client.inv5;
+			client.inv5 = world;
+		}
+		else if(client.inv5.customkeys & customkey_flags)
+		{
+			remove(client.inv5);
+			client.inv5 = world;
+		}
+		
+		//Do player still have something in their custom keys inventory?
+		other.skip_id1_overrides = !(client.inv1 == world && client.inv2 == world && client.inv3 == world && client.inv4 == world && client.inv5 == world);
+	}
 };

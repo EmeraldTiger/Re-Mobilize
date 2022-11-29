@@ -1439,21 +1439,35 @@ void() key_touch =
 // Custom keys inventory
 	if(self.customkeys)
 	{
-		if(!other.skip_id1_overrides)
+		//Player now have something in their custom keys inventory
+		other.skip_id1_overrides = 1;
+
+		//HUD positioning setup (if needed)
+		if(world.hud_origin) other.hud_origin = world.hud_origin; else other.hud_origin = '200 170 150';
+		if(world.hud_offset) other.hud_offset = world.hud_offset; else other.hud_offset = '0 0 -50';
+			
+		//Build the HUD entity
+		entity inv = spawn();
+		if(self.mdl_head == self.mdl)
 		{
-			//Player doesn't have any custom inventory yet. Let's build it on the fly.
-			other.skip_id1_overrides = 1;
-			
-			makevectors(other.v_angle);
-			
-			entity inv1, inv2, inv3, inv4, inv5;
-			inv1 = spawn();
-			inv1.classname = "inventory";
-			inv1.mdl = self.weaponmodel;
-			setmodel(inv1, inv1.mdl);
-			inv1.view_ofs = '200 150 120';
-			inv1.origin = other.origin + v_forward*inv1.view_ofs_x + v_right*inv1.view_ofs_y + v_up*inv1.view_ofs_z;
+			inv.skin = self.skin;
+			inv.frame = self.frame;
 		}
+		inv.customkeys = self.customkeys;
+		inv.view_ofs = self.view_ofs;
+		setmodel(inv, self.mdl_head);
+		
+		//Assign it to the first available slot
+		if(!other.inv1)
+			other.inv1 = inv;
+		else if(!other.inv2)
+			other.inv2 = inv;
+		else if(!other.inv3)
+			other.inv3 = inv;
+		else if(!other.inv4)
+			other.inv4 = inv;
+		else if(!other.inv5)
+			other.inv5 = inv;
 	}
 
 	if (!coop)
@@ -1652,14 +1666,13 @@ void() item_key_custom =
 		return;
 	}
 
-	if(self.weaponmodel)
-		precache_model (self.weaponmodel); //Model or sprite for custom inventory
+	if(self.mdl_head)
+		precache_model (self.mdl_head); //Model or sprite for custom inventory
 	else
-		self.weaponmodel = self.mdl;
+		self.mdl_head = self.mdl;
 
 	precache_model (self.mdl);
 	setmodel (self, self.mdl);
-	self.mdl = "";  // this should not be referenced again
 	
 	self.netname = self.keyname;
 	self.keyname = "";  // this should not be referenced again
