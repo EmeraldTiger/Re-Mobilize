@@ -88,6 +88,8 @@
 	a_grn_mdl(string) : "Global Green Armor model" :  : "Use this field to replace all Green Armors with this model"
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
+	hud_origin(string) : "HUD start point" : "200 170 150" : "Use this field to set the custom keys inventory HUD position relatively to the player (x is forward, y is sideways, z is up)"
+	hud_offset(string) : "HUD offset" : "0 0 -50" : "Use this field to tell by which offset a new key appears in the custom keys inventory HUD relatively to the previous one (x is forward, y is sideways, z is up)"
 ]
 
 //
@@ -589,6 +591,8 @@ The behavior of an item_key_custom should be as the player expects (based on the
 	mdl(string) : "Model file (required)"
 	noise(string) : "Sound file for the pickup sound (default is per worldtype)"
 	skin(integer) : "Skin index (default 0)"
+	view_ofs(string) : "Offset for display in the custom keys inventory HUD (meant to compensate, in case the model is not natively centered in its bounding box)" : "0 0 0"
+	mdl_head(string) : "Path to custom HUD model (if not set, mdl is used)"
 ]
 
 @PointClass
