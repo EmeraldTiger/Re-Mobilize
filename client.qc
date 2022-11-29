@@ -1169,10 +1169,6 @@ else
 	if(self.skip_id1_overrides)
 	{
 		makevectors(self.v_angle);
-		
-		entity inv = find(world,classname,"inventory");
-		if(inv)
-			inv.origin = self.origin + v_forward*inv.view_ofs_x + v_right*inv.view_ofs_y + v_up*inv.view_ofs_z;
 		if(self.inv1) self.inv1.origin = self.origin + v_forward*(self.hud_origin_x + self.inv1.view_ofs_x) + v_right*(self.hud_origin_y + self.inv1.view_ofs_y) + v_up*(self.hud_origin_z + self.inv1.view_ofs_z);
 		if(self.inv2) self.inv2.origin = self.origin + v_forward*(self.hud_origin_x + self.inv2.view_ofs_x + self.hud_offset_x  ) + v_right*(self.hud_origin_y + self.inv2.view_ofs_y + self.hud_offset_y  ) + v_up*(self.hud_origin_z + self.inv2.view_ofs_z + self.hud_offset_z  );
 		if(self.inv3) self.inv3.origin = self.origin + v_forward*(self.hud_origin_x + self.inv3.view_ofs_x + self.hud_offset_x*2) + v_right*(self.hud_origin_y + self.inv3.view_ofs_y + self.hud_offset_y*2) + v_up*(self.hud_origin_z + self.inv3.view_ofs_z + self.hud_offset_z*2);
