@@ -11,8 +11,7 @@ void (vector org, entity death_owner) spawn_tdeath;
 float	modelindex_eyes, modelindex_player;
 void() SUB_CheckWaiting; // in triggers.qc
 
-
-
+entity dummy;
 
 
 void() SetChangeParms =
@@ -379,6 +378,7 @@ void() PutClientInServer =
 	}
 
 	spawn_tdeath (self.origin, self);
+	
 };
 
 
@@ -822,7 +822,15 @@ void() CheckGrapple =
 	local vector player_offset;
 	player_offset = self.origin + self.view_ofs;
 	
-	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
+	// (Credit to Inky for this)
+	if (dummy) {
+		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
+	}
+	else {
+		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, self);
+	}
+	
+	//traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
 	
 	local	entity new, oself;
 	local	float dist;
@@ -838,6 +846,13 @@ void() CheckGrapple =
 		panel_origin = new.origin;
 		dist = vlen(trace_endpos - self.origin);
 		new.angles = vectoangles(trace_endpos - self.origin);
+		
+		if (trace_ent.volume) {
+			self.volume = 1;
+		}
+		else {
+			self.volume = 0;
+		}
 		
 		player_aim = player_offset + (v_forward * 200);
 		new.origin = player_aim;
