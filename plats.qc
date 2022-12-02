@@ -392,7 +392,7 @@ void() train_next = {
 					destang_z = self.angles_z;
 				}
 				if (self.multiplier > 0)
-					SUB_CalcAngleMoveController(destang, self.speed2*self.multiplier, self.rotatecontroller, targ, angleMoveDone);
+					SUB_CalcAngleMoveController(destang, self.speed2*self.multiplier, angleMoveDone, self.rotatecontroller);
 				else
 					self.angles = destang;
 			}
