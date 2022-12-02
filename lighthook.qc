@@ -346,7 +346,7 @@ void () W_FireGrapple =
 // called each frame by CLIENT.QC if client has hook_out
 void() GrappleService =
 {
-	local   vector  o, dist, vel;
+	local   vector  dist, vel;
 	local	float	v;
 
 	if (!self.on_hook) {

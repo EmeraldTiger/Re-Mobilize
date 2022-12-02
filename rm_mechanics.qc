@@ -131,7 +131,7 @@ void() wiremesh_touch =
 	other.wiremesh = self;
 	
 	//Fire wiremesh targets on climbing mode change
-	if(!other.state & STATE_RM_CLIMBING && !other.flags & FL_ONGROUND)
+	if(!(other.state & STATE_RM_CLIMBING) && !(other.flags & FL_ONGROUND))
 	{
 		other.state |= STATE_RM_CLIMBING;
 		activator = other;
