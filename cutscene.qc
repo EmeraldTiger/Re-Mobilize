@@ -48,6 +48,7 @@ local   entity  s;
 	if(o.inv3) { s.inv3=spawn(); s.inv3.mdl = o.inv3.model; }
 	if(o.inv4) { s.inv4=spawn(); s.inv4.mdl = o.inv4.model; }
 	if(o.inv5) { s.inv5=spawn(); s.inv5.mdl = o.inv5.model; }
+	s.fade_amt = cvar("crosshair");
 
 // Save powerups
 // Pentagram
@@ -171,6 +172,7 @@ local   string  val;
 	if(c.inv3) { setmodel (c.inv3, t.inv3.mdl); remove(t.inv3); }
 	if(c.inv4) { setmodel (c.inv4, t.inv4.mdl); remove(t.inv4); }
 	if(c.inv5) { setmodel (c.inv5, t.inv5.mdl); remove(t.inv5); }
+	cvar_set("crosshair", ftos(t.fade_amt));
 
 // Restore powerups
     if (t.invincible_finished)
@@ -442,6 +444,9 @@ local   vector  looky;
 	if(self.inv3) setmodel (self.inv3, "");
 	if(self.inv4) setmodel (self.inv4, "");
 	if(self.inv5) setmodel (self.inv5, "");
+	
+	//Remove crosshair from the screen.
+	cvar_set("crosshair", "0");
 	
 //- - - - - - - - - - - - - - - - - - -
 //    if (vision)
