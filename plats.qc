@@ -374,13 +374,28 @@ void() train_next = {
 
 	if (self.classname == "misc_modeltrain") {
 		if (!(self.spawnflags & TRAIN_NOROTATE)) {
-			destang = vectoangles(targ.origin - self.origin);
-			if (self.spawnflags & TRAIN_ROTATEY) {
-				destang_x = self.angles_x;
-				destang_z = self.angles_z;
+			void() angleMoveDone = SUB_Null;
+			
+			if (targ.origin == self.origin) angleMoveDone = train_wait;
+			
+			if(targ.angles)
+				destang = targ.angles;
+			else if (targ.origin != self.origin)
+				destang = vectoangles(targ.origin - self.origin);
+			else
+				destang = '0 0 0';
+			
+			if(destang != '0 0 0')
+			{
+				if (self.spawnflags & TRAIN_ROTATEY) {
+					destang_x = self.angles_x;
+					destang_z = self.angles_z;
+				}
+				if (self.multiplier > 0)
+					SUB_CalcAngleMoveController(destang, self.speed2*self.multiplier, self.rotatecontroller, targ, angleMoveDone);
+				else
+					self.angles = destang;
 			}
-			if (self.multiplier > 0) SUB_CalcAngleMoveController(destang, self.speed2*self.multiplier, SUB_Null, self.rotatecontroller);
-			else self.angles = destang;
 		}
 	}
 
@@ -389,6 +404,10 @@ void() train_next = {
 		if (self.classname == "misc_modeltrain" && self.style != TRAIN_STYLE_SINGLEANIM)
 			SUB_CallAsSelf(self.animcontroller.think, self.animcontroller);
 	}
+	
+	if (targ.origin == self.origin) //Rotation done, no translation
+		return;
+	
 	// if the TRAIN_CUSTOMALIGN flag is checked then the train should align
 	// with its path_corners based on the location of an "origin" brush added
 	// to the train by the mapper instead of the mins corner

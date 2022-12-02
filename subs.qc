@@ -225,7 +225,7 @@ to not lose track of current think functions.
 */
 void() SUB_CalcAngleMoveDoneController;
 
-void(vector destangle, float tspeed, void() func, entity controller) SUB_CalcAngleMoveController =
+void(vector destangle, float tspeed, entity controller, entity path_corner, void() func) SUB_CalcAngleMoveController =
 {
 	local vector	destdelta;
 	local float		len, traveltime;
@@ -254,7 +254,8 @@ void(vector destangle, float tspeed, void() func, entity controller) SUB_CalcAng
 	self.avelocity = destdelta * (1 / traveltime);
 	
 	// Makes sure controller.owner points to self so it can be referenced later in the think function
-	controller.owner = self;  
+	controller.owner = self;
+	controller.enemy = path_corner;
 	controller.think1 = func;
 	controller.finalangle = destangle;
 	controller.think = SUB_CalcAngleMoveDoneController;
@@ -270,6 +271,9 @@ void() SUB_CalcAngleMoveDoneController =
 	self.owner.angles = self.finalangle;
 	self.owner.avelocity = '0 0 0';
 	self.nextthink = -1;
+	
+	SUB_UseEntTargets(self.enemy);
+	
 	if (self.think1)
 		SUB_CallAsSelf(self.think1, self.owner);
 };
