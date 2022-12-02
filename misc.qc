@@ -1831,7 +1831,7 @@ void(entity tgt) target_textstory_spawn_helper = {
 
 void() target_textstory_use = {
 
-	if (!(activator.flags & FL_CLIENT)) return;
+	if (!(activator.flags & FL_CLIENT || self.spawnflags & TRIGGER_CENTERPRINTALL)) return;
 	if (self.estate != STATE_ACTIVE) return;
 
 	entity t;
