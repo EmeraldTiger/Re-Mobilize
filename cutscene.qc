@@ -43,6 +43,11 @@ local   entity  s;
     s.effects       = o.effects;
     s.items         = o.items;
     s.enemy         = o.enemy;      // PM:  o.enemy changed to camera later.
+	if(o.inv1) { s.inv1=spawn(); s.inv1.mdl = o.inv1.model; }
+	if(o.inv2) { s.inv2=spawn(); s.inv2.mdl = o.inv2.model; }
+	if(o.inv3) { s.inv3=spawn(); s.inv3.mdl = o.inv3.model; }
+	if(o.inv4) { s.inv4=spawn(); s.inv4.mdl = o.inv4.model; }
+	if(o.inv5) { s.inv5=spawn(); s.inv5.mdl = o.inv5.model; }
 
 // Save powerups
 // Pentagram
@@ -161,6 +166,11 @@ local   string  val;
     c.effects       = t.effects;
     c.items         = t.items;
     c.enemy         = t.enemy;      // PM:  Restore client's original enemy.
+	if(c.inv1) { setmodel (c.inv1, t.inv1.mdl); remove(t.inv1); }
+	if(c.inv2) { setmodel (c.inv2, t.inv2.mdl); remove(t.inv2); }
+	if(c.inv3) { setmodel (c.inv3, t.inv3.mdl); remove(t.inv3); }
+	if(c.inv4) { setmodel (c.inv4, t.inv4.mdl); remove(t.inv4); }
+	if(c.inv5) { setmodel (c.inv5, t.inv5.mdl); remove(t.inv5); }
 
 // Restore powerups
     if (t.invincible_finished)
@@ -425,6 +435,14 @@ local   vector  looky;
     self.effects     = 0;
     self.items       = 0;
     self.weaponmodel = "";      // Remove weapon from the screen.
+	
+	//Remove custom keys inventory from the screen.
+	if(self.inv1) setmodel (self.inv1, "");
+	if(self.inv2) setmodel (self.inv2, "");
+	if(self.inv3) setmodel (self.inv3, "");
+	if(self.inv4) setmodel (self.inv4, "");
+	if(self.inv5) setmodel (self.inv5, "");
+	
 //- - - - - - - - - - - - - - - - - - -
 //    if (vision)
 //    {
