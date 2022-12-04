@@ -99,7 +99,7 @@ void() DecodeLevelParms =
 	{
 		//Identify all the trigger_changelevel entities and give them a unique visitflag id.
 		float num, fv;
-		entity portal,marker;
+		entity portal;
 		
 		entity oself = self;
 		
@@ -871,7 +871,7 @@ void() CheckGrapple =
 		new.nextthink = time + 0.02;
 		
 		//Fire lightpanel targets on entering aiming mode
-		if(!self.state & STATE_RM_AIMING)
+		if(!(self.state & STATE_RM_AIMING))
 		{
 			self.state |= STATE_RM_AIMING;
 			self.rotatecontroller = trace_ent; //The .rotatecontroller property is reused in the lightpanel context to keep trace of what lightpanel was aimed at upon exiting aiming state (see if case below)
@@ -895,11 +895,11 @@ void() CheckGrapple =
 		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
-	if (self.impulse==24 && !self.hook_out && !trace_ent.spawnflags & /*Aim only*/1) {
+	if (self.impulse==24 && !self.hook_out && !(trace_ent.spawnflags & /*Aim only*/1)) {
 		W_FireGrapple();
 		
 		//Fire lightpanel targets on hooking
-		if(self.state & STATE_RM_AIMING && (!self.state & STATE_RM_HOOKING))
+		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
 		{
 			self.state = self.state - (self.state & STATE_RM_AIMING);
 			self.state |= STATE_RM_HOOKING;
