@@ -43,6 +43,7 @@ local   entity  s;
     s.effects       = o.effects;
     s.items         = o.items;
     s.enemy         = o.enemy;      // PM:  o.enemy changed to camera later.
+	s.fade_amt      = cvar("crosshair");
 
 // Save powerups
 // Pentagram
@@ -161,6 +162,7 @@ local   string  val;
     c.effects       = t.effects;
     c.items         = t.items;
     c.enemy         = t.enemy;      // PM:  Restore client's original enemy.
+	cvar_set("crosshair", ftos(t.fade_amt));
 
 // Restore powerups
     if (t.invincible_finished)
@@ -425,6 +427,7 @@ local   vector  looky;
     self.effects     = 0;
     self.items       = 0;
     self.weaponmodel = "";      // Remove weapon from the screen.
+	cvar_set("crosshair", "0");
 //- - - - - - - - - - - - - - - - - - -
 //    if (vision)
 //    {
