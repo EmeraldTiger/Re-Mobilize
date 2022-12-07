@@ -254,7 +254,7 @@ void(vector destangle, float tspeed, void() func, entity controller) SUB_CalcAng
 	self.avelocity = destdelta * (1 / traveltime);
 	
 	// Makes sure controller.owner points to self so it can be referenced later in the think function
-	controller.owner = self;  
+	controller.owner = self;
 	controller.think1 = func;
 	controller.finalangle = destangle;
 	controller.think = SUB_CalcAngleMoveDoneController;
@@ -270,6 +270,7 @@ void() SUB_CalcAngleMoveDoneController =
 	self.owner.angles = self.finalangle;
 	self.owner.avelocity = '0 0 0';
 	self.nextthink = -1;
+	
 	if (self.think1)
 		SUB_CallAsSelf(self.think1, self.owner);
 };

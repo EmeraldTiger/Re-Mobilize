@@ -342,6 +342,7 @@ float flag_value(float d) //Inky 20221025 Used for trigger_serverflags
 		case 22: return 2097152; break;
 		case 23: return 4194304; break;
 		case 24: return 8388608; break;
+		default: return 0;
 	}
 }
 
