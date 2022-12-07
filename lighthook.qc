@@ -46,6 +46,21 @@ void(entity h, entity player) GrappleTrail =
 	
 };
 
+void(entity player) NotifyUnhook =
+{
+	if(player.state & STATE_RM_HOOKING)
+	{
+		player.state = player.state - (player.state & STATE_RM_HOOKING);
+		player.state |= STATE_RM_UNHOOKING;
+		activator = player;
+		entity oself = self;
+		self = player.rotatecontroller;
+		SUB_UseTargets();
+		self = oself;
+		player.state = player.state - (player.state & STATE_RM_UNHOOKING);
+	}
+};
+
 void() GrappleReset =
 {
 
@@ -73,17 +88,7 @@ void() GrappleReset =
 	}
 	
 	//Fire lightpanel targets on unhooking
-	if(self.owner.state & STATE_RM_HOOKING)
-	{
-		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_HOOKING);
-		self.owner.state |= STATE_RM_UNHOOKING;
-		activator = self.owner;
-		entity oself = self;
-		self = self.owner.rotatecontroller;
-		SUB_UseTargets();
-		self = oself;
-		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_UNHOOKING);
-	}
+	NotifyUnhook(self.owner);
 	
 	remove(self);
 

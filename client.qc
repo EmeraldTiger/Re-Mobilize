@@ -816,6 +816,7 @@ void() CheckWaterJump =
 	}
 };
 
+void(entity player) NotifyUnhook;
 void() CheckGrapple =
 {
 	
@@ -895,9 +896,11 @@ void() CheckGrapple =
 		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
-	if (self.impulse==24 && !self.hook_out && !(trace_ent.spawnflags & /*Aim only*/1)) {
-		W_FireGrapple();
-		
+	if (self.impulse==24 && !self.hook_out && trace_ent.classname=="func_hook")
+	{
+		if(!(trace_ent.spawnflags & /*Aim only*/1))
+			W_FireGrapple();
+      
 		//Fire lightpanel targets on hooking
 		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
 		{
@@ -910,7 +913,6 @@ void() CheckGrapple =
 			self = oself;
 		}
 	}
-
 }
 
 
@@ -1175,10 +1177,17 @@ else
 	
 	// Re:Mobilize: Lighthook
 	
+	if (self.impulse==25)
+	{
+		if(self.rotatecontroller==world || (self.rotatecontroller!=world && self.rotatecontroller.spawnflags & /*Aim only*/1))
+			NotifyUnhook(self);
+	}
+	
 	CheckGrapple();
 	
 	if (self.hook_out)
 		GrappleService();
+		
 };
 
 /*
