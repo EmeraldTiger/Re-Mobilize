@@ -1961,3 +1961,45 @@ void trigger_random ()
 	self.model="trigger_random by Inky";
 	self.use = trigger_random_use;
 }
+
+/*QUAKED trigger_changeskin (.5 .5 .5) ?
+Changes an entity's skin field
+
+target = entity to change (can be activator or other)
+skin = new value for skin field
+
+*/
+
+void() trigger_changeskin_use =
+{
+	if (self.estate != STATE_ACTIVE) return;
+
+	if(self.target == "activator")
+	{
+		activator.skin = self.skin;
+	}
+	else if(self.target == "other")
+	{
+		other.skin = self.skin;
+	}
+	else if (self.target)
+	{
+		for (entity e = world; (e = find(e, targetname, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname2, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname3, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname4, self.target)); )
+			e.skin = self.skin;
+	}
+
+};
+
+void() trigger_changeskin =
+{
+    if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+        return;
+
+    self.use = trigger_changeskin_use;
+};
