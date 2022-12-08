@@ -413,7 +413,7 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 
 		// Hacky way to force SG/LG collision on nonsolid hookpanels
 		if ((self.state & STATE_RM_AIMING) && dummy) {
-			traceline (src + v_forward*32, src + direction*2048, FALSE, dummy);
+			traceline (src, src + direction*2048, FALSE, dummy);
 		}
 		else {
 			traceline (src, src + direction*2048, FALSE, self);
@@ -795,7 +795,7 @@ void() W_FireLightning =
 
 	// Hacky way to force SG/LG collision on nonsolid hookpanels
 	if ((self.state & STATE_RM_AIMING) && dummy) {
-		traceline (org + v_forward*32, org + v_forward*600, TRUE, dummy);
+		traceline (org, org + v_forward*600, TRUE, dummy);
 		}
 	else {
 		traceline (org, org + v_forward*600, TRUE, self);

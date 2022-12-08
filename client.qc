@@ -825,13 +825,11 @@ void() CheckGrapple =
 	
 	// (Credit to Inky for this)
 	if (dummy) {
-		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
+		traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, dummy);
 	}
 	else {
-		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, self);
+		traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
 	}
-	
-	//traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
 	
 	local	entity new, oself;
 	local	float dist;
