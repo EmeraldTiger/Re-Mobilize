@@ -11,9 +11,6 @@ void (vector org, entity death_owner) spawn_tdeath;
 float	modelindex_eyes, modelindex_player;
 void() SUB_CheckWaiting; // in triggers.qc
 
-entity dummy;
-
-
 void() SetChangeParms =
 {
 	if (self.health <= 0)
@@ -824,12 +821,7 @@ void() CheckGrapple =
 	player_offset = self.origin + self.view_ofs;
 	
 	// (Credit to Inky for this)
-	if (dummy) {
-		traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, dummy);
-	}
-	else {
-		traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
-	}
+	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, aimIgnore);
 	
 	local	entity new, oself;
 	local	float dist;

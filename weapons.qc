@@ -412,12 +412,8 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 		direction = dir + crandom()*spread_x*v_right + crandom()*spread_y*v_up;
 
 		// Hacky way to force SG/LG collision on nonsolid hookpanels
-		if ((self.state & STATE_RM_AIMING) && dummy) {
-			traceline (src, src + direction*2048, FALSE, dummy);
-		}
-		else {
-			traceline (src, src + direction*2048, FALSE, self);
-		}
+		traceline (src - 8*v_forward, src + direction*2048, FALSE, aimIgnore);
+		
 		if (trace_fraction != 1.0)
 			TraceAttack (4, direction);
 
@@ -794,12 +790,7 @@ void() W_FireLightning =
 	org = self.origin + '0 0 16';
 
 	// Hacky way to force SG/LG collision on nonsolid hookpanels
-	if ((self.state & STATE_RM_AIMING) && dummy) {
-		traceline (org, org + v_forward*600, TRUE, dummy);
-		}
-	else {
-		traceline (org, org + v_forward*600, TRUE, self);
-	}
+	traceline (org, org + v_forward*600, TRUE, aimIgnore);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
