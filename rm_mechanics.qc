@@ -269,7 +269,7 @@ void() func_hook =
 	}
 	
 	// Dummy spawn for nonsolid hookpanels
-	if (self.volume) {
+	if (self.volume && dummy==world) {
 		dummy = spawn();
 		dummy.solid = SOLID_NOT;
 	}
