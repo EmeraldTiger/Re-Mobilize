@@ -412,7 +412,9 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 		direction = dir + crandom()*spread_x*v_right + crandom()*spread_y*v_up;
 
 		// Hacky way to force SG/LG collision on nonsolid hookpanels
+		self.solid = SOLID_NOT;
 		traceline (src - 8*v_forward, src + direction*2048, FALSE, aimIgnore);
+		self.solid = SOLID_SLIDEBOX;
 		
 		if (trace_fraction != 1.0)
 			TraceAttack (4, direction);
