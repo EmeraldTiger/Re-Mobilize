@@ -792,7 +792,9 @@ void() W_FireLightning =
 	org = self.origin + '0 0 16';
 
 	// Hacky way to force SG/LG collision on nonsolid hookpanels
+	self.solid = SOLID_NOT;
 	traceline (org, org + v_forward*600, TRUE, aimIgnore);
+	self.solid = SOLID_SLIDEBOX;
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);

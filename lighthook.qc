@@ -252,7 +252,9 @@ void () W_FireGrapple =
 
 	makevectors(self.v_angle);
 	
+	self.solid = SOLID_NOT;
 	traceline(player_offset, (player_offset + (v_forward * 100000)), FALSE, aimIgnore);
+	self.solid = SOLID_SLIDEBOX;
 	
 	if (!(trace_ent.classname=="func_hook") || trace_ent.estate == STATE_INACTIVE) {
 		return;
