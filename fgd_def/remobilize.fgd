@@ -3632,3 +3632,20 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 		1 : "Consume" : 0
 	]
 ]
+
+@PointClass color(181 132 93) base(Appearflags, Targetname) = trigger_changeskin : "Changes the skin field on an entity.
+
+'skin' is the value of the new skin.
+
+'target' can be set to any targetname like usual but can also take the special value 'activator' or 'other'.
+'activator' is suited in conjunction with trigger_filter (eg to filter a monster's health level and change its skin to a damaged version below a certain amount).
+'other' is suited when trigger_changeskin is directly targeted by a monster to adopt a 'death skin' upon death.
+"
+[
+    skin(integer) : "The new skin value"
+	target(choices) : "The entity to change" =
+	[
+		"activator" : "activator"
+		"other" : "other"
+	]
+]
