@@ -46,6 +46,21 @@ void(entity h, entity player) GrappleTrail =
 	
 };
 
+void(entity player) NotifyUnhook =
+{
+	if(player.state & STATE_RM_HOOKING)
+	{
+		player.state = player.state - (player.state & STATE_RM_HOOKING);
+		player.state |= STATE_RM_UNHOOKING;
+		activator = player;
+		entity oself = self;
+		self = player.rotatecontroller;
+		SUB_UseTargets();
+		self = oself;
+		player.state = player.state - (player.state & STATE_RM_UNHOOKING);
+	}
+};
+
 void() GrappleReset =
 {
 
@@ -72,17 +87,7 @@ void() GrappleReset =
 	}
 	
 	//Fire lightpanel targets on unhooking
-	if(self.owner.state & STATE_RM_HOOKING)
-	{
-		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_HOOKING);
-		self.owner.state |= STATE_RM_UNHOOKING;
-		activator = self.owner;
-		entity oself = self;
-		self = self.owner.rotatecontroller;
-		SUB_UseTargets();
-		self = oself;
-		self.owner.state = self.owner.state - (self.owner.state & STATE_RM_UNHOOKING);
-	}
+	NotifyUnhook(self.owner);
 	
 	remove(self);
 
@@ -156,6 +161,10 @@ void () GrappleAnchor =
 			}
 			GrappleReset();
 			return;
+	}
+	
+	if (other.volume) {
+		other.owner = self.owner;
 	}
 	
 	if (other.classname == "player") 
@@ -238,10 +247,13 @@ void () W_FireGrapple =
 	player_offset = self.origin + self.view_ofs;
 
 	makevectors(self.v_angle);
-
-	traceline(player_offset, (player_offset + (v_forward * 100000)), FALSE, self);
-		
-	//traceline(self.origin, (self.origin + (v_forward * 100000)), FALSE, self);
+	
+	if (self.volume) {
+		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 100000)), FALSE, dummy);
+	}
+	else {
+		traceline(player_offset, (player_offset + (v_forward * 100000)), FALSE, self);
+	}
 	
 	if (!(trace_ent.classname=="func_hook") || trace_ent.estate == STATE_INACTIVE) {
 		return;
@@ -407,12 +419,25 @@ void() GrappleService =
 	vel = self.hook.origin - ( self.origin + (v_forward * 16));
 
 	v = vlen (vel);
+	
+	if (self.volume && v < 4) {
+			self.volume = 0;
+			self = self.hook;
+			GrappleReset();
+	}
 
-	if (v <= 100)
-		vel = normalize(vel) * v * 10;  
-	else
+	if (v <= 100) {
+		if (!self.volume) {
+			vel = normalize(vel) * v * 10;
+		}
+		else {
+			vel = normalize(vel) * self.pullspeed;
+		}
+	}
+	else {
 		vel = normalize(vel) * self.pullspeed;
 		//vel = normalize(vel) * 1000;
+	}
 
 	self.velocity = vel;
 

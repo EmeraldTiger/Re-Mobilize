@@ -272,26 +272,34 @@ void() counter_use =
 	if (self.count < 0)
 		return;
 
+	/**/
+	entity msgEnt;
+	if (self.spawnflags & SPAWNFLAG_NOMESSAGE)
+		msgEnt = world;
+	if (activator.classname == "player")
+		msgEnt = activator;
+	else if (self.spawnflags & TRIGGER_CENTERPRINTALL)
+		msgEnt = find(world, classname, "player"); //Re:Mobilize is for many reasons singleplayer-focused, so let's not bother with a loop to find "all the players". Here the spawnflags simply means "send a message to player never mind they're the direct activator or not".
+	/**/
+	
 	if (self.count != 0)
 	{
-		if (activator.classname == "player"
-		&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
+		if (msgEnt)
 		{
 			if (self.count >= 4)
-				centerprint (activator, "There are more to go...");
+				centerprint (msgEnt, "There are more to go...");
 			else if (self.count == 3)
-				centerprint (activator, "Only 3 more to go...");
+				centerprint (msgEnt, "Only 3 more to go...");
 			else if (self.count == 2)
-				centerprint (activator, "Only 2 more to go...");
+				centerprint (msgEnt, "Only 2 more to go...");
 			else
-				centerprint (activator, "Only 1 more to go...");
+				centerprint (msgEnt, "Only 1 more to go...");
 		}
 		return;
 	}
 
-	if (activator.classname == "player"
-	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centerprint(activator, "Sequence completed!");
+	if (msgEnt)
+		centerprint(msgEnt, "Sequence completed!");
 	self.enemy = activator;
 	multi_trigger ();
 };
@@ -1961,3 +1969,45 @@ void trigger_random ()
 	self.model="trigger_random by Inky";
 	self.use = trigger_random_use;
 }
+
+/*QUAKED trigger_changeskin (.5 .5 .5) ?
+Changes an entity's skin field
+
+target = entity to change (can be activator or other)
+skin = new value for skin field
+
+*/
+
+void() trigger_changeskin_use =
+{
+	if (self.estate != STATE_ACTIVE) return;
+
+	if(self.target == "activator")
+	{
+		activator.skin = self.skin;
+	}
+	else if(self.target == "other")
+	{
+		other.skin = self.skin;
+	}
+	else if (self.target)
+	{
+		for (entity e = world; (e = find(e, targetname, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname2, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname3, self.target)); )
+			e.skin = self.skin;
+		for (entity e = world; (e = find(e, targetname4, self.target)); )
+			e.skin = self.skin;
+	}
+
+};
+
+void() trigger_changeskin =
+{
+    if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+        return;
+
+    self.use = trigger_changeskin_use;
+};

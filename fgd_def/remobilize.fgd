@@ -2557,7 +2557,10 @@ If needed, the ammo values are cut off to always stay in the legal [0..100] rang
 ]
 @PointClass base(Appearflags, Target, Targetname) = trigger_counter : "Trigger: Counter"
 [
-	spawnflags(flags) = [ 1: "No Message" : 0 ]
+	spawnflags(flags) = [
+		1: "No Message" : 0
+		1048576 : "Message all players" : 0
+	]
 	count(integer) : "Count before trigger" : 2
 	delay (integer) : "Delay"
 	message(string) : "Message"
@@ -3631,5 +3634,22 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	spawnflags(Flags) =
 	[
 		1 : "Consume" : 0
+	]
+]
+
+@PointClass color(181 132 93) base(Appearflags, Targetname) = trigger_changeskin : "Changes the skin field on an entity.
+
+'skin' is the value of the new skin.
+
+'target' can be set to any targetname like usual but can also take the special value 'activator' or 'other'.
+'activator' is suited in conjunction with trigger_filter (eg to filter a monster's health level and change its skin to a damaged version below a certain amount).
+'other' is suited when trigger_changeskin is directly targeted by a monster to adopt a 'death skin' upon death.
+"
+[
+    skin(integer) : "The new skin value"
+	target(choices) : "The entity to change" =
+	[
+		"activator" : "activator"
+		"other" : "other"
 	]
 ]
