@@ -11,8 +11,7 @@ void (vector org, entity death_owner) spawn_tdeath;
 float	modelindex_eyes, modelindex_player;
 void() SUB_CheckWaiting; // in triggers.qc
 
-
-
+entity dummy;
 
 
 void() SetChangeParms =
@@ -379,6 +378,7 @@ void() PutClientInServer =
 	}
 
 	spawn_tdeath (self.origin, self);
+	
 };
 
 
@@ -816,13 +816,22 @@ void() CheckWaterJump =
 	}
 };
 
+void(entity player) NotifyUnhook;
 void() CheckGrapple =
 {
 	
 	local vector player_offset;
 	player_offset = self.origin + self.view_ofs;
 	
-	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, self);
+	// (Credit to Inky for this)
+	if (dummy) {
+		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
+	}
+	else {
+		traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, self);
+	}
+	
+	//traceline((player_offset + (v_forward * 32)), (player_offset + (v_forward * 10000)), FALSE, dummy);
 	
 	local	entity new, oself;
 	local	float dist;
@@ -838,6 +847,13 @@ void() CheckGrapple =
 		panel_origin = new.origin;
 		dist = vlen(trace_endpos - self.origin);
 		new.angles = vectoangles(trace_endpos - self.origin);
+		
+		if (trace_ent.volume) {
+			self.volume = 1;
+		}
+		else {
+			self.volume = 0;
+		}
 		
 		player_aim = player_offset + (v_forward * 200);
 		new.origin = player_aim;
@@ -880,11 +896,13 @@ void() CheckGrapple =
 		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
-	if (self.impulse==24 && !self.hook_out && !(trace_ent.spawnflags & /*Aim only*/1)) {
+	if (self.impulse==24 && !self.hook_out && trace_ent.classname=="func_hook")
+	{
+		if(!(trace_ent.spawnflags & /*Aim only*/1))
 		W_FireGrapple();
 		
 		//Fire lightpanel targets on hooking
-		if(self.state & STATE_RM_AIMING && (!(self.state & STATE_RM_HOOKING)))
+		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
 		{
 			self.state = self.state - (self.state & STATE_RM_AIMING);
 			self.state |= STATE_RM_HOOKING;
@@ -1159,6 +1177,12 @@ else
 	}
 	
 	// Re:Mobilize: Lighthook
+	
+	if (self.impulse==25)
+	{
+		if(self.rotatecontroller==world || (self.rotatecontroller!=world && self.rotatecontroller.spawnflags & /*Aim only*/1))
+			NotifyUnhook(self);
+	}
 	
 	CheckGrapple();
 	
