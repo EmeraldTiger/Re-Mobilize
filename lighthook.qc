@@ -50,7 +50,6 @@ void() GrappleReset =
 {
 
 	if (self.enemy) {
-		self.enemy.anchored = 0;
 		if (self.enemy.locked_on) {
 			self.enemy.locked_on = 0;
 		}
@@ -195,9 +194,6 @@ void () GrappleAnchor =
 		self.velocity = '0 0 0';
 		self.avelocity = '0 0 0';
 	}
-	
-	// user currently is hooked to something
-	other.anchored = 1;
 
 	self.frame = 2; // anchored
 	

@@ -1113,8 +1113,6 @@ void(entity client, float density, vector color) csf_set;
 .string hooknoise4;
 .string hooknoise5;
 
-.float anchored;
-
 //Inky 20221029 Visited maps handling
 .float visitflag;
 
