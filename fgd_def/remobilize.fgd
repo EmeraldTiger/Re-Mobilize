@@ -592,6 +592,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 	skin(integer) : "Skin index (default 0)"
 	view_ofs(string) : "Offset for display in the custom keys inventory HUD (meant to compensate, in case the model is not natively centered in its bounding box)" : "0 0 0"
 	mdl_head(string) : "Path to custom HUD model (if not set, mdl is used)"
+	mdl_body(string) : "Path to custom HUD legend (if not set, no legend)"
 ]
 
 @PointClass
