@@ -1411,6 +1411,38 @@ void() item_cells =
 /*
 ===============================================================================
 
+INVENTORY
+
+===============================================================================
+*/
+
+void(entity player, float show) toggle_inventory =
+{
+	if(show==TRUE && invPanel.model == "")
+	{
+		if(player) sound (player, CHAN_VOICE, "misc/puzzle.wav", 1, ATTN_NONE);
+		if(invItem1) setmodel (invItem1, invItem1.mdl);
+		if(invItem2) setmodel (invItem2, invItem2.mdl);
+		if(invItem3) setmodel (invItem3, invItem3.mdl);
+		if(invItem4) setmodel (invItem4, invItem4.mdl);
+		if(invItem5) setmodel (invItem5, invItem5.mdl);
+		if(invPanel) setmodel (invPanel, invPanel.mdl);
+	}
+	else if(show==FALSE && invPanel.model == invPanel.mdl)
+	{
+		if(player) sound (player, CHAN_VOICE, "misc/puzzleaway.wav", 1, ATTN_NONE);
+		if(invItem1) setmodel (invItem1, "");
+		if(invItem2) setmodel (invItem2, "");
+		if(invItem3) setmodel (invItem3, "");
+		if(invItem4) setmodel (invItem4, "");
+		if(invItem5) setmodel (invItem5, "");
+		if(invPanel) setmodel (invPanel, "");
+	}
+};
+
+/*
+===============================================================================
+
 KEYS
 
 ===============================================================================
@@ -1440,34 +1472,42 @@ void() key_touch =
 	if(self.customkeys)
 	{
 		//Player now have something in their custom keys inventory
-		other.skip_id1_overrides = 1;
+		other.skip_id1_overrides += 1;
 
-		//HUD positioning setup (if needed)
-		if(world.hud_origin) other.hud_origin = world.hud_origin; else other.hud_origin = '200 170 150';
-		if(world.hud_offset) other.hud_offset = world.hud_offset; else other.hud_offset = '0 0 -50';
-			
 		//Build the HUD entity
 		entity inv = spawn();
+	
 		if(self.mdl_head == self.mdl)
 		{
 			inv.skin = self.skin;
 			inv.frame = self.frame;
 		}
+		else
+			inv.face_always = "1";
+		
 		inv.customkeys = self.customkeys;
 		inv.view_ofs = self.view_ofs;
-		setmodel(inv, self.mdl_head);
+		inv.mdl = self.mdl_head;
+		if(invPanel) if(invPanel.model != "") setmodel(inv, inv.mdl);
 		
 		//Assign it to the first available slot
-		if(!other.inv1)
-			other.inv1 = inv;
-		else if(!other.inv2)
-			other.inv2 = inv;
-		else if(!other.inv3)
-			other.inv3 = inv;
-		else if(!other.inv4)
-			other.inv4 = inv;
-		else if(!other.inv5)
-			other.inv5 = inv;
+		if(!invItem1)
+			invItem1 = inv;
+		else if(!invItem2)
+			invItem2 = inv;
+		else if(!invItem3)
+			invItem3 = inv;
+		else if(!invItem4)
+			invItem4 = inv;
+		else if(!invItem5)
+			invItem5 = inv;
+		
+		//Floating 'Puzzle items' panel
+		if(!invPanel)
+		{
+			invPanel = spawn();
+			invPanel.mdl = "gfx/puzzle.spr";
+		}
 	}
 
 	if (!coop)
@@ -1666,6 +1706,11 @@ void() item_key_custom =
 		return;
 	}
 
+	//Floating 'Puzzle items' panel
+	precache_model("gfx/puzzle.spr");
+	precache_sound("misc/puzzle.wav");
+	precache_sound("misc/puzzleaway.wav");
+	
 	if(self.mdl_head)
 		precache_model (self.mdl_head); //Model or sprite for custom inventory
 	else

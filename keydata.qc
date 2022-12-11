@@ -224,43 +224,45 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 	if(customkey_flags)
 	{
 		//Reassign the slots
-		if(client.inv1.customkeys & customkey_flags)
+		if(invItem1.customkeys & customkey_flags)
 		{
-			remove(client.inv1);
-			client.inv1 = client.inv2;
-			client.inv2 = client.inv3;
-			client.inv3 = client.inv4;
-			client.inv4 = client.inv5;
-			client.inv5 = world;
+			remove(invItem1);
+			invItem1 = invItem2;
+			invItem2 = invItem3;
+			invItem3 = invItem4;
+			invItem4 = invItem5;
+			invItem5 = world;
 		}
-		else if(client.inv2.customkeys & customkey_flags)
+		else if(invItem2.customkeys & customkey_flags)
 		{
-			remove(client.inv2);
-			client.inv2 = client.inv3;
-			client.inv3 = client.inv4;
-			client.inv4 = client.inv5;
-			client.inv5 = world;
+			remove(invItem2);
+			invItem2 = invItem3;
+			invItem3 = invItem4;
+			invItem4 = invItem5;
+			invItem5 = world;
 		}
-		else if(client.inv3.customkeys & customkey_flags)
+		else if(invItem3.customkeys & customkey_flags)
 		{
-			remove(client.inv3);
-			client.inv3 = client.inv4;
-			client.inv4 = client.inv5;
-			client.inv5 = world;
+			remove(invItem3);
+			invItem3 = invItem4;
+			invItem4 = invItem5;
+			invItem5 = world;
 		}
-		else if(client.inv4.customkeys & customkey_flags)
+		else if(invItem4.customkeys & customkey_flags)
 		{
-			remove(client.inv4);
-			client.inv4 = client.inv5;
-			client.inv5 = world;
+			remove(invItem4);
+			invItem4 = invItem5;
+			invItem5 = world;
 		}
-		else if(client.inv5.customkeys & customkey_flags)
+		else if(invItem5.customkeys & customkey_flags)
 		{
-			remove(client.inv5);
-			client.inv5 = world;
+			remove(invItem5);
+			invItem5 = world;
 		}
 		
+		other.skip_id1_overrides -= 1;
+
 		//Do player still have something in their custom keys inventory?
-		other.skip_id1_overrides = !(client.inv1 == world && client.inv2 == world && client.inv3 == world && client.inv4 == world && client.inv5 == world);
+		if (invItem1 == world && invItem2 == world && invItem3 == world && invItem4 == world && invItem5 == world) other.skip_id1_overrides = 0;
 	}
 };

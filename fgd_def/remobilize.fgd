@@ -88,8 +88,6 @@
 	a_grn_mdl(string) : "Global Green Armor model" :  : "Use this field to replace all Green Armors with this model"
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
-	hud_origin(string) : "HUD start point" : "200 170 150" : "Use this field to set the custom keys inventory HUD position relatively to the player (x is forward, y is sideways, z is up)"
-	hud_offset(string) : "HUD offset" : "0 0 -50" : "Use this field to tell by which offset a new key appears in the custom keys inventory HUD relatively to the previous one (x is forward, y is sideways, z is up)"
 ]
 
 //
