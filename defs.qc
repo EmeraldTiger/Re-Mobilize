@@ -1117,5 +1117,5 @@ void(entity client, float density, vector color) csf_set;
 .float visitflag;
 
 //Inky 20221210 Custom keys inventory
-entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5;
+entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, invLabel2, invLabel3, invLabel4, invLabel5;
 .string face_always;

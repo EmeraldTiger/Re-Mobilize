@@ -1421,22 +1421,32 @@ void(entity player, float show) toggle_inventory =
 	if(show==TRUE && invPanel.model == "")
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzle.wav", 1, ATTN_NONE);
+		if(invPanel) setmodel (invPanel, invPanel.mdl);
 		if(invItem1) setmodel (invItem1, invItem1.mdl);
 		if(invItem2) setmodel (invItem2, invItem2.mdl);
 		if(invItem3) setmodel (invItem3, invItem3.mdl);
 		if(invItem4) setmodel (invItem4, invItem4.mdl);
 		if(invItem5) setmodel (invItem5, invItem5.mdl);
-		if(invPanel) setmodel (invPanel, invPanel.mdl);
+		if(invLabel1) setmodel (invLabel1, invLabel1.mdl);
+		if(invLabel2) setmodel (invLabel2, invLabel2.mdl);
+		if(invLabel3) setmodel (invLabel3, invLabel3.mdl);
+		if(invLabel4) setmodel (invLabel4, invLabel4.mdl);
+		if(invLabel5) setmodel (invLabel5, invLabel5.mdl);
 	}
 	else if(show==FALSE && invPanel.model == invPanel.mdl)
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzleaway.wav", 1, ATTN_NONE);
+		if(invPanel) setmodel (invPanel, "");
 		if(invItem1) setmodel (invItem1, "");
 		if(invItem2) setmodel (invItem2, "");
 		if(invItem3) setmodel (invItem3, "");
 		if(invItem4) setmodel (invItem4, "");
 		if(invItem5) setmodel (invItem5, "");
-		if(invPanel) setmodel (invPanel, "");
+		if(invLabel1) setmodel (invLabel1, "");
+		if(invLabel2) setmodel (invLabel2, "");
+		if(invLabel3) setmodel (invLabel3, "");
+		if(invLabel4) setmodel (invLabel4, "");
+		if(invLabel5) setmodel (invLabel5, "");
 	}
 };
 
@@ -1488,25 +1498,56 @@ void() key_touch =
 		inv.customkeys = self.customkeys;
 		inv.view_ofs = self.view_ofs;
 		inv.mdl = self.mdl_head;
-		if(invPanel) if(invPanel.model != "") setmodel(inv, inv.mdl);
+		
+		//Build the label entity for it, if any
+		entity label = world;
+		
+		if(self.mdl_body)
+		{
+			entity label = spawn();
+			label.mdl = self.mdl_body;
+		}
 		
 		//Assign it to the first available slot
 		if(!invItem1)
+		{
 			invItem1 = inv;
+			invLabel1 = label;
+		}
 		else if(!invItem2)
+		{
 			invItem2 = inv;
+			invLabel2 = label;
+		}
 		else if(!invItem3)
+		{
 			invItem3 = inv;
+			invLabel3 = label;
+		}
 		else if(!invItem4)
+		{
 			invItem4 = inv;
+			invLabel4 = label;
+		}
 		else if(!invItem5)
+		{
 			invItem5 = inv;
+			invLabel5 = label;
+		}
 		
 		//Floating 'Puzzle items' panel
-		if(!invPanel)
+		if(invPanel)
+		{
+			if(invPanel.model != "")
+			{
+				setmodel(inv, inv.mdl);
+				setmodel(label, label.mdl);
+			}
+		}
+		else
 		{
 			invPanel = spawn();
-			invPanel.mdl = "gfx/puzzle.spr";
+			invPanel.mdl = self.obit_method;
 		}
 	}
 
@@ -1707,7 +1748,8 @@ void() item_key_custom =
 	}
 
 	//Floating 'Puzzle items' panel
-	precache_model("gfx/puzzle.spr");
+	if(world.mdl_head) self.obit_method = world.mdl_head; else self.obit_method = "gfx/puzzle.spr";
+	precache_model(self.obit_method);
 	precache_sound("misc/puzzle.wav");
 	precache_sound("misc/puzzleaway.wav");
 	

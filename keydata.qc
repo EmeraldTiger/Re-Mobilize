@@ -232,6 +232,12 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
+			remove(invLabel1);
+			invLabel1 = invLabel2;
+			invLabel2 = invLabel3;
+			invLabel3 = invLabel4;
+			invLabel4 = invLabel5;
+			invLabel5 = world;
 		}
 		else if(invItem2.customkeys & customkey_flags)
 		{
@@ -240,6 +246,11 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
+			remove(invLabel2);
+			invLabel2 = invLabel3;
+			invLabel3 = invLabel4;
+			invLabel4 = invLabel5;
+			invLabel5 = world;
 		}
 		else if(invItem3.customkeys & customkey_flags)
 		{
@@ -247,17 +258,26 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
+			remove(invLabel3);
+			invLabel3 = invLabel4;
+			invLabel4 = invLabel5;
+			invLabel5 = world;
 		}
 		else if(invItem4.customkeys & customkey_flags)
 		{
 			remove(invItem4);
 			invItem4 = invItem5;
 			invItem5 = world;
+			remove(invLabel4);
+			invLabel4 = invLabel5;
+			invLabel5 = world;
 		}
 		else if(invItem5.customkeys & customkey_flags)
 		{
 			remove(invItem5);
 			invItem5 = world;
+			remove(invLabel5);
+			invLabel5 = world;
 		}
 		
 		other.skip_id1_overrides -= 1;

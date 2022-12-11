@@ -88,6 +88,7 @@
 	a_grn_mdl(string) : "Global Green Armor model" :  : "Use this field to replace all Green Armors with this model"
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
+	mdl_head(string) : "Custom 'Puzzle items panel' sprite" :  : "Use this field to replace the default inventory plaque sprite"
 ]
 
 //
