@@ -268,12 +268,6 @@ void() func_hook =
 		self.frame = 1;
 	}
 	
-	// Dummy spawn for nonsolid hookpanels
-	if (self.volume) {
-		dummy = spawn();
-		dummy.solid = SOLID_NOT;
-	}
-	
 	// medieval sounds
 	if (self.sounds == 1) 
 	{
