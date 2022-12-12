@@ -407,6 +407,7 @@ void() go_camera =
 local   vector  looky;
 
     cutscene = 1;   // Cutscene ON.
+	toggle_inventory(world, FALSE);
 
 // Don't let player-turned-camera pick up items.
     // self.xfl        = self.xfl - (self.xfl & XFL_ITEMS);
@@ -427,7 +428,10 @@ local   vector  looky;
     self.effects     = 0;
     self.items       = 0;
     self.weaponmodel = "";      // Remove weapon from the screen.
+	
+	//Remove crosshair from the screen.
 	cvar_set("crosshair", "0");
+	
 //- - - - - - - - - - - - - - - - - - -
 //    if (vision)
 //    {

@@ -88,6 +88,7 @@
 	a_grn_mdl(string) : "Global Green Armor model" :  : "Use this field to replace all Green Armors with this model"
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
+	mdl_head(string) : "Custom 'Puzzle items panel' sprite" :  : "Use this field to replace the default inventory plaque sprite"
 ]
 
 //
@@ -589,6 +590,9 @@ The behavior of an item_key_custom should be as the player expects (based on the
 	mdl(string) : "Model file (required)"
 	noise(string) : "Sound file for the pickup sound (default is per worldtype)"
 	skin(integer) : "Skin index (default 0)"
+	view_ofs(string) : "Offset for display in the custom keys inventory HUD (meant to compensate, in case the model is not natively centered in its bounding box)" : "0 0 0"
+	mdl_head(string) : "Path to custom HUD model (if not set, mdl is used)"
+	mdl_body(string) : "Path to custom HUD legend (if not set, no legend)"
 ]
 
 @PointClass
@@ -1865,6 +1869,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0
+		2 : "Use key silently" : 0
 		4 : "Don't link" : 0
 		8 : "Gold Key required" : 0
 		16: "Silver Key required" : 0
@@ -2420,6 +2425,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	noise2(string) : "Sound file for the 'key used' sound (default is per worldtype)"
 	spawnflags(flags) =
 	[
+		2 : "Use key silently" : 0
 		8 : "Silver Key Required" : 0
 		16 : "Gold Key Required" : 0
 	]

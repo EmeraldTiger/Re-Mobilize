@@ -11,6 +11,8 @@ void (vector org, entity death_owner) spawn_tdeath;
 float	modelindex_eyes, modelindex_player;
 void() SUB_CheckWaiting; // in triggers.qc
 
+entity dummy;
+
 void() SetChangeParms =
 {
 	if (self.health <= 0)
@@ -813,7 +815,9 @@ void() CheckWaterJump =
 	}
 };
 
+void(entity player, float show) toggle_inventory;
 void(entity player) NotifyUnhook;
+
 void() CheckGrapple =
 {
 	
@@ -891,8 +895,8 @@ void() CheckGrapple =
 	if (self.impulse==24 && !self.hook_out && trace_ent.classname=="func_hook")
 	{
 		if(!(trace_ent.spawnflags & /*Aim only*/1))
-			W_FireGrapple();
-      
+		W_FireGrapple();
+		
 		//Fire lightpanel targets on hooking
 		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
 		{
@@ -905,6 +909,11 @@ void() CheckGrapple =
 			self = oself;
 		}
 	}
+	else if(self.impulse==24 && trace_ent.classname!="func_hook" && vlen(trace_endpos-player_offset)>250)
+	{
+		toggle_inventory(self, TRUE);
+	}
+
 }
 
 
@@ -1171,15 +1180,39 @@ else
 	
 	if (self.impulse==25)
 	{
+		toggle_inventory(self, FALSE);
+		
 		if(self.rotatecontroller==world || (self.rotatecontroller!=world && self.rotatecontroller.spawnflags & /*Aim only*/1))
-			NotifyUnhook(self);
+			NotifyUnhook(self);		
 	}
 	
 	CheckGrapple();
 	
 	if (self.hook_out)
 		GrappleService();
+	
+	//Display custom keys inventory
+	if(invPanel) invPanel.origin = self.origin + v_forward*(250) + v_up*(100);
+	if(self.skip_id1_overrides > 0)
+	{
+		float hoffset = -35*(self.skip_id1_overrides - 1);
 		
+		makevectors(self.v_angle);
+		if(invItem1) invItem1.origin = self.origin + v_forward*(200 + invItem1.view_ofs_x) + v_right*(hoffset + invItem1.view_ofs_y      ) + v_up*(40 + invItem1.view_ofs_z);
+		if(invItem2) invItem2.origin = self.origin + v_forward*(200 + invItem2.view_ofs_x) + v_right*(hoffset + invItem2.view_ofs_y + 70 ) + v_up*(40 + invItem2.view_ofs_z);
+		if(invItem3) invItem3.origin = self.origin + v_forward*(200 + invItem3.view_ofs_x) + v_right*(hoffset + invItem3.view_ofs_y + 140) + v_up*(40 + invItem3.view_ofs_z);
+		if(invItem4) invItem4.origin = self.origin + v_forward*(200 + invItem4.view_ofs_x) + v_right*(hoffset + invItem4.view_ofs_y + 210) + v_up*(40 + invItem4.view_ofs_z);
+		if(invItem5) invItem5.origin = self.origin + v_forward*(200 + invItem5.view_ofs_x) + v_right*(hoffset + invItem5.view_ofs_y + 280) + v_up*(40 + invItem5.view_ofs_z);
+		if(invLabel1) invLabel1.origin = self.origin + v_forward*(200) + v_right*(hoffset      ) + 2*v_up;
+		if(invLabel2) invLabel2.origin = self.origin + v_forward*(200) + v_right*(hoffset + 70 ) + 2*v_up;
+		if(invLabel3) invLabel3.origin = self.origin + v_forward*(200) + v_right*(hoffset + 140) + 2*v_up;
+		if(invLabel4) invLabel4.origin = self.origin + v_forward*(200) + v_right*(hoffset + 210) + 2*v_up;
+		if(invLabel5) invLabel5.origin = self.origin + v_forward*(200) + v_right*(hoffset + 280) + 2*v_up;
+
+	}
+		
+	for (entity e = world; (e = find(e, face_always, "1")); )
+		e.angles = vectoangles(self.origin - e.origin);
 };
 
 /*
