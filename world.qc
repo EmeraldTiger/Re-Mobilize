@@ -320,6 +320,8 @@ fog_color(string) : "Fog Color R/G/B example = (0.3 0.3 0.3)"
 sky(string) : "Sky Texture" :  : "Must have compatible skybox textures in gfx/env folder."
 */
 //=======================
+entity aimIgnore;
+
 void() worldspawn =
 {
 	DetectKnownRelease ();
@@ -327,6 +329,11 @@ void() worldspawn =
 	InitNewSpawnflags ();  // new spawnflags for all entities -- iw
 
 	lastspawn = world;
+	
+	// aimIgnore spawn
+	aimIgnore = spawn();
+	aimIgnore.solid = SOLID_NOT;
+	
 	InitBodyQue ();
 
 // custom map attributes
