@@ -214,13 +214,14 @@ void(entity client, string custom_message,
 		s = "You used the ";
 	}
 
-	sprint (client, s);
-	sprint (client, self.netname);
-	sprint (client, "\n");
+	if(!(self.spawnflags&/*Use key silently*/2))
+	{
+		sprint (client, s);
+		sprint (client, self.netname);
+		sprint (client, "\n");
 
-// the old code in door_fire included a comment from dumptruck_ds
-// thanking c0burn re changing CHAN_VOICE to CHAN_ITEM
-	sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
-
+		sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
+	}
+	
 	success_func ();
 };

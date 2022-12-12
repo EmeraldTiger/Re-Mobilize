@@ -1869,6 +1869,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0
+		2 : "Use key silently" : 0
 		4 : "Don't link" : 0
 		8 : "Gold Key required" : 0
 		16: "Silver Key required" : 0
@@ -2424,6 +2425,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	noise2(string) : "Sound file for the 'key used' sound (default is per worldtype)"
 	spawnflags(flags) =
 	[
+		2 : "Use key silently" : 0
 		8 : "Silver Key Required" : 0
 		16 : "Gold Key Required" : 0
 	]

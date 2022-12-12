@@ -1508,6 +1508,12 @@ void() key_touch =
 			label.mdl = self.mdl_body;
 		}
 		
+		if(invPanel) if(invPanel.model != "")
+		{
+			setmodel(inv, inv.mdl);
+			setmodel(label, label.mdl);
+		}
+		
 		//Assign it to the first available slot
 		if(!invItem1)
 		{
@@ -1536,15 +1542,7 @@ void() key_touch =
 		}
 		
 		//Floating 'Puzzle items' panel
-		if(invPanel)
-		{
-			if(invPanel.model != "")
-			{
-				setmodel(inv, inv.mdl);
-				setmodel(label, label.mdl);
-			}
-		}
-		else
+		if(!invPanel)
 		{
 			invPanel = spawn();
 			invPanel.mdl = self.obit_method;
@@ -1757,6 +1755,9 @@ void() item_key_custom =
 		precache_model (self.mdl_head); //Model or sprite for custom inventory
 	else
 		self.mdl_head = self.mdl;
+
+	if(self.mdl_body)
+		precache_model (self.mdl_body); //Sprite for custom inventory legend
 
 	precache_model (self.mdl);
 	setmodel (self, self.mdl);
