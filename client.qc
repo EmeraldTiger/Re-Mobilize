@@ -11,8 +11,6 @@ void (vector org, entity death_owner) spawn_tdeath;
 float	modelindex_eyes, modelindex_player;
 void() SUB_CheckWaiting; // in triggers.qc
 
-entity dummy;
-
 void() SetChangeParms =
 {
 	if (self.health <= 0)
