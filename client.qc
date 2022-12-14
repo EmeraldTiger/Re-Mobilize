@@ -1211,6 +1211,11 @@ else
 		
 	for (entity e = world; (e = find(e, face_always, "1")); )
 		e.angles = vectoangles(self.origin - e.origin);
+	for (entity e = world; (e = find(e, face_always, "2")); )
+	{
+		e.angles = vectoangles(self.origin - e.origin);
+		e.angles_x = 0;
+	}
 };
 
 /*
