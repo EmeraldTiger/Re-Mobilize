@@ -2011,3 +2011,60 @@ void() trigger_changeskin =
 
     self.use = trigger_changeskin_use;
 };
+
+/*QUAKED trigger_enterleave (.5 .5 .5) ?
+A trigger that fires its targets when entering it, leaving it, or both.
+
+Thanks to Yoder, author of trigger_multitouch on which this trigger is based.
+*/
+
+void() trigger_enterleave_leave =
+{
+	if (self.estate != STATE_ACTIVE)											return;
+
+    self.wait = 0;
+	if (self.target3!="" || self.target4!="")
+	{
+		string otarget = self.target;
+		string otarget2 = self.target2;
+		string okilltarget = self.killtarget;
+		SUB_UseTargets();
+		self.target = otarget;
+		self.target2 = otarget2;
+		self.killtarget = okilltarget;
+	}
+};
+
+void() trigger_enterleave_enter =
+{
+	if (self.estate != STATE_ACTIVE)											return;
+	
+    if (self.wait == 0) // first touch?
+    {
+        self.wait = 1;
+		if (self.target!="" || self.target2!="")
+        {
+			string otarget3 = self.target3;
+			string otarget4 = self.target4;
+			string okilltarget2 = self.killtarget2;
+            SUB_UseTargets();
+			self.target3 = otarget3;
+			self.target4 = otarget4;
+			self.killtarget2 = okilltarget2;
+		}
+    }
+    
+    // think
+    self.think = trigger_enterleave_leave;
+    self.nextthink = time + 0.2;
+};
+
+void() trigger_enterleave =
+{
+    if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+        return;
+	
+    InitTrigger ();
+    self.touch = trigger_enterleave_enter;
+    self.wait = 0; // 0 is left, 1 is touched
+};
