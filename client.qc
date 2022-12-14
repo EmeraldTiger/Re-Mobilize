@@ -840,7 +840,7 @@ void() CheckGrapple =
 		new.origin_z = trace_endpos[2];
 		panel_origin = new.origin;
 		dist = vlen(trace_endpos - self.origin);
-		new.angles = vectoangles(trace_endpos - self.origin);
+		new.angles = vectoangles(self.origin - trace_endpos);
 		
 		if (trace_ent.volume) {
 			self.volume = 1;
