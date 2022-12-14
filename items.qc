@@ -1504,7 +1504,7 @@ void() key_touch =
 		
 		if(self.mdl_body)
 		{
-			entity label = spawn();
+			label = spawn();
 			label.mdl = self.mdl_body;
 		}
 		
