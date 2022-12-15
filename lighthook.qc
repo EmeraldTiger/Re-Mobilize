@@ -163,10 +163,6 @@ void () GrappleAnchor =
 			return;
 	}
 	
-	if (other.volume) {
-		other.owner = self.owner;
-	}
-	
 	if (other.classname == "player") 
 	{
 		if (self.owner.hooknoise1 != "") {
@@ -418,7 +414,6 @@ void() GrappleService =
 	v = vlen (vel);
 	
 	if (self.volume && v < 4) {
-			self.volume = 0;
 			self = self.hook;
 			GrappleReset();
 	}

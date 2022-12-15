@@ -890,10 +890,15 @@ void() CheckGrapple =
 		self.state = self.state - (self.state & STATE_RM_UNAIMING);
 	}
 	
+	if (trace_ent.volume) {
+		trace_ent.owner = self;
+	}
+	
 	if (self.impulse==24 && !self.hook_out && trace_ent.classname=="func_hook")
 	{
-		if(!(trace_ent.spawnflags & /*Aim only*/1))
-		W_FireGrapple();
+		if (!(trace_ent.spawnflags & /*Aim only*/1)) {
+			W_FireGrapple();
+		}
 		
 		//Fire lightpanel targets on hooking
 		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
