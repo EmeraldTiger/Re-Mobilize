@@ -2020,7 +2020,8 @@ Thanks to Yoder, author of trigger_multitouch on which this trigger is based.
 
 void() trigger_enterleave_leave =
 {
-	if (self.estate != STATE_ACTIVE)											return;
+	if (self.estate != STATE_ACTIVE)
+		return;
 
     self.wait = 0;
 	if (self.target3!="" || self.target4!="")
@@ -2028,6 +2029,9 @@ void() trigger_enterleave_leave =
 		string otarget = self.target;
 		string otarget2 = self.target2;
 		string okilltarget = self.killtarget;
+		self.target = "";
+		self.target2 = "";
+		self.killtarget = "";
 		SUB_UseTargets();
 		self.target = otarget;
 		self.target2 = otarget2;
@@ -2037,7 +2041,8 @@ void() trigger_enterleave_leave =
 
 void() trigger_enterleave_enter =
 {
-	if (self.estate != STATE_ACTIVE)											return;
+	// from Copper -- dumptruck_ds
+	if (!CheckValidTouch()) return;
 	
     if (self.wait == 0) // first touch?
     {
@@ -2047,6 +2052,10 @@ void() trigger_enterleave_enter =
 			string otarget3 = self.target3;
 			string otarget4 = self.target4;
 			string okilltarget2 = self.killtarget2;
+			self.target3 = "";
+			self.target4 = "";
+			self.killtarget2 = "";
+			activator = other;
             SUB_UseTargets();
 			self.target3 = otarget3;
 			self.target4 = otarget4;
