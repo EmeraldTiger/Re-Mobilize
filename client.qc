@@ -840,7 +840,7 @@ void() CheckGrapple =
 		new.origin_z = trace_endpos[2];
 		panel_origin = new.origin;
 		dist = vlen(trace_endpos - self.origin);
-		new.angles = vectoangles(trace_endpos - self.origin);
+		new.angles = vectoangles(self.origin - trace_endpos);
 		
 		if (trace_ent.volume) {
 			self.volume = 1;
@@ -1198,24 +1198,31 @@ else
 	if(invPanel) invPanel.origin = self.origin + v_forward*(250) + v_up*(100);
 	if(self.skip_id1_overrides > 0)
 	{
-		float hoffset = -35*(self.skip_id1_overrides - 1);
+		float dist = world.distance;
+		if(dist==0) dist = 70;
+		
+		float hoffset = -0.5*dist*(self.skip_id1_overrides - 1);
 		
 		makevectors(self.v_angle);
-		if(invItem1) invItem1.origin = self.origin + v_forward*(200 + invItem1.view_ofs_x) + v_right*(hoffset + invItem1.view_ofs_y      ) + v_up*(40 + invItem1.view_ofs_z);
-		if(invItem2) invItem2.origin = self.origin + v_forward*(200 + invItem2.view_ofs_x) + v_right*(hoffset + invItem2.view_ofs_y + 70 ) + v_up*(40 + invItem2.view_ofs_z);
-		if(invItem3) invItem3.origin = self.origin + v_forward*(200 + invItem3.view_ofs_x) + v_right*(hoffset + invItem3.view_ofs_y + 140) + v_up*(40 + invItem3.view_ofs_z);
-		if(invItem4) invItem4.origin = self.origin + v_forward*(200 + invItem4.view_ofs_x) + v_right*(hoffset + invItem4.view_ofs_y + 210) + v_up*(40 + invItem4.view_ofs_z);
-		if(invItem5) invItem5.origin = self.origin + v_forward*(200 + invItem5.view_ofs_x) + v_right*(hoffset + invItem5.view_ofs_y + 280) + v_up*(40 + invItem5.view_ofs_z);
-		if(invLabel1) invLabel1.origin = self.origin + v_forward*(200) + v_right*(hoffset      ) + 2*v_up;
-		if(invLabel2) invLabel2.origin = self.origin + v_forward*(200) + v_right*(hoffset + 70 ) + 2*v_up;
-		if(invLabel3) invLabel3.origin = self.origin + v_forward*(200) + v_right*(hoffset + 140) + 2*v_up;
-		if(invLabel4) invLabel4.origin = self.origin + v_forward*(200) + v_right*(hoffset + 210) + 2*v_up;
-		if(invLabel5) invLabel5.origin = self.origin + v_forward*(200) + v_right*(hoffset + 280) + 2*v_up;
-
+		if(invItem1) invItem1.origin = self.origin + v_forward*(200 + invItem1.view_ofs_x) + v_right*(hoffset + invItem1.view_ofs_y         ) + v_up*(40 + invItem1.view_ofs_z);
+		if(invItem2) invItem2.origin = self.origin + v_forward*(200 + invItem2.view_ofs_x) + v_right*(hoffset + invItem2.view_ofs_y +   dist) + v_up*(40 + invItem2.view_ofs_z);
+		if(invItem3) invItem3.origin = self.origin + v_forward*(200 + invItem3.view_ofs_x) + v_right*(hoffset + invItem3.view_ofs_y + 2*dist) + v_up*(40 + invItem3.view_ofs_z);
+		if(invItem4) invItem4.origin = self.origin + v_forward*(200 + invItem4.view_ofs_x) + v_right*(hoffset + invItem4.view_ofs_y + 3*dist) + v_up*(40 + invItem4.view_ofs_z);
+		if(invItem5) invItem5.origin = self.origin + v_forward*(200 + invItem5.view_ofs_x) + v_right*(hoffset + invItem5.view_ofs_y + 4*dist) + v_up*(40 + invItem5.view_ofs_z);
+		if(invLabel1) invLabel1.origin = self.origin + v_forward*(200) + v_right*(hoffset         ) + 2*v_up;
+		if(invLabel2) invLabel2.origin = self.origin + v_forward*(200) + v_right*(hoffset +   dist) + 2*v_up;
+		if(invLabel3) invLabel3.origin = self.origin + v_forward*(200) + v_right*(hoffset + 2*dist) + 2*v_up;
+		if(invLabel4) invLabel4.origin = self.origin + v_forward*(200) + v_right*(hoffset + 3*dist) + 2*v_up;
+		if(invLabel5) invLabel5.origin = self.origin + v_forward*(200) + v_right*(hoffset + 4*dist) + 2*v_up;
 	}
 		
 	for (entity e = world; (e = find(e, face_always, "1")); )
 		e.angles = vectoangles(self.origin - e.origin);
+	for (entity e = world; (e = find(e, face_always, "2")); )
+	{
+		e.angles = vectoangles(self.origin - e.origin);
+		e.angles_x = 0;
+	}
 };
 
 /*
