@@ -1699,6 +1699,7 @@ Player can move freely inside of this entity's volume, on walls and ceilings."
 	spawnflags(Flags) =
 	[
 		1 : "Aim only" : 0
+		2 : "Player noclip" : 0
 	]
 ]
 
