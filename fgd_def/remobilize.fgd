@@ -1856,6 +1856,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	lip(integer) : "Lip" : 8
 	dmg(integer) : "Damage inflicted when blocked" : 2
 	message(string) : "Message if touched"
+	message2(string) : "Message when key used"
 	health(integer) : "Health (shootable)" : 0
 	cnt(choices) : "Leave key in player's inventory?" : 0 =
 	[
@@ -1870,7 +1871,6 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0
-		2 : "Use key silently" : 0
 		4 : "Don't link" : 0
 		8 : "Gold Key required" : 0
 		16: "Silver Key required" : 0
@@ -2422,11 +2422,11 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	delay(float) : "Delay before trigger" : "0" : "Delay before trigger"
 	keyname(string) : "Sets the keyname of the item_key_custom which unlocks this entity. If any key spawnflag is selected (either silver or gold), this only changes the display name of the required key."
 	message(string) : "Custom message"
+	message2(string) : "Message when key used"
 	noise1(string) : "Sound file for the 'key required' sound (default is per worldtype)"
 	noise2(string) : "Sound file for the 'key used' sound (default is per worldtype)"
 	spawnflags(flags) =
 	[
-		2 : "Use key silently" : 0
 		8 : "Silver Key Required" : 0
 		16 : "Gold Key Required" : 0
 	]
