@@ -232,7 +232,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
-			remove(invLabel1);
+			if(invLabel1) remove(invLabel1);
 			invLabel1 = invLabel2;
 			invLabel2 = invLabel3;
 			invLabel3 = invLabel4;
@@ -246,7 +246,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
-			remove(invLabel2);
+			if(invLabel2) remove(invLabel2);
 			invLabel2 = invLabel3;
 			invLabel3 = invLabel4;
 			invLabel4 = invLabel5;
@@ -258,7 +258,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invItem3 = invItem4;
 			invItem4 = invItem5;
 			invItem5 = world;
-			remove(invLabel3);
+			if(invLabel3) remove(invLabel3);
 			invLabel3 = invLabel4;
 			invLabel4 = invLabel5;
 			invLabel5 = world;
@@ -268,7 +268,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			remove(invItem4);
 			invItem4 = invItem5;
 			invItem5 = world;
-			remove(invLabel4);
+			if(invLabel4) remove(invLabel4);
 			invLabel4 = invLabel5;
 			invLabel5 = world;
 		}
@@ -276,7 +276,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 		{
 			remove(invItem5);
 			invItem5 = world;
-			remove(invLabel5);
+			if(invLabel5) remove(invLabel5);
 			invLabel5 = world;
 		}
 		
