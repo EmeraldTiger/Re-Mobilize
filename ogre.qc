@@ -1367,7 +1367,7 @@ void() monster_ogre =
 	body_model ("progs/ogre.mdl");
 	// setmodel (self, "progs/ogre.mdl");
 
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+	resize(VEC_HULL2_MIN, VEC_HULL2_MAX);
 	if (!self.proj_speed_mod)
 	{
 		self.proj_speed_mod = 1;
@@ -1492,7 +1492,7 @@ void() monster_ogre_marksman =
 	body_model ("progs/ogre.mdl");
 	// setmodel (self, "progs/ogre.mdl");
 
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+	resize(VEC_HULL2_MIN, VEC_HULL2_MAX);
 	if (!self.proj_speed_mod)
 	{
 		self.proj_speed_mod = 1;
@@ -1550,7 +1550,7 @@ void() monster_dead_ogre =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-40.64 -54.06 -54.1','29.42 54.63 30');
+            resize('-40.64 -54.06 -54.1','29.42 54.63 30');
 		}
 		else
 		{
@@ -1563,7 +1563,7 @@ void() monster_dead_ogre =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-45.64 -29.46 -54.52','33.87 39.18 30');
+            resize('-45.64 -29.46 -54.52','33.87 39.18 30');
 		}
 		else
 		{

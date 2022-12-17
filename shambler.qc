@@ -661,7 +661,7 @@ void() monster_shambler =
 	body_model ("progs/shambler.mdl");
 	// setmodel (self, "progs/shambler.mdl");
 
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+	resize(VEC_HULL2_MIN, VEC_HULL2_MAX);
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 600;
@@ -718,7 +718,7 @@ void() monster_dead_shambler =
         if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-                setsize(self,'-77.09 -72.17 -51.52','47.44 98.15 30');
+        resize('-77.09 -72.17 -51.52','47.44 98.15 30');
 	}
 	else
 	{

@@ -457,7 +457,7 @@ void() monster_dog =
 	body_model ("progs/dog.mdl"); //dumptruck_ds
 	// setmodel (self, "progs/dog.mdl");
 
-	setsize (self, '-32 -32 -24', '32 32 40');
+	resize('-32 -32 -24', '32 32 40');
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 25;
@@ -494,7 +494,7 @@ void() monster_dead_dog =
         if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-                setsize(self,'-24.51 -16.5 -50.37','28.2 13.81 30');
+        resize('-24.51 -16.5 -50.37','28.2 13.81 30');
 	}
 	else
 	{

@@ -257,7 +257,7 @@ void() boss_awake =
 
 	body_model ("progs/boss.mdl");
 	// setmodel (self, "progs/boss.mdl"); //custom_mdl -- dumptruck_ds
-	setsize (self, '-128 -128 -24', '128 128 256');
+	resize('-128 -128 -24', '128 128 256');
 
 	if (skill == 0)
 		self.health = 1;

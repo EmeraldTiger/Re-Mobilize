@@ -793,7 +793,7 @@ void() misc_teleporttrain =
 	else
 	body_model ("progs/teleport.mdl");
 	// precache_model ("progs/teleport.mdl");
-	setsize (self, '-16 -16 -16', '16 16 16');
+	resize('-16 -16 -16', '16 16 16');
 
 	//Causes the ball to spin around like it was originally intended to.
 	if (!(self.spawnflags & 2)) 			//don't spin - helpful for invisible spawner -- dumptruck_ds

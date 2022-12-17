@@ -699,7 +699,7 @@ void() player_dead_axe =
 	if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-               	setsize(self,'-38.72 -5.83 -50.45','28.73 33.85 30');
+        resize('-38.72 -5.83 -50.45','28.73 33.85 30');
 	}
 	else
 	{
@@ -725,7 +725,7 @@ void() player_dead_face_down =
 	if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-               	setsize(self,'-50.28 -23.55 -49.85','30.66 14.49 30');
+        resize('-50.28 -23.55 -49.85','30.66 14.49 30');
 	}
 	else
 	{
@@ -751,7 +751,7 @@ void() player_dead_on_side =
 	if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-               	setsize(self,'-38.72 -5.83 -50.45','28.73 33.85 30');
+        resize('-38.72 -5.83 -50.45','28.73 33.85 30');
 	}
 	else
 	{

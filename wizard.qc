@@ -528,7 +528,7 @@ void() monster_wizard =
 	body_model ("progs/wizard.mdl");
 	// setmodel (self, "progs/wizard.mdl"); //dumptruck_ds
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.proj_speed_mod)
 	{
@@ -570,7 +570,7 @@ void() monster_dead_wizard =
 	if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-               	setsize(self,'-50.75 -27.46 -55.19','31.81 33.61 30');
+        resize('-50.75 -27.46 -55.19','31.81 33.61 30');
 	}
 	else
 	{

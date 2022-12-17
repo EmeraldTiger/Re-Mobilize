@@ -362,7 +362,7 @@ void() monster_shalrath =
 
 	body_model ("progs/shalrath.mdl");
 	// setmodel (self, "progs/shalrath.mdl");
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+	resize(VEC_HULL2_MIN, VEC_HULL2_MAX);
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 400;
@@ -423,7 +423,7 @@ void() monster_dead_shalrath =
 	if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-               	setsize(self,'-41.41 -40.06 -49.38','34.52 24.32 30');
+        resize('-41.41 -40.06 -49.38','34.52 24.32 30');
 	}
 	else
 	{

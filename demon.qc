@@ -298,7 +298,7 @@ void() monster_demon1 =
 	body_model ("progs/demon.mdl");
 	// setmodel (self, "progs/demon.mdl");
 
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+	resize(VEC_HULL2_MIN, VEC_HULL2_MAX);
 
   if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 300;
@@ -493,7 +493,7 @@ void() monster_dead_demon =
         if (self.spawnflags & 1)
 	{
 		self.solid = SOLID_BBOX;
-    setsize(self,'-43.63 -47.26 -50.53','32.48 24.65 30');
+		resize('-43.63 -47.26 -50.53','32.48 24.65 30');
 	}
 	else
 	{

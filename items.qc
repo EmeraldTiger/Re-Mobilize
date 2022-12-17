@@ -82,7 +82,7 @@ void() DelaySpawnItem =
 {
 	self.solid = SOLID_TRIGGER;
 	setmodel (self, self.mdl);
-	setsize (self, self.pos1, self.pos2);
+	resize(self.pos1, self.pos2);
 
 	if (!(self.spawnflags & ITEM_SPAWNSILENT)) 			// SILENT, gb
 		// sound (self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
@@ -341,7 +341,7 @@ void() item_health =
 		if !(self.particles_offset)
 		self.particles_offset = '16 16 8'; // dumptruck_ds custom health models and sounds END
 	}
-	setsize (self, '0 0 0', '32 32 56');
+	resize('0 0 0', '32 32 56');
 	StartItem ();
 };
 
@@ -366,7 +366,7 @@ void() item_health_vial =
 
 	self.healamount = 5;
 	self.healtype = 2; // over heal and count down like mega health -- dumptruck_ds
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	if !(self.particles_offset)
 	self.particles_offset = '0 0 0';
 	StartItem ();
@@ -612,7 +612,7 @@ void() item_armor_shard =
 	precache_sound_misc ("dump/armsh1.wav");
 	if !(self.skin) // dumptruck_ds custom models and sounds END
 	self.skin = 0;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 
@@ -634,7 +634,7 @@ void() item_armor1 =
 	precache_sound_misc ("items/armor1.wav");
 	if !(self.skin) // dumptruck_ds custom models and sounds END
 	self.skin = 0;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 
@@ -660,7 +660,7 @@ void() item_armor2 =
 	if !(self.skin) // dumptruck_ds custom models and sounds END
 	self.skin = 1;
 	precache_sound_misc ("items/armor1.wav");
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 
@@ -688,7 +688,7 @@ void() item_armorInv =
 	if !(self.skin) // dumptruck_ds custom models and sounds END
 	self.skin = 2;
 	precache_sound_misc ("items/armor1.wav");
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 
@@ -923,7 +923,7 @@ void() weapon_axe =
 	self.weapon = IT_AXE;
 	self.netname = "Axe";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 /*QUAKED weapon_shotgun (0 .5 .8) (-16 -16 0) (16 16 32) X STYLE_1 STYLE_2 X X SPAWN_SILENT TRIGGER_SPAWNED SUSPENDED_IN_AIR NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER RESPAWN_WITH_DM_EFFECTS NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
@@ -943,7 +943,7 @@ void() weapon_shotgun =
 	self.weapon = IT_SHOTGUN;
 	self.netname = "Shotgun";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };
 // johnfitz
@@ -963,7 +963,7 @@ void() weapon_supershotgun =
 	self.weapon = IT_SUPER_SHOTGUN;
 	self.netname = "Double-barrelled Shotgun";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 33';
 	StartItem ();
 };
@@ -983,7 +983,7 @@ void() weapon_nailgun =
 	self.weapon = IT_NAILGUN;
 	self.netname = "nailgun";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 31';
 	StartItem ();
 };
@@ -1003,7 +1003,7 @@ void() weapon_supernailgun =
 	self.weapon = IT_SUPER_NAILGUN;
 	self.netname = "Super Nailgun";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 34';
 	StartItem ();
 };
@@ -1023,7 +1023,7 @@ void() weapon_grenadelauncher =
 	self.weapon = 3;
 	self.netname = "Grenade Launcher";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 28';
 	StartItem ();
 };
@@ -1043,7 +1043,7 @@ void() weapon_rocketlauncher =
 	self.weapon = 3;
 	self.netname = "Rocket Launcher";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 32';
 	StartItem ();
 };
@@ -1064,7 +1064,7 @@ void() weapon_lightning =
 	self.weapon = 3;
 	self.netname = "Thunderbolt";
 	self.touch = weapon_touch;
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	self.particles_offset = '0 0 31';
 	StartItem ();
 };
@@ -1226,7 +1226,7 @@ void() item_shells =
 	}
 	self.weapon = 1;
 	self.netname = "shells";
-	setsize (self, '0 0 0', '32 32 56');
+	resize('0 0 0', '32 32 56');
 	StartItem ();
 };
 
@@ -1286,7 +1286,7 @@ void() item_spikes =
 	}
 	self.weapon = 2;
 	self.netname = "nails";
-	setsize (self, '0 0 0', '32 32 56');
+	resize('0 0 0', '32 32 56');
 	StartItem ();
 };
 
@@ -1343,7 +1343,7 @@ void() item_rockets =
 	}
 	self.weapon = 3;
 	self.netname = "rockets";
-	setsize (self, '0 0 0', '32 32 56');
+	resize('0 0 0', '32 32 56');
 	StartItem ();
 };
 
@@ -1403,7 +1403,7 @@ void() item_cells =
 	}
 	self.weapon = 4;
 	self.netname = "cells";
-	setsize (self, '0 0 0', '32 32 56');
+	resize('0 0 0', '32 32 56');
 	StartItem ();
 };
 
@@ -1601,7 +1601,7 @@ void() key_start =
 	key_setsounds ();
 	self.particles_offset = '0 0 18';
 	self.touch = key_touch;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	StartItem ();
 };
 
@@ -1866,7 +1866,7 @@ void() item_sigil =
 	}
 
 	self.touch = sigil_touch;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	self.particles_offset = '0 0 18';
 	StartItem ();
 };
@@ -1985,7 +1985,7 @@ void() item_artifact_invulnerability =
 	body_model ("progs/invulner.mdl");
 	self.netname = "Pentagram of Protection";
 	self.items = IT_INVULNERABILITY;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
 	self.particles_offset = '0 0 16';
 	StartItem ();
@@ -2011,7 +2011,7 @@ void() item_artifact_envirosuit =
 	body_model ("progs/suit.mdl");
 	self.netname = "Biosuit";
 	self.items = IT_SUIT;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
 	self.particles_offset = '0 0 32';
 	StartItem ();
@@ -2039,7 +2039,7 @@ void() item_artifact_invisibility =
 	body_model ("progs/invisibl.mdl");
 	self.netname = "Ring of Shadows";
 	self.items = IT_INVISIBILITY;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
 	self.particles_offset = '0 0 0';
 	StartItem ();
@@ -2067,7 +2067,7 @@ void() item_artifact_super_damage =
 	if !(self.netname) // custom name -- dumptruck_ds
 	self.netname = "Quad Damage";
 	self.items = IT_QUAD;
-	setsize (self, '-16 -16 -24', '16 16 32');
+	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
 	self.particles_offset = '0 0 16';
 	StartItem ();
@@ -2239,7 +2239,7 @@ void() DropKey1 =
 	item.items = IT_KEY1;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setsize (item, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	item.touch = key_touch;
 };
 
@@ -2278,7 +2278,7 @@ void() DropKey2 =
 	item.items = IT_KEY2;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setsize (item, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	item.touch = key_touch;
 };
 
@@ -2296,7 +2296,7 @@ void() DropVial = //
 	setmodel(item, "progs/h_mdls/pd_vial.mdl");
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setsize (item, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	item.touch = health_touch;
 	item.healamount = 5;
 	item.healtype = 0;
@@ -2319,7 +2319,7 @@ void() DropShard = //
 	setmodel(item, "progs/armshr.mdl");
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setsize (item, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	item.touch = shard_touch;
 	item.snd_misc = "dump/armsh1.wav";
 
@@ -2430,7 +2430,7 @@ void() DropBackpack =
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
 	setmodel (item, "progs/backpack.mdl");
-	setsize (item, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	item.touch = BackpackTouch;
 
 	item.nextthink = time + 120;	// remove after 2 minutes
@@ -2568,6 +2568,6 @@ void() item_backpack =
 	precache_body_model ("progs/pd_bpack.mdl");
 	body_model ("progs/pd_bpack.mdl");
 	// setmodel (self, "progs/backpack.mdl");
-	setsize (self, '-16 -16 0', '16 16 56');
+	resize('-16 -16 0', '16 16 56');
 	StartItem ();
 };

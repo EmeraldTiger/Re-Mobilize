@@ -135,7 +135,7 @@ void() zombie_run1              =[      $run1,          zombie_run2     ] {
 		{  // sloppy hack, but it fixes the illusionary zombie bug
 		body_model ("progs/zombie.mdl"); //custom_mdls dumptruck_ds
 		// setmodel (self, "progs/zombie.mdl");
-		setsize (self, '-16 -16 -24', '16 16 40');
+		resize('-16 -16 -24', '16 16 40');
 		}
 	ai_run(1);
 	self.inpain = 0;};
@@ -847,7 +847,7 @@ void() monster_zombie =
 	body_model ("progs/zombie.mdl"); //custom_mdls dumptruck_ds
 	// setmodel (self, "progs/zombie.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 	self.health = 61;
 
 	if (self.spawnflags & SPAWN_CRUCIFIED)
