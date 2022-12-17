@@ -44,7 +44,7 @@ void() keytrigger_use =
 		return;
 
 	self.attack_finished = time + 2;
-	keylock_try_to_unlock (activator, self.message, keytrigger_unlock);
+	keylock_try_to_unlock (activator, self.message, self.message2, keytrigger_unlock);
 };
 
 void() keytrigger_touch =

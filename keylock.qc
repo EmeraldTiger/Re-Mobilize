@@ -185,24 +185,22 @@ The self.cnt functionality is a feature of progs_dump and was not part
 of the original game.  -- iw
 ================
 */
-void(entity client, string custom_message,
+void(entity client, string failure_message, string success_message,
 		void() success_func) keylock_try_to_unlock =
 {
-	local string s;
+	local string s = "";
 
 // support for item_key_custom -- iw
 	if (!HasKeys (client, self.items, self.customkeys))
 	{
-		if (custom_message != "")
-			centerprint (client, custom_message);
+		if (failure_message != "")
+			centerprint (client, failure_message);
 		else
 			centerprint2 (client, "You need the ", self.netname);
 		sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 		return;
 	}
 
-// the old code in door_touch included a comment from dumptruck_ds
-// thanking RennyC re self.cnt
 	if (self.cnt)
 	{
 		s = "You used (and kept) the ";
@@ -214,14 +212,19 @@ void(entity client, string custom_message,
 		s = "You used the ";
 	}
 
-	if(!(self.spawnflags&/*Use key silently*/2))
+	if (success_message != "")
+	{
+		sprint (client, success_message);
+		sprint (client, "\n");
+	}
+	else
 	{
 		sprint (client, s);
 		sprint (client, self.netname);
 		sprint (client, "\n");
-
-		sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 	}
+
+	sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 	
 	success_func ();
 };
