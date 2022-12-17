@@ -290,6 +290,9 @@ void() func_hook =
 	precache_sound ("misc/laseroff.wav");
 	self.use = func_hook_use;
 	
+	if (self.spawnflags & /*Player noclip*/2)
+		self.volume = 1;
+	
 	if (!self.speed) {
 		self.speed = 500;
 	}
