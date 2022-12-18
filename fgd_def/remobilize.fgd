@@ -3664,8 +3664,6 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 
 'killtarget' is the target killed upon entering the trigger.
 'killtarget2' is the target killed upon leaving the trigger.
-
-'spawnflags' is used to adjust who can fire the trigger.
 "
 [
 	target(target_destination) : "Target (fired upon entering the trigger)"
