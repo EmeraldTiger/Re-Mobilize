@@ -116,7 +116,7 @@ void(float offset) hknight_shot =
 			newmis.skin = 0;
 		}
 	}
-	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	sound_attack (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 

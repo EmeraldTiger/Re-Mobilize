@@ -2239,7 +2239,7 @@ void() DropKey1 =
 	item.items = IT_KEY1;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	resize('-16 -16 0', '16 16 56');
+	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = key_touch;
 };
 
@@ -2278,7 +2278,7 @@ void() DropKey2 =
 	item.items = IT_KEY2;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	resize('-16 -16 0', '16 16 56');
+	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = key_touch;
 };
 
@@ -2296,7 +2296,7 @@ void() DropVial = //
 	setmodel(item, "progs/h_mdls/pd_vial.mdl");
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	resize('-16 -16 0', '16 16 56');
+	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = health_touch;
 	item.healamount = 5;
 	item.healtype = 0;
@@ -2319,7 +2319,7 @@ void() DropShard = //
 	setmodel(item, "progs/armshr.mdl");
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	resize('-16 -16 0', '16 16 56');
+	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = shard_touch;
 	item.snd_misc = "dump/armsh1.wav";
 
@@ -2430,7 +2430,7 @@ void() DropBackpack =
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
 	setmodel (item, "progs/backpack.mdl");
-	resize('-16 -16 0', '16 16 56');
+	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = BackpackTouch;
 
 	item.nextthink = time + 120;	// remove after 2 minutes
