@@ -356,7 +356,7 @@ void() monster_knight =
 	body_model ("progs/knight.mdl"); // dumptruck_ds custom_mdls
 	// setmodel (self, "progs/knight.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 75;
@@ -395,7 +395,7 @@ void() monster_dead_knight =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-25.56 -14.56 -50.49','26.45 40.2 30');
+            resize('-25.56 -14.56 -50.49','26.45 40.2 30');
 		}
 		else
 		{
@@ -408,7 +408,7 @@ void() monster_dead_knight =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-30.36 -45.6 -50.18','28.29 11.59 30');
+            resize('-30.36 -45.6 -50.18','28.29 11.59 30');
 		}
 		else
 		{

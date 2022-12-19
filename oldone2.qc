@@ -344,7 +344,7 @@ void() monster_oldone2 =
 
 	body_model ("progs/oldone.mdl"); //custom_mdls dumptruck_ds
 	// setmodel (self, "progs/oldone.mdl");
-	setsize (self, '-160 -128 -24', '160 128 256');
+	resize('-160 -128 -24', '160 128 256');
 
 	if (!self.health)
 	{

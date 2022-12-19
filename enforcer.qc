@@ -948,7 +948,7 @@ void() monster_enforcer =
 	body_model ("progs/enforcer.mdl"); // SPIKE to the RESCUE!!!! - got this fixed. -- dumptruck_ds
 	// // setmodel (self, "progs/enforcer.mdl"); //orginal dumptruck_ds
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.proj_speed_mod)
 	{
@@ -1021,7 +1021,7 @@ void() monster_dead_enforcer =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-41.16 -45.65 -51.95','21.45 25.49 30');
+            resize('-41.16 -45.65 -51.95','21.45 25.49 30');
 		}
 		else
 		{
@@ -1034,7 +1034,7 @@ void() monster_dead_enforcer =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-39.85 -29.35 -49.07','20.52 33.17 30');
+            resize('-39.85 -29.35 -49.07','20.52 33.17 30');
 		}
 		else
 		{

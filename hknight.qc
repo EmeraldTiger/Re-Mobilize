@@ -671,7 +671,7 @@ void() monster_hell_knight =
 	body_model ("progs/hknight.mdl"); // custom_mdls dumptruck_ds
 	// setmodel (self, "progs/hknight.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 250;
@@ -732,7 +732,7 @@ void() monster_dead_hell_knight =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-68.96 -20.43 -53.98','34.8 21.15 30');
+            resize('-68.96 -20.43 -53.98','34.8 21.15 30');
 		}
 		else
 		{
@@ -745,7 +745,7 @@ void() monster_dead_hell_knight =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-42.05 -31.07 -51.56','46.34 25.02 30');
+            resize('-42.05 -31.07 -51.56','46.34 25.02 30');
 		}
 		else
 		{

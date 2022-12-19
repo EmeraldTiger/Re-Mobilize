@@ -412,7 +412,7 @@ void() boss2_awake =
 
 	body_model ("progs/boss.mdl");
 	// setmodel (self, "progs/boss.mdl");
-	setsize (self, '-128 -128 -24', '128 128 256');
+	resize('-128 -128 -24', '128 128 256');
 
 	if (!self.health)
 	{

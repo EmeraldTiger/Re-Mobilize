@@ -286,7 +286,7 @@ void() monster_fish =
 	body_model ("progs/fish.mdl");
 	// setmodel (self, "progs/fish.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 24');
+	resize('-16 -16 -24', '16 16 24');
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 25;

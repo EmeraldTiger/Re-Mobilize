@@ -271,7 +271,7 @@ void() monster_tarbaby =
 	body_model ("progs/tarbaby.mdl"); //custom_mdls dumptruck_ds
 	// setmodel (self, "progs/tarbaby.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.health) //thanks RennyC -- dumptruck_ds
 	self.health = 80;

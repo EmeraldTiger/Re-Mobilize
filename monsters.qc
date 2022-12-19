@@ -516,3 +516,22 @@ void() swimmonster_start =
 	self.think = swimmonster_start_go;
 	total_monsters = total_monsters + 1;
 };
+
+void(vector defaultmin, vector defaultmax) resize =
+{
+	vector vmin = defaultmin, vmax = defaultmax;
+
+	if(self.mdlsz)
+	{
+		if(!self.centeroffset) self.centeroffset = '0 0 0';
+
+		vmin_x = self.centeroffset_x - (self.mdlsz_x / 2);
+		vmin_y = self.centeroffset_y - (self.mdlsz_y / 2);
+		vmin_z = self.centeroffset_z - (self.mdlsz_z / 2);
+
+		vmax_x = self.centeroffset_x + (self.mdlsz_x / 2);
+		vmax_y = self.centeroffset_y + (self.mdlsz_y / 2);
+		vmax_z = self.centeroffset_z + (self.mdlsz_z / 2);
+    }
+	setsize(self, vmin, vmax);
+};

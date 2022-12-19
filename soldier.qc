@@ -634,7 +634,7 @@ void() monster_army =
 	//dumptruck_ds custom_mdls
 	body_model ("progs/soldier.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 40');
+	resize('-16 -16 -24', '16 16 40');
 
 	if (!self.proj_speed_mod)
 	{
@@ -686,7 +686,7 @@ void() monster_dead_army =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-38.27 -30.47 -50.3','22.1 25.35 30');
+            resize('-38.27 -30.47 -50.3','22.1 25.35 30');
 		}
 		else
 		{
@@ -699,7 +699,7 @@ void() monster_dead_army =
 		if (self.spawnflags & 1)
 		{
 			self.solid = SOLID_BBOX;
-                	setsize(self,'-39.85 -29.35 -49.07','20.52 33.17 30');
+            resize('-39.85 -29.35 -49.07','20.52 33.17 30');
 		}
 		else
 		{
