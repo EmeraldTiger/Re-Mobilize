@@ -328,7 +328,11 @@ void() func_hook =
 	if (self.noise3 != "") {
 		precache_sound(self.noise3);
 	}
-		
+	
+	if(!self.mdl)
+		self.mdl = "progs/tracer1.mdl";
+	precache_model(self.mdl);
+	
 	setmodel (self, self.model);
 	self.classname = "func_hook";
 	

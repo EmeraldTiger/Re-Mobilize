@@ -852,14 +852,11 @@ void() CheckGrapple =
 		player_aim = player_offset + (v_forward * 200);
 		new.origin = player_aim;
 		
-		new.angles[2] = (time * 100) % 360;
+		if(!(trace_ent.spawnflags & /*Non rotating tracer*/4))
+			new.angles[2] = (time * 100) % 360;
 		new.alpha = (dist / 300) - (0.5);
-		if (trace_ent.mdl!="") {
-			setmodel (new, trace_ent.mdl);
-		}
-		else {
-			setmodel (new, "progs/tracer1.mdl");
-		}
+		setmodel (new, trace_ent.mdl);
+
 		setsize (new, '0 0 0', '0 0 0');
 		new.think = SUB_Remove;
 		new.ltime = time;
