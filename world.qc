@@ -487,8 +487,6 @@ void() worldspawn =
 	
 // Re:Mobilize precaches
 
-	precache_model("progs/tracer1.mdl");
-
 	precache_sound ("misc/cushion1.wav");
 	precache_sound ("misc/cushion2.wav");
 	precache_sound ("misc/cushion3.wav");
