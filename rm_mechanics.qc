@@ -233,7 +233,12 @@ void() func_hook_use = {
 			sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 		}
 		else {
-			sound (self, CHAN_ITEM, "misc/laser_on.wav", 1, ATTN_NORM);
+			if (self.sounds == 1) {
+				sound (self, CHAN_ITEM, "grapple/mhookenable.wav", 1, ATTN_NORM);
+			}
+			else {
+				sound (self, CHAN_ITEM, "misc/laser_on.wav", 1, ATTN_NORM);
+			}
 		}
 		activator.disable_event = 0;
 		
@@ -245,7 +250,12 @@ void() func_hook_use = {
 			sound (self, CHAN_ITEM, self.noise5, 1, ATTN_NORM);
 		}
 		else {
-			sound (self, CHAN_ITEM, "misc/laseroff.wav", 1, ATTN_NORM);
+			if (self.sounds == 1) {
+				sound (self, CHAN_ITEM, "grapple/mhookdisable.wav", 1, ATTN_NORM);
+			}
+			else {
+				sound (self, CHAN_ITEM, "misc/laseroff.wav", 1, ATTN_NORM);
+			}
 		}
 		activator.disable_event = 1;
 	}
@@ -274,6 +284,8 @@ void() func_hook =
 		precache_sound("grapple/mhookactive.wav");
 		precache_sound("grapple/mhookattach.wav");
 		precache_sound("grapple/mhookdetach.wav");
+		precache_sound("grapple/mhookdisable.wav");
+		precache_sound("grapple/mhookenable.wav");
 	}
 	
 	// enable noise
@@ -288,6 +300,7 @@ void() func_hook =
 	
 	precache_sound ("misc/laser_on.wav");
 	precache_sound ("misc/laseroff.wav");
+	
 	self.use = func_hook_use;
 	
 	if (self.spawnflags & /*Player noclip*/2)
