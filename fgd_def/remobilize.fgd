@@ -2511,7 +2511,7 @@ MONSTER_ONLY(16) will only teleport monsters"
         3 : "Nightmare!"
 	]
 ]
-@PointClass base(Trigger) = trigger_relay : "Trigger: Relay"
+@PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
 ]
 @SolidClass base(Appearflags, TriggerWait) = trigger_take_weapon : "
