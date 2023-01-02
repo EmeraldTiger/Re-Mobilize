@@ -362,7 +362,7 @@ void() SUB_UseTargets =
 //
 // print the message
 //
-	if (self.message != "" && !(self.flags & FL_NOCENTERPRINT)) {
+	if (self.message != "" && !(self.flags & FL_NOCENTERPRINT) && self != world) {
 		if (self.spawnflags & TRIGGER_CENTERPRINTALL) {
 			t = find(world, classname, "player");
 			while (t) {
