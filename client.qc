@@ -785,6 +785,10 @@ void() CheckWaterJump =
 {
 	if (self.movetype == MOVETYPE_NOCLIP) // from Copper -- dumptruck_ds
 		return;
+		
+	if (self.state & STATE_RM_AIMING) {
+		return;
+	}
 
 	local vector start, end;
 
@@ -992,9 +996,6 @@ void() PlayerPreThink =
 	CheckRules ();
 	WaterMove ();
 
-	if (self.waterlevel == 2)
-		CheckWaterJump ();
-
 	if (self.deadflag >= DEAD_DEAD)
 	{
 		PlayerDeathThink ();
@@ -1190,6 +1191,9 @@ else
 	
 	if (self.hook_out)
 		GrappleService();
+		
+	if (self.waterlevel == 2)
+		CheckWaterJump ();
 	
 	//Display custom keys inventory
 	if(invPanel) invPanel.origin = self.origin + v_forward*(250) + v_up*(100);
