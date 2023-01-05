@@ -46,14 +46,12 @@ void() misc_model_use = {
 		self.model = "";
 
 		self.state = STATE_INVISIBLE;
-		setorigin(self, self.origin);
 	}
 	else {
 		if (self.spawnflags & MISC_MODEL_SOLID) self.solid = SOLID_BBOX;
 		self.model = self.mdl;
 
 		self.state = STATE_ACTIVE;
-		setorigin(self, self.origin);
 	}
 };
 
@@ -81,6 +79,7 @@ void() misc_model = {
     setmodel(self, self.mdl);
     
 	setsize(self, vmin, vmax);
+	setorigin(self, self.origin);
 	
 	if(self.spawnflags & MISC_MODEL_SOLID) self.solid = SOLID_BBOX;
 	else self.solid = SOLID_NOT;

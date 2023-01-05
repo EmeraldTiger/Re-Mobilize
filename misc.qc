@@ -1069,21 +1069,21 @@ float TOGGLEVISWALL_NOTSOLID = 2;
 
 void() func_togglevisiblewall_use =
 {
-	if(!self.state) {
+	if(!self.estate) {
 		if(!(self.spawnflags & TOGGLEVISWALL_NOTSOLID)) {
 			self.solid = SOLID_BSP;
 			self.movetype = MOVETYPE_PUSH;
 		}
 		setmodel (self, self.origmodel);
 		if(self.switchshadstyle) lightstyle(self.switchshadstyle, "a");
-		self.state = 1;
+		self.estate = 1;
 	} else {
 
 		self.solid = SOLID_NOT;
 		self.movetype = MOVETYPE_NONE;
 		setmodel (self, "");
 		if(self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
-		self.state = 0;
+		self.estate = 0;
 	}
 
 };
@@ -1098,8 +1098,8 @@ void() func_togglevisiblewall =
 
 	self.origmodel = self.model;
 
-	if(self.spawnflags & TOGGLEVISWALL_STARTOFF) self.state = 1;
-	else self.state = 0;
+	if(self.spawnflags & TOGGLEVISWALL_STARTOFF) self.estate = 1;
+	else self.estate = 0;
 
 	if(self.spawnflags & TOGGLEVISWALL_NOTSOLID) {
 		self.solid = SOLID_NOT;
