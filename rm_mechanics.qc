@@ -337,3 +337,61 @@ void() func_hook =
 	self.classname = "func_hook";
 	
 };
+
+/*
+===============================================================================
+target_autohook
+===============================================================================
+*/
+
+/*QUAKED target_autohook (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
+A point entity that targets a func_hook's targetname2 field, and causes the autohook's activator to be hooked to (or unhooked from, if already hooked) the target func_hook.
+Can be used with trigger_everything to hook not only players, but also monsters.
+If the player is hooked by this entity, they cannot unhook until another target_autohook does so.
+
+Keys:
+
+"style" Determines whether this entity hooks or unhooks the activator.
+
+0. Hook
+1. Unhook
+
+*/
+
+entity hooktarget;
+
+void() target_autohook_hook = {
+	if (activator.disable_event) {
+		activator.disable_event = 0;
+	}
+	
+	if (!activator.hook_out) {
+		W_FireGrappleAuto(activator, self.shadowcontroller);
+		activator.autohooked = 1;
+	}
+	else if (activator.flags & FL_MONSTER) {
+		W_FireGrappleAuto(activator, self.shadowcontroller);
+	}
+	
+}
+
+void() target_autohook_unhook = {
+	activator.disable_event = 1;
+	activator.hook_out = 0;
+	activator.autohooked = 0;
+	hooktarget.locked_on = 0;
+}
+
+
+void() target_autohook = {
+	entity targ;
+	targ = find(world, targetname2, self.target);
+	if (targ && self.style==0) {
+		self.shadowcontroller = targ;
+		self.use = target_autohook_hook;
+	}
+	else if (targ && self.style==1) {
+		hooktarget = targ;
+		self.use = target_autohook_unhook;
+	}
+}

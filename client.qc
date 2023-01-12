@@ -835,7 +835,7 @@ void() CheckGrapple =
 	local	float dist;
 	local	vector panel_origin;
 	local	vector player_aim;
-
+	
 	if ((trace_ent.classname=="func_hook") && trace_ent.estate == STATE_ACTIVE && !trace_ent.locked_on) {
 		self.disable_event = 0;
 		new = spawn();

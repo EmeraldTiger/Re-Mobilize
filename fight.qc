@@ -184,6 +184,9 @@ Stay facing the enemy
 */
 void() ai_face =
 {
+	if (self.hook_out && !self.disable_event)
+		GrappleService();
+	
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw ();
 };
