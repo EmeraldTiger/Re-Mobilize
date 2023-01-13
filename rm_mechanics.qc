@@ -365,11 +365,11 @@ void() target_autohook_hook = {
 		activator.disable_event = 0;
 	}
 	
-	if (!activator.hook_out) {
+	if (!activator.hook_out && self.shadowcontroller.estate == STATE_ACTIVE) {
 		W_FireGrappleAuto(activator, self.shadowcontroller);
 		activator.autohooked = 1;
 	}
-	else if (activator.flags & FL_MONSTER) {
+	else if ((activator.flags & FL_MONSTER) && self.shadowcontroller.estate == STATE_ACTIVE) {
 		W_FireGrappleAuto(activator, self.shadowcontroller);
 	}
 	

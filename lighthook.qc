@@ -97,6 +97,12 @@ void() GrappleTrack =
 {
 	local   vector  spray;
 	
+	if (self.owner.disable_event) {
+		self.disable_event = 0;
+		GrappleReset();
+		return;
+	}
+	
 	if ((self.owner.flags & FL_MONSTER) && !self.owner.hook_out) {
 		return;
 	}
@@ -167,6 +173,7 @@ void () GrappleAnchor =
 			GrappleReset();
 			return;
 	}
+	
 	
 	/*
 	if (other.classname == "player") 
@@ -247,6 +254,34 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	
 	activator.pullspeed = targ.speed;
 	activator.hookstyle = targ.style;
+	
+	if (trace_ent.sounds) {
+		activator.hooksounds = trace_ent.sounds;
+	}
+	else {
+		activator.hooksounds = 0;
+	}
+	
+	if (trace_ent.noise) {
+		activator.hooknoise1 = trace_ent.noise;
+	}
+	else {
+		activator.hooknoise1 = "";
+	}
+	
+	if (trace_ent.noise2) {
+		activator.hooknoise2 = trace_ent.noise2;
+	}
+	else {
+		activator.hooknoise2 = "";
+	}
+	
+	if (trace_ent.noise3) {
+		activator.hooknoise3 = trace_ent.noise3;
+	}
+	else {
+		activator.hooknoise3 = "";
+	}
 	
 	targ.locked_on = 1;
 	activator.currenthook = targ;
