@@ -273,10 +273,8 @@ void() counter_use =
 		return;
 
 	/**/
-	entity msgEnt;
-	if (self.spawnflags & SPAWNFLAG_NOMESSAGE)
-		msgEnt = world;
-	if (activator.classname == "player")
+	entity msgEnt = world;
+	if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
 		msgEnt = activator;
 	else if (self.spawnflags & TRIGGER_CENTERPRINTALL)
 		msgEnt = find(world, classname, "player"); //Re:Mobilize is for many reasons singleplayer-focused, so let's not bother with a loop to find "all the players". Here the spawnflags simply means "send a message to player never mind they're the direct activator or not".
