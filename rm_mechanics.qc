@@ -376,10 +376,12 @@ void() target_autohook_hook = {
 }
 
 void() target_autohook_unhook = {
-	activator.disable_event = 1;
-	activator.hook_out = 0;
-	activator.autohooked = 0;
-	hooktarget.locked_on = 0;
+	if (activator.autohooked) {
+		activator.disable_event = 1;
+		activator.hook_out = 0;
+		activator.autohooked = 0;
+		hooktarget.locked_on = 0;
+	}
 }
 
 
