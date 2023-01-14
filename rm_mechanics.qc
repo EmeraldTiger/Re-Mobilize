@@ -361,6 +361,7 @@ Keys:
 entity hooktarget;
 
 void() target_autohook_hook = {
+	
 	if (activator.disable_event) {
 		activator.disable_event = 0;
 	}

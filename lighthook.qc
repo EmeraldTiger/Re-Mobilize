@@ -255,29 +255,29 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	activator.pullspeed = targ.speed;
 	activator.hookstyle = targ.style;
 	
-	if (trace_ent.sounds) {
-		activator.hooksounds = trace_ent.sounds;
+	if (targ.sounds) {
+		activator.hooksounds = targ.sounds;
 	}
 	else {
 		activator.hooksounds = 0;
 	}
 	
-	if (trace_ent.noise) {
-		activator.hooknoise1 = trace_ent.noise;
+	if (targ.noise) {
+		activator.hooknoise1 = targ.noise;
 	}
 	else {
 		activator.hooknoise1 = "";
 	}
 	
-	if (trace_ent.noise2) {
-		activator.hooknoise2 = trace_ent.noise2;
+	if (targ.noise2) {
+		activator.hooknoise2 = targ.noise2;
 	}
 	else {
 		activator.hooknoise2 = "";
 	}
 	
-	if (trace_ent.noise3) {
-		activator.hooknoise3 = trace_ent.noise3;
+	if (targ.noise3) {
+		activator.hooknoise3 = targ.noise3;
 	}
 	else {
 		activator.hooknoise3 = "";
