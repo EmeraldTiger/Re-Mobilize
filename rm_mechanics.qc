@@ -240,7 +240,6 @@ void() func_hook_use = {
 				sound (self, CHAN_ITEM, "misc/laser_on.wav", 1, ATTN_NORM);
 			}
 		}
-		activator.disable_event = 0;
 		
 	}
 	else {
@@ -257,7 +256,6 @@ void() func_hook_use = {
 				sound (self, CHAN_ITEM, "misc/laseroff.wav", 1, ATTN_NORM);
 			}
 		}
-		activator.disable_event = 1;
 	}
 };
 

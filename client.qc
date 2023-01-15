@@ -837,7 +837,6 @@ void() CheckGrapple =
 	local	vector player_aim;
 
 	if ((trace_ent.classname=="func_hook") && trace_ent.estate == STATE_ACTIVE && !trace_ent.locked_on) {
-		self.disable_event = 0;
 		new = spawn();
 		new.origin_x = trace_endpos[0];
 		new.origin_y = trace_endpos[1];

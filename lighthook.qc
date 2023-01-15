@@ -381,8 +381,7 @@ void() GrappleService =
 			self.hook_finished = time + 0.55;
 	}
 	
-	if (self.disable_event) {
-		self.disable_event = 0;
+	if (self.currenthook.estate == STATE_INACTIVE) {
 		self = self.hook;
 		GrappleReset();
 		return;
