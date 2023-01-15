@@ -240,7 +240,6 @@ void() func_hook_use = {
 				sound (self, CHAN_ITEM, "misc/laser_on.wav", 1, ATTN_NORM);
 			}
 		}
-		activator.disable_event = 0;
 		
 	}
 	else {
@@ -257,7 +256,6 @@ void() func_hook_use = {
 				sound (self, CHAN_ITEM, "misc/laseroff.wav", 1, ATTN_NORM);
 			}
 		}
-		activator.disable_event = 1;
 	}
 };
 
@@ -358,13 +356,7 @@ Keys:
 
 */
 
-entity hooktarget;
-
 void() target_autohook_hook = {
-	
-	if (activator.disable_event) {
-		activator.disable_event = 0;
-	}
 	
 	if (!activator.hook_out && self.shadowcontroller.estate == STATE_ACTIVE) {
 		W_FireGrappleAuto(activator, self.shadowcontroller);
@@ -378,10 +370,8 @@ void() target_autohook_hook = {
 
 void() target_autohook_unhook = {
 	if (activator.autohooked) {
-		activator.disable_event = 1;
 		activator.hook_out = 0;
 		activator.autohooked = 0;
-		hooktarget.locked_on = 0;
 	}
 }
 
@@ -394,7 +384,6 @@ void() target_autohook = {
 		self.use = target_autohook_hook;
 	}
 	else if (targ && self.style==1) {
-		hooktarget = targ;
 		self.use = target_autohook_unhook;
 	}
 }

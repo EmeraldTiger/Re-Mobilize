@@ -728,7 +728,7 @@ The monster has an enemy it is trying to kill
 void(float dist) ai_run =
 {
 	
-	if (self.hook_out && !self.disable_event) {
+	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE) {
 		GrappleService();
 	}
 	

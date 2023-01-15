@@ -97,12 +97,6 @@ void() GrappleTrack =
 {
 	local   vector  spray;
 	
-	if (self.owner.disable_event) {
-		self.disable_event = 0;
-		GrappleReset();
-		return;
-	}
-	
 	if ((self.owner.flags & FL_MONSTER) && !self.owner.hook_out) {
 		return;
 	}
@@ -465,8 +459,7 @@ void() GrappleService =
 			self.hook_finished = time + 0.55;
 	}
 	
-	if (self.disable_event) {
-		self.disable_event = 0;
+	if (self.currenthook.estate == STATE_INACTIVE) {
 		self = self.hook;
 		GrappleReset();
 		return;
