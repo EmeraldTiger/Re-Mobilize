@@ -1815,6 +1815,19 @@ You can either replace the current value with a new one, or add/subtract to it (
 	]
 ]
 
+@PointClass base(Appearflags, Targetname) = target_autohook : "A point entity that targets a func_hook's targetname2 field, and causes the autohook's activator to be hooked to (or unhooked from, if already hooked) the target func_hook. Can be used with trigger_everything to hook not only players, but also monsters. If the player is hooked by this entity, they cannot unhook until another target_autohook does so.
+"
+[
+	target(target_destination) : "Target"
+	target2(target_destination) : "Target"
+	target3(target_destination) : "Target"
+	target4(target_destination) : "Target"
+	style(choices) : "Determines whether this entity hooks or unhooks the activator." : 0 = [
+		0 : "Hook"
+		1 : "Unhook"
+	]
+]
+
 
 //@SolidClass = func_group : "Group of brushes for in-editor use" []
 // @SolidClass = func_detail : "Group of brushes for certain compilers " []

@@ -96,7 +96,11 @@ void() GrappleReset =
 void() GrappleTrack =
 {
 	local   vector  spray;
-
+	
+	if ((self.owner.flags & FL_MONSTER) && !self.owner.hook_out) {
+		return;
+	}
+	
 	// Release dead targets
 	if (self.enemy.classname == "player" && self.enemy.health <= 0)
 		self.owner.on_hook = FALSE;
@@ -136,6 +140,7 @@ void() GrappleTrack =
 		self.velocity = self.enemy.velocity;
 
 	self.nextthink = time + 0.1;
+	
 };
 
 // Tries to anchor the grapple to whatever it touches
@@ -163,6 +168,8 @@ void () GrappleAnchor =
 			return;
 	}
 	
+	
+	/*
 	if (other.classname == "player") 
 	{
 		if (self.owner.hooknoise1 != "") {
@@ -199,6 +206,7 @@ void () GrappleAnchor =
 		self.velocity = '0 0 0';
 		self.avelocity = '0 0 0';
 	}
+	*/
 
 	self.frame = 2; // anchored
 	
@@ -210,7 +218,9 @@ void () GrappleAnchor =
 			sound (self, CHAN_WEAPON, "grapple/mhookattach.wav", 1, ATTN_NORM);
 			}
 			else {
-			sound (self, CHAN_WEAPON, "grapple/grhit2.wav", 1, ATTN_NORM);
+				if (!(self.owner.flags & FL_MONSTER)) {
+					sound (self, CHAN_WEAPON, "grapple/grhit2.wav", 1, ATTN_NORM);
+				}
 			}
 	}
 
@@ -230,6 +240,73 @@ void () GrappleAnchor =
 	self.solid = SOLID_NOT;
 	self.touch = SUB_Null;
 };
+
+void (entity hooked, entity targ) W_FireGrappleAuto = 
+{
+	vector ray_origin;
+	ray_origin = (targ.mins + targ.maxs) * 0.5;
+	
+	activator.pullspeed = targ.speed;
+	activator.hookstyle = targ.style;
+	
+	if (targ.sounds) {
+		activator.hooksounds = targ.sounds;
+	}
+	else {
+		activator.hooksounds = 0;
+	}
+	
+	if (targ.noise) {
+		activator.hooknoise1 = targ.noise;
+	}
+	else {
+		activator.hooknoise1 = "";
+	}
+	
+	if (targ.noise2) {
+		activator.hooknoise2 = targ.noise2;
+	}
+	else {
+		activator.hooknoise2 = "";
+	}
+	
+	if (targ.noise3) {
+		activator.hooknoise3 = targ.noise3;
+	}
+	else {
+		activator.hooknoise3 = "";
+	}
+	
+	targ.locked_on = 1;
+	activator.currenthook = targ;
+	
+	activator.punchangle_x = -2; // bump him
+	
+	activator.launchtime = time + 1;
+	
+	newmis = spawn();
+	newmis.movetype = MOVETYPE_FLYMISSILE;
+	newmis.solid = SOLID_BBOX;
+	newmis.owner = activator;		// newmis belongs to me
+	activator.hook = newmis;			// This is my newmis
+	newmis.classname = "hook";
+	
+	vector norm;
+	norm = normalize(ray_origin - activator.origin);
+	newmis.velocity = norm * -5;
+	setorigin (newmis, ray_origin);
+	newmis.angles = vectoangles(norm);
+	
+	newmis.touch = GrappleAnchor;
+	newmis.think = GrappleReset;
+	newmis.nextthink = time + 2;
+	newmis.frame = 1; // hook spread
+	
+	setsize(newmis, '0 0 0' , '0 0 0 ');
+
+	activator.hook_out = TRUE;
+	
+}
 
 void () W_FireGrapple =
 {
@@ -352,8 +429,9 @@ void() GrappleService =
 
 	if (!self.on_hook) {
 		// just draw a line to the hook
-		if (vlen(self.hook.origin - self.origin) > 50)
+		if (vlen(self.hook.origin - self.origin) > 50) {
 			GrappleTrail(self.hook, self);
+		}
 		return;
 	}
 
@@ -396,12 +474,11 @@ void() GrappleService =
 		GrappleReset();
 	}
 
-	if (self.impulse==25)
+	if (self.impulse==25 && !self.autohooked)
 	{
 		self = self.hook;
 		
 		GrappleReset();	
-	
 		
 		return;
 	}
