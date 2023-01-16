@@ -17,6 +17,8 @@ speed indefinitely. Default of 0 means no limit.
 
 */
 
+float TRACE_TO_SURFACE = 1;
+
 void() trampoline_touch =
 {
 	// Enforce a minimum velocity the player must fall so they won't just bounce endlessly
@@ -26,8 +28,14 @@ void() trampoline_touch =
 	if (!((other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX))	
 	|| (CheckValidTouch()))) return;
 	
-    vector surfNorm = trace_plane_normal;
 	vector up = '0 0 1';
+	
+	if (self.spawnflags & TRACE_TO_SURFACE) {
+		vector offset = other.origin;
+		offset[2] -= 300;
+		traceline(other.origin, offset, FALSE, other);
+		up = trace_plane_normal;
+	}
 	
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
