@@ -1619,11 +1619,22 @@ When player is touching this entity, she can climb by pushing jump."
 
 @SolidClass base(Appearflags, Target) = trigger_trampoline : "Invisible trampoline entity.
 
-Player will bounce off of this like a trampoline, reflecting velocity."
+Player will bounce off of this like a trampoline, reflecting velocity.
+
+'elasticity' sets how much velocity is boosted after a bounce (ignoring gravity); default of 1 is perfectly elastic, values less than 1 will result in lower bounces, and values higher than 1 will provide a higher boost. Small changes in elasticity greatly effect velocity. Elasticity values greater than 1 work well with angled trampolines (see below).
+
+'maxbounce' sets the maximum vertical velocity that a player can achieve using the trampoline.
+
+NOTE: A player can continue to bounce indefinitely and gain height on an elasticity > 1 trampoline, which can compromise progression; to prevent this, always set a maxbounce value if using an elasticity > 1 trampoline.
+
+'speed' sets the minimum vertical velocity that a player must have to bounce on the trampoline. If set to -1, the trampoline cannot bounce players, and will only act as a cushion.
+
+Spawnflags:
+- 'Angled' overrides the default upwards orientation and instead performs a trace from the entity using the trampoline to the surface below it, and returns the surface normal. This can be used to make angled trampolines. Be aware that the Quake engine does not support non-axial trigger brushes, so a diagonally-rotated trampoline must be simulated by constructing a series of trigger_trampolines in a staircase pattern approximating the angle."
 [
-	elasticity(string) : "How much velocity is boosted after a bounce (ignoring gravity); default of 1 is perfectly elastic, values less than 1 will result in lower bounces, and values higher than 1 will provide a higher boost that is not physically possible. Small changes in elasticity greatly effect velocity; values between 0.9 and 1.1 are recommended, and the default of 1 should be used in almost all cases. If greater than 1, you are strongly urged to set maxbounce as well." : "1"
+	elasticity(string) : "How much velocity is boosted after a bounce, ignoring gravity." : "1"
 	
-	maxbounce(string) : "The maximum vertical velocity that a player can achieve using the trampoline. Use of this is highly recommended if elasticity > 1, as otherwise the player will continue to gain upwards speed indefinitely. Default means no limit." : "0"
+	maxbounce(string) : "The maximum vertical velocity that a player can achieve using the trampoline." : "0"
 	
 	sounds(choices) : "Sound" : 0 =
 	[
@@ -1642,7 +1653,7 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
 	noise2(string) : "Sound file for the 'landing (no bounce)' sound (if set, overrides 'sounds')"
-	speed(choices) : "Minimum absolute speed  (>0) required to activate the bounce effect" : 200 =
+	speed(choices) : "Minimum vertical speed required to bounce" : 200 =
 	[
 		-1: "Cushion only (no bounce)"
 	]
@@ -1650,7 +1661,9 @@ Player will bounce off of this like a trampoline, reflecting velocity."
 
 @SolidClass base(Appearflags, Target) = trigger_wiremesh : "Invisible wiremesh entity.
 
-Player can move freely inside of this entity's volume, on walls and ceilings."
+Player can move freely inside of this entity's volume, on walls and ceilings.
+
+'speed' sets how quickly the player moves across the wiremesh."
 [
 	speed(string) : "Speed at which the player travels along the wiremesh; default 300." : "300"
 
@@ -1672,9 +1685,24 @@ Player can move freely inside of this entity's volume, on walls and ceilings."
 	noise4(string) : "Sound file for a 'climbing' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise3."
 ]
 
-@SolidClass base(Appearflags, Targetname, Target) = func_hook : "A lighthook panel; a player that is looking directly at the surface of this can latch onto it with the lighthook (default RMB)"
+@SolidClass base(Appearflags, Targetname, Target) = func_hook : "A lighthook panel; a player that is looking directly at the surface of this can latch onto it with the lighthook (default RMB).
+
+Lightpanels start enabled by default; by assigning a targetname, the lightpanel will be disabled on map startup and must be turned on by a targeting entity. Afterwards, the lightpanel can be toggled off again if targeted once more.
+
+The lightpanel's targetname2 property is used for a different purpose from targetname. Instead of auto-disabling the panel and having it turn on/off, targetname2 allows it to forcefully hook the player, as well as monsters, through the target_autohook entity. See target_autohook for more information.
+
+If the target field of a func_hook points to an info_notnull, the origin of the hook beam will be forced to the location of the target, rather than where the player clicks. This is useful for non-repeating textures where the light beam can only logically come from one place. Bury the info_notnull halfway into the func_hook for best results.
+
+'speed' sets how fast the lighthook pulls the player. This does not affect the lighthook beam itself, which is infinitely fast.
+
+Spawnflags:
+- 'Aim only' disables the hooking function of the lightpanel, while keeping other useful properties such as aiming and reacting to the hook keys (without actually hooking). Useful in conjunction with lightpanel events.
+
+- 'Player noclip' makes the lightpanel nonsolid to players - a player can hook up to it and pass right through, unhooking upon doing so.
+
+- 'Non rotating tracer' disables the normal rotation of the tracer/crosshairs that appear when aiming at the lightpanel."
 [
-	speed(string) : "Speed at which the lighthook pulls the player (not the hook itself, which is infinitely fast); default 500." : "500"
+	speed(string) : "Speed at which the lighthook pulls the player; default 500." : "500"
 	
 	style(choices) : "Color of the lighthook beam" : 0 =
 	[
