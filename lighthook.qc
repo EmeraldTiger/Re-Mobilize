@@ -73,6 +73,7 @@ void() GrappleReset =
 	self.owner.hook_out = FALSE;
 	self.owner.weaponframe = 0;
 	self.owner.attack_finished = time +0.25;
+	self.owner.autohooked = 0;
 	
 	if (self.owner.hooknoise2 != "") {
 		sound (self, CHAN_WEAPON, self.owner.hooknoise2, 1, ATTN_NORM);

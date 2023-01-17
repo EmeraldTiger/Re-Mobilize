@@ -184,7 +184,7 @@ Stay facing the enemy
 */
 void() ai_face =
 {
-	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE)
+	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE && self.autohooked)
 		GrappleService();
 	
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
