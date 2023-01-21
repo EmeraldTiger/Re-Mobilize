@@ -359,10 +359,11 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 		32 : "Spawn Silently" : 0
 		64 : "Trigger spawned" : 0
 		128 : "Suspended in air" : 0
+		4194304 : "Spawn then drop" : 0
 		8388608 : "Don't drop to floor" : 0
 	]
 	// message(string) : "Message"
-	// delay(integer) : "Delay"
+	delay(float) : "If 'Spawn then drop', delay before falling down" : 0.2
 ]
 
 @BaseClass base(NonRespawnableItem) =
@@ -1828,8 +1829,8 @@ By default it'll fire for each and every registered touch, even if simultaneous.
 ]
 
 
-@PointClass base(Appearflags, Targetname) = target_setcount : "Changes the targeted entity's 'count' field. Targets both targetname and targetname2 fields.
-Can be used with a trigger_filter to dinamically change its comparing value, or to reset/change a trigger_counter's current use count.
+@PointClass base(Appearflags, Targetname) = target_setcount : "Changes the targeted entity's 'count' field. Targets targetname, targetname2, targetname3 and targetname4 fields.
+Can be used with a trigger_filter to dynamically change its comparing value, or to reset/change a trigger_counter's current use count.
 
 You can either replace the current value with a new one, or add/subtract to it (by using a positive or negative 'count'), by selecting into the 'style' field.
 "
