@@ -1766,6 +1766,7 @@ There are various fields available to test, selectable through the 'style' key. 
 - Float types can do all operations, and are compared to this entity's 'count' field.
 - Flag types support Equal and bitwise AND, and are compared to the 'aflag' field.
 - String types have only Equal evaluation, and are compared to this entity's 'type' field.
+- Vector types can do all float operations on a per-axis basis, and are compared to this entity's 'count' field.
 
 You can set the trigger to fire if the condition evaluates to false by activating the spawnflag 'Trigger if false'. It'll never fire if the entity targeted by 'include' isn't found, regardless of this spawnflag.
 
@@ -1793,6 +1794,9 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		17 : "ammo_cells (float, use 'count' field)"
 		18 : "maxbounce (float, use 'count' field)"
 		19 : "frame (float, use 'count' field)"
+		20 : "origin (vector, choose a dimension with shardvalue then treat as float)"
+		21 : "angles (vector, choose a dimension with shardvalue then treat as float)"
+		21 : "velocity (vector, choose a dimension with shardvalue then treat as float)"
 	]
 	weapon(choices) : "Operation" : 0 = [
 		0 : "== (equal, valid for all fields)"
@@ -1802,14 +1806,22 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		4 : ">= (more than or equal, valid for floats only)"
 		5 : "& (bitwise AND, valid for floats and flags)"
 		6 : "| (bitwise OR, valid for floats and flags)"
+		7 : "% (remainder of an integer division, valid for floats and flags)"
 	]
 	count(integer) : "Float value to test"
+	cnt(integer) : "Modulus used for the % operator"
 	aflag(flags) = []
 	type(string) : "String value to test"
 	spawnflags(flags) = [
 		1: "Trigger if false"
 		2: "Relay owner as activator"
 	]
+	shardvalue(choices) : "Vector dimension" : 0 = [
+		0 : "X"
+		1 : "Y"
+		2 : "Z"
+	]
+	pain_target(string) : "Target(s) to fire if the condition evaluated to false"
 ]
 
 
@@ -1818,18 +1830,20 @@ A no-holds-barred touchable trigger. Everything triggers it. Players, monsters, 
 
 It can only fire targets matching its 'target' field. Doesn't have support for the 'target2-4' fields, neither 'message' nor 'killtarget'. Useful when used in conjunction with the trigger_filter point entity to filter out its firing.
 
-By default it'll fire for each and every registered touch, even if simultaneous. If given a 'wait' value, it'll act like a trigger_multiple, where a single activation puts it on hold for 'wait' seconds. If the target is a trigger_filter, you can set it to wait only if the filter evaluates to true.
+By default it'll fire for each and every registered touch, even if simultaneous. You can set it up to accept touches only by entities of a certain classname by putting the classname in 'include'.
+If given a 'wait' value, it'll act like a trigger_multiple, where a single activation puts it on hold for 'wait' seconds. If the target is a trigger_filter, you can set it to wait only if the filter evaluates to true.
 "
 [
 	wait(integer) : "Wait before reset" : 0
 	spawnflags(flags) = [
 		1: "Wait only if trigger_filter evaluates to true"
 	]
+	include(string) : "Classname of entities whose touches are taken into account. All other entities are ignored. If not set, all entities accepted."
 ]
 
 
-@PointClass base(Appearflags, Targetname) = target_setcount : "Changes the targeted entity's 'count' field. Targets both targetname and targetname2 fields.
-Can be used with a trigger_filter to dinamically change its comparing value, or to reset/change a trigger_counter's current use count.
+@PointClass base(Appearflags, Targetname) = target_setcount : "Changes the targeted entity's 'count' field. Targets targetname, targetname2, targetname3 and targetname4 fields.
+Can be used with a trigger_filter to dynamically change its comparing value, or to reset/change a trigger_counter's current use count.
 
 You can either replace the current value with a new one, or add/subtract to it (by using a positive or negative 'count'), by selecting into the 'style' field.
 "
@@ -3698,6 +3712,23 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 "
 [
     skin(integer) : "The new skin value"
+	target(choices) : "The entity to change" =
+	[
+		"activator" : "activator"
+		"other" : "other"
+	]
+]
+
+@PointClass color(181 132 93) base(Appearflags, Targetname) = trigger_changeframe : "Changes the frame field on an entity.
+
+'frame' is the value of the new frame.
+
+'target' can be set to any targetname like usual but can also take the special value 'activator' or 'other'.
+'activator' is suited in conjunction with trigger_filter (eg to filter a breakable statue's health level and change its frame to a damaged version below a certain amount).
+'other' is suited when... Who knows, there's probably a case when it might be useful!
+"
+[
+    frame(integer) : "The new frame value"
 	target(choices) : "The entity to change" =
 	[
 		"activator" : "activator"
