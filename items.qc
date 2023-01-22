@@ -7,6 +7,7 @@ float ITEM_SPAWNSILENT = 32;
 float ITEM_SPAWNED = 64;
 float ITEM_SUSPENDED = 128;
 float ITEM_RESPAWNDM = 16384;
+float ITEM_SPAWNFALL = 4194304;
 float ITEM_DONTDROP = 8388608;
 
 .vector particles_offset;
@@ -78,6 +79,8 @@ DelaySpawnItem //this is from rmq-items.qc
 Makes a SPAWNED item ready for pickup on a trigger event - modified a bit -- dumptruck_ds
 ============
 */
+void() DropToFloor = { droptofloor(); }
+
 void() DelaySpawnItem =
 {
 	self.solid = SOLID_TRIGGER;
@@ -88,7 +91,16 @@ void() DelaySpawnItem =
 		// sound (self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
 		spawn_tfog (self.origin + self.particles_offset);
 
-	if (self.spawnflags & ITEM_SUSPENDED)
+	if (self.spawnflags & ITEM_SPAWNFALL)
+	{
+		self.movetype = MOVETYPE_FLY;
+		self.think = DropToFloor;
+		if(self.delay)
+			self.nextthink = time + self.delay;
+		else
+			self.nextthink = time + 0.2;
+	}
+	else if (self.spawnflags & ITEM_SUSPENDED)
 		self.movetype = MOVETYPE_FLY;
 	else
 		self.movetype = MOVETYPE_TOSS;
@@ -123,7 +135,7 @@ void() PlaceItem =
 	self.solid = SOLID_TRIGGER;
 	self.velocity = '0 0 0';
 
-	if (self.spawnflags & ITEM_SUSPENDED)  //ijed Don't drop spawnflag
+	if (self.spawnflags & ITEM_SUSPENDED || self.spawnflags & ITEM_SPAWNFALL)  //ijed Don't drop spawnflag
 	{
 		self.movetype = MOVETYPE_FLY;
 	}
@@ -169,7 +181,7 @@ void() PlaceItem =
 		}
 	}
 
-	if ((self.spawnflags & ITEM_SPAWNED))		// SPAWNED, gb
+	if (self.spawnflags & ITEM_SPAWNED || self.spawnflags & ITEM_SPAWNFALL)		// SPAWNED, gb
 	{
 		self.pos1 = self.mins;
 		self.pos2 = self.maxs;
