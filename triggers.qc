@@ -1611,6 +1611,7 @@ float FILTER_OP_GT = 3;
 float FILTER_OP_GTE = 4;
 float FILTER_OP_BITMASK_AND = 5;
 float FILTER_OP_BITMASK_OR = 6;
+float FILTER_OP_MODULO = 7;
 
 void() trigger_filter_use = {
 	self.state = 0;
@@ -1723,6 +1724,37 @@ void() trigger_filter_use = {
 			fieldtype = FILTER_FIELDTYPE_FLOAT;
 			targfloat = targ.frame;
 			break;
+		
+		case /*origin*/20:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			switch(self.shardvalue)
+			{
+				case 0:		targfloat = targ.origin_x; break;
+				case 1:		targfloat = targ.origin_y; break;
+				default:	targfloat = targ.origin_z; break;
+			}
+			break;
+		
+		case /*angles*/21:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			switch(self.shardvalue)
+			{
+				case 0:		targfloat = targ.angles_x; break;
+				case 1:		targfloat = targ.angles_y; break;
+				default:	targfloat = targ.angles_z; break;
+			}
+			break;
+		
+		case /*velocity*/22:
+			fieldtype = FILTER_FIELDTYPE_FLOAT;
+			switch(self.shardvalue)
+			{
+				case 0:		targfloat = targ.velocity_x; break;
+				case 1:		targfloat = targ.velocity_y; break;
+				default:	targfloat = targ.velocity_z; break;
+			}
+			break;
+
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
@@ -1733,12 +1765,14 @@ void() trigger_filter_use = {
 		else if (op == FILTER_OP_GTE) 			{if (targfloat >= self.count) result = 1;}
 		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.count) result = 1;}
 		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.count) result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
 		else 									{if (targfloat == self.count) result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_FLAG) {
 		if 		(op == FILTER_OP_EQUALS) 		{if (targfloat == self.aflag) result = 1;}
 		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.aflag) result = 1;}
 		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.aflag) result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
 		else 									{if (targfloat == self.aflag) result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_STRING) {
@@ -1761,7 +1795,14 @@ void() trigger_filter_use = {
 		if (other.classname == "trigger_everything" && other.spawnflags & 1) {
 			if (other.wait)	other.attack_finished = time + other.wait;
 		}
-
+	}
+	else if(self.pain_target)
+	{
+		if (self.spawnflags & 2 && activator.owner) activator = activator.owner; // relay activator as owner
+		SUB_UseSpecificTarget(self.pain_target, targetname);
+		SUB_UseSpecificTarget(self.pain_target, targetname2);
+		SUB_UseSpecificTarget(self.pain_target, targetname3);
+		SUB_UseSpecificTarget(self.pain_target, targetname4);
 	}
 };
 
@@ -1783,6 +1824,8 @@ void() trigger_everything_touch = {
 	if (self.estate != STATE_ACTIVE) return;
 
 	if (time < self.attack_finished) return;
+	
+	if (self.include) if(other.classname != self.include) return;
 
 	activator = other;
 
@@ -2008,6 +2051,48 @@ void() trigger_changeskin =
         return;
 
     self.use = trigger_changeskin_use;
+};
+
+/*QUAKED trigger_changeframe (.5 .5 .5) ?
+Changes an entity's frame field
+
+target = entity to change (can be activator or other)
+frame = new value for frame field
+
+*/
+
+void() trigger_changeframe_use =
+{
+	if (self.estate != STATE_ACTIVE) return;
+
+	if(self.target == "activator")
+	{
+		activator.frame = self.frame;
+	}
+	else if(self.target == "other")
+	{
+		other.frame = self.frame;
+	}
+	else if (self.target)
+	{
+		for (entity e = world; (e = find(e, targetname, self.target)); )
+			e.frame = self.frame;
+		for (entity e = world; (e = find(e, targetname2, self.target)); )
+			e.frame = self.frame;
+		for (entity e = world; (e = find(e, targetname3, self.target)); )
+			e.frame = self.frame;
+		for (entity e = world; (e = find(e, targetname4, self.target)); )
+			e.frame = self.frame;
+	}
+
+};
+
+void() trigger_changeframe =
+{
+    if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+        return;
+
+    self.use = trigger_changeframe_use;
 };
 
 /*QUAKED trigger_enterleave (.5 .5 .5) ?
