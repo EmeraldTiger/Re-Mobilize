@@ -3722,3 +3722,5 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	killtarget(target_destination) : "Killtarget (fired upon entering the trigger)"
 	killtarget2(target_destination) : "Killtarget2 (fired upon leaving the trigger)"
 ]
+
+@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []

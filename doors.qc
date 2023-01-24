@@ -950,3 +950,11 @@ void () func_door_secret =
 	if (!self.wait)
 		self.wait = 5;		// 5 seconds before closing
 };
+
+/*QUAKED func_playerclip
+A bbox entity which is solid for the player only
+*/
+void() func_playerclip =
+{
+	setmodel (self, self.model);	// set size and link into world
+};

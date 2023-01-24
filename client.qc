@@ -919,6 +919,27 @@ void() CheckGrapple =
 
 }
 
+void(string target_class) MakeClassSolid =
+{
+    entity e;
+    e = world;
+    while( (e = find(e, classname, target_class)) )
+    {
+        e.solid = SOLID_BSP;
+        e.movetype = MOVETYPE_PUSH;
+    }
+};
+ 
+void(string target_class) MakeClassNonSolid =
+{
+    entity e;
+    e = world;
+    while( (e = find(e, classname, target_class)) )
+    {
+        e.solid = SOLID_NOT;
+        e.movetype = MOVETYPE_NONE;
+    }
+};
 
 /*
 ================
@@ -990,6 +1011,8 @@ void() PlayerPreThink =
 	if (cleanUpClientStuff)
 		fog_setFromEnt(self, self);
 
+	MakeClassSolid("func_playerclip");
+	
 	makevectors (self.v_angle);		// is this still used
 
 	CheckRules ();
@@ -1394,6 +1417,8 @@ void() PlayerPostThink =
 	if (self.deadflag)
 		return;
 
+	MakeClassNonSolid("func_playerclip");
+	
 // do weapon stuff
 
 	W_WeaponFrame ();
