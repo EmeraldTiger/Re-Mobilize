@@ -536,6 +536,10 @@ The monster is staying in one place for a while, with slight angle turns
 */
 void() ai_stand =
 {
+	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE && self.autohooked) {
+		GrappleService();
+	}
+	
 	if (FindTarget ())
 		return;
 
