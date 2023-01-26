@@ -1987,6 +1987,9 @@ Effects will require an origin brush to work properly (see func_fall2 in manual 
 
 @SolidClass base(Appearflags, Targetname, Effects, ModelLight) = func_togglevisiblewall : "A bmodel which you can toggle its visibility. Behaves much like a traditional func_wall in any other way, but you can target it to toggle visible/invisible.
 If the entity has a switchable shadow it also toggles automatically (no need for a shadow controller)."
+If the entity has a switchable shadow it also toggles automatically (no need for a shadow controller).
+Although odd to the entity's name, the 'Keep visible' spawnflag allows to switch the wall solidity only, while keeping it visible all time. The shadow may or may not be switched at the occasion.
+"
 [
 	spawnflags(flags) =
 	[
@@ -3728,15 +3731,6 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 'activator' is suited in conjunction with trigger_filter (eg to filter a breakable statue's health level and change its frame to a damaged version below a certain amount).
 'other' is suited when... Who knows, there's probably a case when it might be useful!
 "
-[
-    frame(integer) : "The new frame value"
-	target(choices) : "The entity to change" =
-	[
-		"activator" : "activator"
-		"other" : "other"
-	]
-]
-
 @SolidClass color(181 132 93) base(Appearflags, Targetname) = trigger_enterleave : "A trigger that fires its targets when entering it, leaving it, or both.
 
 'target' and 'target2' are the targets fired upon entering the trigger.
@@ -3753,3 +3747,5 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	killtarget(target_destination) : "Killtarget (fired upon entering the trigger)"
 	killtarget2(target_destination) : "Killtarget2 (fired upon leaving the trigger)"
 ]
+
+@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []
