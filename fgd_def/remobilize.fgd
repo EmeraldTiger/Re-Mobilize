@@ -1995,6 +1995,7 @@ Although odd to the entity's name, the 'Keep visible' spawnflag allows to switch
 	[
 		1 : "Start Off" : 0
 		2 : "Non-solid" : 0
+		4 : "Keep visible" : 0
 	]
 	_switchableshadow(choices) : "Switchable shadow" : 0 : "Enables dynamic shadows that toggle on/off with the entity" = [
 		0: "No"
