@@ -48,6 +48,8 @@ void(entity h, entity player) GrappleTrail =
 
 void(entity player) NotifyUnhook =
 {
+	if(player.classname != "player") return;
+	
 	if(player.state & STATE_RM_HOOKING)
 	{
 		player.state = player.state - (player.state & STATE_RM_HOOKING);
@@ -107,7 +109,7 @@ void() GrappleTrack =
 		self.owner.on_hook = FALSE;
 
 	// drop the hook if owner is dead or has released the button
-	if (!self.owner.on_hook || self.owner.health <= 0) {
+	if (!self.owner.on_hook || ((self.owner.classname == "player" || self.owner.flags & FL_MONSTER) && self.owner.health <= 0)) {
 		GrappleReset();
 		return;
 	}
@@ -247,53 +249,53 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	vector ray_origin;
 	ray_origin = (targ.mins + targ.maxs) * 0.5;
 	
-	activator.pullspeed = targ.speed;
-	activator.hookstyle = targ.style;
+	hooked.pullspeed = targ.speed;
+	hooked.hookstyle = targ.style;
 	
 	if (targ.sounds) {
-		activator.hooksounds = targ.sounds;
+		hooked.hooksounds = targ.sounds;
 	}
 	else {
-		activator.hooksounds = 0;
+		hooked.hooksounds = 0;
 	}
 	
 	if (targ.noise) {
-		activator.hooknoise1 = targ.noise;
+		hooked.hooknoise1 = targ.noise;
 	}
 	else {
-		activator.hooknoise1 = "";
+		hooked.hooknoise1 = "";
 	}
 	
 	if (targ.noise2) {
-		activator.hooknoise2 = targ.noise2;
+		hooked.hooknoise2 = targ.noise2;
 	}
 	else {
-		activator.hooknoise2 = "";
+		hooked.hooknoise2 = "";
 	}
 	
 	if (targ.noise3) {
-		activator.hooknoise3 = targ.noise3;
+		hooked.hooknoise3 = targ.noise3;
 	}
 	else {
-		activator.hooknoise3 = "";
+		hooked.hooknoise3 = "";
 	}
 	
 	targ.locked_on = 1;
-	activator.currenthook = targ;
+	hooked.currenthook = targ;
 	
-	activator.punchangle_x = -2; // bump him
+	hooked.punchangle_x = -2; // bump him
 	
-	activator.launchtime = time + 1;
+	hooked.launchtime = time + 1;
 	
 	newmis = spawn();
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
-	newmis.owner = activator;		// newmis belongs to me
-	activator.hook = newmis;			// This is my newmis
+	newmis.owner = hooked;		// newmis belongs to me
+	hooked.hook = newmis;			// This is my newmis
 	newmis.classname = "hook";
 	
 	vector norm;
-	norm = normalize(ray_origin - activator.origin);
+	norm = normalize(ray_origin - hooked.origin);
 	newmis.velocity = norm * -5;
 	setorigin (newmis, ray_origin);
 	newmis.angles = vectoangles(norm);
@@ -305,7 +307,7 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	
 	setsize(newmis, '0 0 0' , '0 0 0 ');
 
-	activator.hook_out = TRUE;
+	hooked.hook_out = TRUE;
 	
 }
 

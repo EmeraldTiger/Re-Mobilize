@@ -364,36 +364,77 @@ Keys:
 
 */
 
-void() target_autohook_hook = {
-	
-	if (!activator.hook_out && self.shadowcontroller.estate == STATE_ACTIVE) {
-		W_FireGrappleAuto(activator, self.shadowcontroller);
-		activator.autohooked = 1;
-	}
-	else if ((activator.flags & FL_MONSTER) && self.shadowcontroller.estate == STATE_ACTIVE) {
-		W_FireGrappleAuto(activator, self.shadowcontroller);
-		activator.autohooked = 1;
-	}
-	
-}
+void() target_autohook_victim_think =
+{
+	GrappleService();
+	self.nextthink = time + .1;
+};
 
-void() target_autohook_unhook = {
-	if (activator.autohooked) {
-		activator.hook_out = 0;
-		activator.autohooked = 0;
-		activator.currenthook.locked_on = 0;
+void() target_autohook_use =
+{
+	//Look for the hookee and hook them
+	if(!self.enemy)
+	{
+		//Look for the hookee
+		
+		if(self.target == "other")
+			self.enemy = other;
+		else if(self.target)
+		{
+			self.enemy = find(world,targetname,self.target);
+			if(!self.enemy) self.enemy = find(world,targetname2,self.target);
+			if(!self.enemy) self.enemy = find(world,targetname3,self.target);
+			if(!self.enemy) self.enemy = find(world,targetname4,self.target);
+		}
+		
+		if(!self.enemy) self.enemy = activator;
+		if(!self.enemy) return;
+		
+		//Hook them
+		
+		if (self.animcontroller.estate == STATE_ACTIVE && ((self.enemy.hook_out == 0) || (self.enemy.flags & FL_MONSTER)))
+		{
+			W_FireGrappleAuto(self.enemy, self.animcontroller);
+			self.enemy.autohooked = 1;
+			if((!self.enemy.think)||self.enemy.think==PlaceItem)
+			{
+				self.enemy.think = target_autohook_victim_think;
+				self.enemy.nextthink = time + .1;
+			}
+		}
+		
+		//Automatically release them after a delay
+		if(self.delay)
+			self.nextthink = time + self.delay;
+	}
+	else //Release them
+	{
+		if (self.enemy.autohooked)
+		{
+			self.enemy.hook_out = 0;
+			self.enemy.autohooked = 0;
+			if(self.enemy.currenthook) self.enemy.currenthook.locked_on = 0;
+			if(self.enemy.think == target_autohook_victim_think)
+			{
+				self.enemy.think = SUB_Null;
+				self.enemy.nextthink = -1;
+			}
+		}
+		self.enemy = world;
 	}
 }
-
 
 void() target_autohook = {
-	entity targ;
-	targ = find(world, targetname2, self.target);
-	if (targ && self.style==0) {
-		self.shadowcontroller = targ;
-		self.use = target_autohook_hook;
+	entity lpanel = world;
+	
+	//Pairing to the lightpanel with the same netname
+	do
+	{
+		lpanel = find(lpanel, netname, self.netname);
+		if(!lpanel) objerror ("target_autohook: no func_hook with a matching netname");
 	}
-	else if (targ && self.style==1) {
-		self.use = target_autohook_unhook;
-	}
+	while(lpanel.classname != "func_hook");
+	
+	self.animcontroller = lpanel;
+	self.use = self.think = target_autohook_use;
 }

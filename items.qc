@@ -37,7 +37,11 @@ void() SUB_regen =
 void(entity whatitem, float defaultdelay) CheckItemRespawn =
 {
 	if (!whatitem.ritem)	// respawn item if true, otherwise abort
+	{
+		whatitem.nextthink = -1;
 		return;
+	}
+	
 	else if(whatitem.ritem == 1)
 	{
 		whatitem.cnt = whatitem.cnt + 1;	// inc before check to account for zero indexing
