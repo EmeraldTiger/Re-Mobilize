@@ -1986,12 +1986,14 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 Effects will require an origin brush to work properly (see func_fall2 in manual for details)" []
 
 @SolidClass base(Appearflags, Targetname, Effects, ModelLight) = func_togglevisiblewall : "A bmodel which you can toggle its visibility. Behaves much like a traditional func_wall in any other way, but you can target it to toggle visible/invisible.
-If the entity has a switchable shadow it also toggles automatically (no need for a shadow controller)."
+If the entity has a switchable shadow it also toggles automatically (no need for a shadow controller).
+Although odd to the entity's name, the 'Keep visible' spawnflag allows to switch the wall solidity only, while keeping it visible all time. The shadow may or may not be switched at the occasion."
 [
 	spawnflags(flags) =
 	[
 		1 : "Start Off" : 0
 		2 : "Non-solid" : 0
+		4 : "Keep visible" : 0
 	]
 	_switchableshadow(choices) : "Switchable shadow" : 0 : "Enables dynamic shadows that toggle on/off with the entity" = [
 		0: "No"
@@ -3753,3 +3755,5 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	killtarget(target_destination) : "Killtarget (fired upon entering the trigger)"
 	killtarget2(target_destination) : "Killtarget2 (fired upon leaving the trigger)"
 ]
+
+@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []

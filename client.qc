@@ -919,6 +919,20 @@ void() CheckGrapple =
 
 }
 
+void(float makeSolid) MakePlayerClipSolid =
+{
+    entity e = world;
+	entity oself = self;
+    while( (e = find(e, classname, "func_playerclip")) )
+    {
+		if(e.estate != makeSolid)
+		{
+			self = e;
+			self.use();
+        }
+    }
+	self = oself;
+};
 
 /*
 ================
@@ -990,6 +1004,8 @@ void() PlayerPreThink =
 	if (cleanUpClientStuff)
 		fog_setFromEnt(self, self);
 
+	MakePlayerClipSolid(TRUE);
+	
 	makevectors (self.v_angle);		// is this still used
 
 	CheckRules ();
@@ -1394,6 +1410,8 @@ void() PlayerPostThink =
 	if (self.deadflag)
 		return;
 
+	MakePlayerClipSolid(FALSE);
+	
 // do weapon stuff
 
 	W_WeaponFrame ();

@@ -1081,7 +1081,7 @@ void() func_togglevisiblewall_use =
 
 		self.solid = SOLID_NOT;
 		self.movetype = MOVETYPE_NONE;
-		setmodel (self, "");
+		if(!(self.spawnflags & /*Keep visible*/4)) setmodel (self, "");
 		if(self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
 		self.estate = 0;
 	}
@@ -1110,6 +1110,15 @@ void() func_togglevisiblewall =
 
 };
 
+/*QUAKED func_playerclip
+A bbox entity which is solid for the player only
+*/
+void() func_playerclip =
+{
+	self.targetname=self.targetname2=self.targetname3=self.targetname4=string_null;
+	self.spawnflags = /*Keep visible*/4;
+	func_togglevisiblewall();
+};
 
 /*****************
 func_shadow
