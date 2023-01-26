@@ -27,7 +27,8 @@ void () func_explobox_explode_silent =
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	BecomeExplosion ();
-
+	
+	SUB_UseTargets();
 };
 
 void () func_explobox_explode = {

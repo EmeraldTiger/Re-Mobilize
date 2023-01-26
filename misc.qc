@@ -419,6 +419,8 @@ void() barrel_explode =
 
 	self.origin_z = self.origin_z + 32;
 	BecomeExplosion ();
+	
+	SUB_UseTargets();
 };
 
 
