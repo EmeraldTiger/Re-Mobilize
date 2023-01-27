@@ -1097,7 +1097,6 @@ void(entity client, float density, vector color) csf_set;
 // lighthook-related
 
 .string noise5;
-.float locked_on;
 .float hook_out;
 .float hookstyle;
 .float hooksounds;

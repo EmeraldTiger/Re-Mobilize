@@ -370,71 +370,106 @@ void() target_autohook_victim_think =
 	self.nextthink = time + .1;
 };
 
-void() target_autohook_use =
+entity(entity lastv) nextvictim =
 {
-	//Look for the hookee and hook them
-	if(!self.enemy)
+	if(!self.target)
+		return activator;
+	else if(self.target == "player")
+		return find (world, classname, "player");
+	else if (self.target == "other") //The target is the entity having fired a trigger
+		return other;
+	else
+		return find(lastv,targetname,self.target);
+};
+
+void() target_autohook_hook =
+{
+	if (self.estate != STATE_ACTIVE)
+		return;
+
+	entity victim = world;
+	do
 	{
-		//Look for the hookee
-		
-		if(self.target == "other")
-			self.enemy = other;
-		else if(self.target)
-		{
-			self.enemy = find(world,targetname,self.target);
-			if(!self.enemy) self.enemy = find(world,targetname2,self.target);
-			if(!self.enemy) self.enemy = find(world,targetname3,self.target);
-			if(!self.enemy) self.enemy = find(world,targetname4,self.target);
-		}
-		
-		if(!self.enemy) self.enemy = activator;
-		if(!self.enemy) return;
+		//Look for the target_autohook's next victim
+		victim = nextvictim(victim);
+		if(!victim) return;
 		
 		//Hook them
-		
-		if (self.animcontroller.estate == STATE_ACTIVE && ((self.enemy.hook_out == 0) || (self.enemy.flags & FL_MONSTER)))
+		if (self.animcontroller.estate == STATE_ACTIVE && ((victim.hook_out == 0) || (victim.flags & FL_MONSTER)))
 		{
-			W_FireGrappleAuto(self.enemy, self.animcontroller);
-			self.enemy.autohooked = 1;
-			if((!self.enemy.think)||self.enemy.think==PlaceItem)
+			W_FireGrappleAuto(victim, self.animcontroller);
+			victim.autohooked = 1;
+			if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null)
 			{
-				self.enemy.think = target_autohook_victim_think;
-				self.enemy.nextthink = time + .1;
+				victim.think = target_autohook_victim_think;
+				victim.nextthink = time + .1;
 			}
 		}
-		
-		//Automatically release them after a delay
-		if(self.delay)
-			self.nextthink = time + self.delay;
-	}
-	else //Release them
+				
+		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
+		if(self.target == "player" || self.target == "other" || victim == activator) break;
+	} while (1);
+	
+	//If a delay is set, an automatic dehooking will occur
+	if(self.delay)
 	{
-		if (self.enemy.autohooked)
-		{
-			self.enemy.hook_out = 0;
-			self.enemy.autohooked = 0;
-			if(self.enemy.currenthook) self.enemy.currenthook.locked_on = 0;
-			if(self.enemy.think == target_autohook_victim_think)
-			{
-				self.enemy.think = SUB_Null;
-				self.enemy.nextthink = -1;
-			}
-		}
-		self.enemy = world;
+		self.think = target_autohook_dehook;
+		self.nextthink = time + self.delay;
 	}
 }
 
-void() target_autohook = {
-	entity lpanel = world;
-	
-	//Pairing to the lightpanel with the same netname
+void() target_autohook_dehook =
+{
+	if (self.estate != STATE_ACTIVE)
+		return;
+
+	entity victim = world;
 	do
 	{
-		lpanel = find(lpanel, netname, self.netname);
-		if(!lpanel) objerror ("target_autohook: no func_hook with a matching netname");
-	}
+		//Look for the target_autohook's next victim
+		victim = nextvictim(victim);
+		if(!victim) return;
+		
+		//DeHook them
+		if (victim.autohooked)
+		{
+			victim.hook_out = 0;
+			victim.autohooked = 0;
+			if(victim.think == target_autohook_victim_think)
+			{
+				victim.think = SUB_Null;
+				victim.nextthink = -1;
+			}
+		}
+
+				
+		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
+		if(self.target == "player" || self.target == "other" || victim == activator) break;
+	} while (1);
+}
+
+void() target_autohook_pair =
+{
+	entity lpanel = world;
+
+	//Pairing to the lightpanel with the same netname
+	do
+		if(!(lpanel = find(lpanel, netname, self.netname))) objerror ("target_autohook: no func_hook with a matching netname");
 	while(lpanel.classname != "func_hook");
 	
 	self.animcontroller = lpanel;
-	self.use = self.think = target_autohook_use;
+};
+
+void() target_autohook =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+	
+	if(self.style == 0)
+		self.use = target_autohook_hook;
+	else if(self.style == 1)
+		self.use = target_autohook_dehook;
+	
+	self.think = target_autohook_pair;
+	self.nextthink = time + 0.3;
 }

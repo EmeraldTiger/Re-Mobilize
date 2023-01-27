@@ -65,12 +65,6 @@ void(entity player) NotifyUnhook =
 
 void() GrappleReset =
 {
-
-	if (self.enemy) {
-		if (self.enemy.locked_on) {
-			self.enemy.locked_on = 0;
-		}
-	}
 	self.owner.on_hook = FALSE;
 	self.owner.hook_out = FALSE;
 	self.owner.weaponframe = 0;
@@ -164,9 +158,6 @@ void () GrappleAnchor =
 	}
 	
 	if (other.classname != "func_hook" || other.estate == STATE_INACTIVE ) {
-			if (self.currenthook) {
-				self.locked_on = 0;
-			}
 			GrappleReset();
 			return;
 	}
@@ -280,7 +271,6 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 		hooked.hooknoise3 = "";
 	}
 	
-	targ.locked_on = 1;
 	hooked.currenthook = targ;
 	
 	hooked.punchangle_x = -2; // bump him
@@ -363,7 +353,6 @@ void () W_FireGrapple =
 		self.hooknoise3 = "";
 	}
 	
-	trace_ent.locked_on = 1;
 	self.currenthook = trace_ent;
 	self.hookpoint = trace_endpos;
 	
@@ -439,8 +428,7 @@ void() GrappleService =
 	}
 
 	// drop the hook if player lets go of button
-	if (
-									self.teleport_time > time) 
+	if (self.teleport_time > time) 
 	{ // release when we get 'ported
 		self = self.hook;
 		GrappleReset();

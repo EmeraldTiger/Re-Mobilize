@@ -23,6 +23,7 @@ void() SUB_regen =
 	setorigin (self, self.origin);
 	
 	self.use = SUB_Null;
+	if(self.think == SUB_regen) self.think = SUB_Null;
 };
 
 // Supa, Quoth respawning items support Respawn item like in DM if 'ritem' TRUE,
@@ -36,12 +37,17 @@ void() SUB_regen =
 
 void(entity whatitem, float defaultdelay) CheckItemRespawn =
 {
-	if (!whatitem.ritem)	// respawn item if true, otherwise abort
+	if(whatitem.think == target_autohook_victim_think)
 	{
+		whatitem.hook_out = FALSE;
+		whatitem.autohooked = 0;
+		whatitem.think = SUB_Null;
 		whatitem.nextthink = -1;
-		return;
 	}
 	
+	if (!whatitem.ritem)	// respawn item if true, otherwise abort
+		return;
+
 	else if(whatitem.ritem == 1)
 	{
 		whatitem.cnt = whatitem.cnt + 1;	// inc before check to account for zero indexing
@@ -421,6 +427,7 @@ void() health_touch =
 	stuffcmd (other, "bf\n");
 
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	self.solid = SOLID_NOT;
 
 	self.think = SUB_regen;
@@ -506,6 +513,7 @@ void() shard_touch = // this from RMQ shard_touch
 	}
 	self.solid = SOLID_NOT;
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 
 	// Supa, SP respawning items support
 	if (!deathmatch)
@@ -577,6 +585,7 @@ void() armor_touch =
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	// Supa, SP respawning items support
 	if (!deathmatch)
 		CheckItemRespawn(self, 30);
@@ -912,6 +921,7 @@ void() weapon_touch =
 
 // remove it in single player, or setup for respawning in deathmatch
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	self.solid = SOLID_NOT;
 	// Supa, SP respawning items support
 	if (!deathmatch)
@@ -1169,6 +1179,7 @@ local float		best;
 
 // remove it in single player, or setup for respawning in deathmatch
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	self.solid = SOLID_NOT;
 	if (!deathmatch)
 		CheckItemRespawn(self, 30);
@@ -1569,6 +1580,7 @@ void() key_touch =
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
+		self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	}
 
 	activator = other;
@@ -1807,6 +1819,7 @@ void() sigil_touch =
 	stuffcmd (other, "bf\n");
 	self.solid = SOLID_NOT;
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	serverflags = serverflags | (self.spawnflags & 15);
 	self.classname = "";		// so rune doors won't find it
 
@@ -1827,6 +1840,7 @@ void() sigil_touch2 = //replacement for Skill Select Rune hack -- uses info_play
 	// stuffcmd (other, "bf\n");
 	self.solid = SOLID_NOT;
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 	serverflags = serverflags | (self.spawnflags & 16);
 	self.classname = "";		// so rune doors won't find it
 
@@ -1949,6 +1963,7 @@ void() powerup_touch =
 	self.solid = SOLID_NOT;
 	other.items = other.items | self.items;
 	self.model = string_null;
+	self.velocity = '0 0 0'; //In case self was grabbed on the fly while being hooked
 
 // do the apropriate action
 	if (self.classname == "item_artifact_envirosuit")
