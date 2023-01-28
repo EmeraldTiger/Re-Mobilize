@@ -459,7 +459,7 @@ void() GrappleService =
 	traceline(self.origin, self.hook.origin, FALSE, self.owner);
 	
 	// check for this in case the lighthook is severed by a moving brush
-	if (trace_ent.classname != "worldspawn")
+	if (trace_ent.classname != "worldspawn" && !(trace_ent.volume && self.autohooked))
 	{
 		self = self.hook;
 		GrappleReset();
@@ -480,7 +480,7 @@ void() GrappleService =
 
 	v = vlen (vel);
 	
-	if (self.volume && v < 4) {
+	if (self.volume && v < 4  && !self.autohooked) {
 			self = self.hook;
 			GrappleReset();
 	}
