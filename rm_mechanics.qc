@@ -435,6 +435,7 @@ void() target_autohook_dehook =
 				e.think = SUB_Null;
 				e.nextthink = -1;
 			}
+			sound (e, CHAN_WEAPON, "grapple/grdetach1.wav", 1, ATTN_NORM);
 		}
 		
 		e = nextent(e);
@@ -462,7 +463,10 @@ void() target_autohook =
 	if(self.style == 0)
 		self.use = target_autohook_hook;
 	else if(self.style == 1)
+	{
+		precache_sound ("grapple/grdetach1.wav");
 		self.use = target_autohook_dehook;
+	}
 	
 	self.think = target_autohook_pair;
 	self.nextthink = time + 0.3;
