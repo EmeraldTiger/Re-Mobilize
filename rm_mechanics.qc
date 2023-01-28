@@ -423,29 +423,23 @@ void() target_autohook_dehook =
 	if (self.estate != STATE_ACTIVE)
 		return;
 
-	entity victim = world;
+	entity e = nextent(world);
 	do
 	{
-		//Look for the target_autohook's next victim
-		victim = nextvictim(victim);
-		if(!victim) return;
-		
-		//DeHook them
-		if (victim.autohooked)
+		if (e.currenthook == self.animcontroller && e.autohooked)
 		{
-			victim.hook_out = 0;
-			victim.autohooked = 0;
-			if(victim.think == target_autohook_victim_think)
+			e.hook_out = 0;
+			e.autohooked = 0;
+			if(e.think == target_autohook_victim_think)
 			{
-				victim.think = SUB_Null;
-				victim.nextthink = -1;
+				e.think = SUB_Null;
+				e.nextthink = -1;
 			}
 		}
-
-				
-		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
-		if(self.target == "player" || self.target == "other" || victim == activator) break;
-	} while (1);
+		
+		e = nextent(e);
+	}
+	while(e);
 }
 
 void() target_autohook_pair =
