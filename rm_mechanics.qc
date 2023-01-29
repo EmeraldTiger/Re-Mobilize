@@ -384,7 +384,7 @@ entity(entity lastv) nextvictim =
 
 void() target_autohook_hook =
 {
-	if (self.estate != STATE_ACTIVE)
+	if (!(self.estate == STATE_ACTIVE && self.animcontroller.estate == STATE_ACTIVE))
 		return;
 
 	entity victim = world;
@@ -392,18 +392,15 @@ void() target_autohook_hook =
 	{
 		//Look for the target_autohook's next victim
 		victim = nextvictim(victim);
-		if(!victim) return;
+		if(!victim) break;
 		
 		//Hook them
-		if (self.animcontroller.estate == STATE_ACTIVE && ((victim.hook_out == 0) || (victim.flags & FL_MONSTER)))
+		W_FireGrappleAuto(victim, self.animcontroller);
+		victim.autohooked = 1;
+		if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null||victim.think==DropToFloor)
 		{
-			W_FireGrappleAuto(victim, self.animcontroller);
-			victim.autohooked = 1;
-			if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null)
-			{
-				victim.think = target_autohook_victim_think;
-				victim.nextthink = time + .1;
-			}
+			victim.think = target_autohook_victim_think;
+			victim.nextthink = time + .1;
 		}
 				
 		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
