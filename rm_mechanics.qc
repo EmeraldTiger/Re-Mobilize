@@ -395,6 +395,8 @@ void() target_autohook_hook =
 		if(!victim) break;
 		
 		//Hook them
+		victim.oldmovetype = victim.movetype;
+		victim.movetype = MOVETYPE_WALK; //Indispensable for some reason
 		W_FireGrappleAuto(victim, self.animcontroller);
 		victim.autohooked = 1;
 		if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null||victim.think==DropToFloor)
@@ -425,6 +427,7 @@ void() target_autohook_dehook =
 	{
 		if (e.currenthook == self.animcontroller && e.autohooked)
 		{
+			e.movetype = e.oldmovetype;
 			e.hook_out = 0;
 			e.autohooked = 0;
 			if(e.think == target_autohook_victim_think)

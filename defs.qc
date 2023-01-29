@@ -1104,6 +1104,7 @@ void(entity client, float density, vector color) csf_set;
 .vector hookpoint;
 .float launchtime;
 .float hook_finished;
+.float oldmovetype;
 
 .string hooknoise1;
 .string hooknoise2;
