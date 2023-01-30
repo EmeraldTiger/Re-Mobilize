@@ -400,11 +400,11 @@ void() target_autohook_hook =
 		if (victim.classname == "player") {
 			victim.movetype = MOVETYPE_WALK;
 		}
-		else if (victim.flags & FL_MONSTER) {
-			victim.movetype = MOVETYPE_FLY;
-		}
 		else if (victim.flags & FL_ITEM) {
 			victim.movetype = MOVETYPE_FLYMISSILE;
+		}
+		else {
+			victim.movetype = MOVETYPE_FLY;
 		}
 		W_FireGrappleAuto(victim, self.animcontroller);
 		victim.autohooked = 1;
