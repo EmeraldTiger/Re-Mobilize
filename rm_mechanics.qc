@@ -396,7 +396,16 @@ void() target_autohook_hook =
 		
 		//Hook them
 		victim.oldmovetype = victim.movetype;
-		victim.movetype = MOVETYPE_WALK; //Indispensable for some reason
+		// Disambiguate movetypes based on victim
+		if (victim.classname == "player") {
+			victim.movetype = MOVETYPE_WALK;
+		}
+		else if (victim.flags & FL_MONSTER) {
+			victim.movetype = MOVETYPE_FLY;
+		}
+		else if (victim.flags & FL_ITEM) {
+			victim.movetype = MOVETYPE_FLYMISSILE;
+		}
 		W_FireGrappleAuto(victim, self.animcontroller);
 		victim.autohooked = 1;
 		if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null||victim.think==DropToFloor)
