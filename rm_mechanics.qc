@@ -444,6 +444,9 @@ void() target_autohook_dehook =
 				e.think = DropToFloor;
 				e.nextthink = time + 0.2;
 			}
+			else if (e.flags & FL_MONSTER) {
+				e.movetype = MOVETYPE_STEP;
+			}
 			else {
 				e.movetype = e.oldmovetype;
 			}

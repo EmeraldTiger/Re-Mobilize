@@ -104,6 +104,7 @@ void() GrappleTrack =
 
 	// drop the hook if owner is dead or has released the button
 	if (!self.owner.on_hook || ((self.owner.classname == "player" || self.owner.flags & FL_MONSTER) && self.owner.health <= 0)) {
+		dprint("come on");
 		GrappleReset();
 		return;
 	}
