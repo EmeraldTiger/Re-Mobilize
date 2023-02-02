@@ -436,7 +436,17 @@ void() target_autohook_dehook =
 	{
 		if (e.currenthook == self.animcontroller && e.autohooked)
 		{
-			e.movetype = e.oldmovetype;
+			if (e.flags & FL_ITEM) {
+				e.velocity[0] = 0;
+				e.velocity[1] = 0;
+				e.movetype = MOVETYPE_TOSS;
+				setsize (e, '0 0 0',  '0 0 0');
+				e.think = DropToFloor;
+				e.nextthink = time + 0.2;
+			}
+			else {
+				e.movetype = e.oldmovetype;
+			}
 			e.hook_out = 0;
 			e.autohooked = 0;
 			if(e.think == target_autohook_victim_think)
