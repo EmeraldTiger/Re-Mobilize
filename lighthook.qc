@@ -71,6 +71,10 @@ void() GrappleReset =
 	self.owner.attack_finished = time +0.25;
 	self.owner.autohooked = 0;
 	
+	if (self.owner.health <= 0) {
+		self.owner.movetype = MOVETYPE_STEP;
+	}
+	
 	if (self.owner.hooknoise2 != "") {
 		sound (self, CHAN_WEAPON, self.owner.hooknoise2, 1, ATTN_NORM);
 	}
@@ -104,7 +108,6 @@ void() GrappleTrack =
 
 	// drop the hook if owner is dead or has released the button
 	if (!self.owner.on_hook || ((self.owner.classname == "player" || self.owner.flags & FL_MONSTER) && self.owner.health <= 0)) {
-		dprint("come on");
 		GrappleReset();
 		return;
 	}
