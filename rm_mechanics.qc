@@ -394,8 +394,12 @@ void() target_autohook_hook =
 		victim = nextvictim(victim);
 		if(!victim) break;
 		
+		//Switch to the next victim if the current one is hooked already by the same func_hook.
+		if(victim.autohooked && victim.currenthook == self.animcontroller) continue;
+		
 		//Hook them
 		victim.oldmovetype = victim.movetype;
+		
 		// Disambiguate movetypes based on victim
 		if (victim.classname == "player") {
 			victim.movetype = MOVETYPE_WALK;
