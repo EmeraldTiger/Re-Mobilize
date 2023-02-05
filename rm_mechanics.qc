@@ -433,47 +433,49 @@ void() target_autohook_dehook =
 {
 	if (self.estate != STATE_ACTIVE)
 		return;
-		
-	if (activator.autohooked) {
-		activator.hook_out = 0;
-		activator.autohooked = 0;
-		activator.movetype = activator.oldmovetype;
-	}
-
-	/*
-	entity e = nextent(world);
-	do
-	{
-		if (e.currenthook == self.animcontroller && e.autohooked)
-		{
-			if (e.flags & FL_ITEM) {
-				e.velocity[0] = 0;
-				e.velocity[1] = 0;
-				e.movetype = MOVETYPE_TOSS;
-				setsize (e, '0 0 0',  '0 0 0');
-				e.think = DropToFloor;
-				e.nextthink = time + 0.2;
-			}
-			else if (e.flags & FL_MONSTER) {
-				e.movetype = MOVETYPE_STEP;
-			}
-			else {
-				e.movetype = e.oldmovetype;
-			}
-			e.hook_out = 0;
-			e.autohooked = 0;
-			if(e.think == target_autohook_victim_think)
-			{
-				e.think = SUB_Null;
-				e.nextthink = -1;
-			}
-			sound (e, CHAN_WEAPON, "grapple/grdetach1.wav", 1, ATTN_NORM);
+	
+	// If activator-bound, detach each activator individually rather than as a whole (looks better)
+	if (!self.target) {	
+		if (activator.autohooked) {
+			activator.hook_out = 0;
+			activator.autohooked = 0;
+			activator.movetype = activator.oldmovetype;
 		}
-		
-		e = nextent(e);
 	}
-	while(e);
-	*/
+	else {
+		entity e = nextent(world);
+		do
+		{
+			if (e.currenthook == self.animcontroller && e.autohooked)
+			{
+				if (e.flags & FL_ITEM) {
+					e.velocity[0] = 0;
+					e.velocity[1] = 0;
+					e.movetype = MOVETYPE_TOSS;
+					setsize (e, '0 0 0',  '0 0 0');
+					e.think = DropToFloor;
+					e.nextthink = time + 0.2;
+				}
+				else if (e.flags & FL_MONSTER) {
+					e.movetype = MOVETYPE_STEP;
+				}
+				else {
+					e.movetype = e.oldmovetype;
+				}
+				e.hook_out = 0;
+				e.autohooked = 0;
+				if(e.think == target_autohook_victim_think)
+				{
+					e.think = SUB_Null;
+					e.nextthink = -1;
+				}
+				sound (e, CHAN_WEAPON, "grapple/grdetach1.wav", 1, ATTN_NORM);
+			}
+			
+			e = nextent(e);
+		}
+		while(e);
+	}
 }
 
 void() target_autohook_pair =
