@@ -2115,6 +2115,7 @@ void() trigger_enterleave_leave =
 		self.target = "";
 		self.target2 = "";
 		self.killtarget = "";
+		activator = other;
 		SUB_UseTargets();
 		self.target = otarget;
 		self.target2 = otarget2;
