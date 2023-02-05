@@ -364,6 +364,8 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 	]
 	// message(string) : "Message"
 	delay(float) : "If 'Spawn then drop', delay before falling down" : 0.2
+	mdlsz(string) : "Entity size (x y z). Special value '-1 -1 -1' actually means '0 0 0' (zero-sized)"
+	centeroffset(string) : "Offset (x y z) applied to the entity model from the center of its bounding box (applies only if mdlsz is set)"
 ]
 
 @BaseClass base(NonRespawnableItem) =
