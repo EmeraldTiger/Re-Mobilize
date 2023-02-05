@@ -189,6 +189,11 @@ void() ai_face =
 		GrappleService();
 		self = oself;
 	}
+	else if (self.currenthook.estate != STATE_ACTIVE) {
+		self.hook_out = 0;
+		self.autohooked = 0;
+		self.movetype = self.oldmovetype;
+	}
 	
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw ();

@@ -738,6 +738,11 @@ void(float dist) ai_run =
 		GrappleService();
 		self = oself;
 	}
+	else if (self.currenthook.estate != STATE_ACTIVE) {
+		self.hook_out = 0;
+		self.autohooked = 0;
+		self.movetype = self.oldmovetype;
+	}
 	
 	// dprint("ai_run\n");
 	movedist = dist;

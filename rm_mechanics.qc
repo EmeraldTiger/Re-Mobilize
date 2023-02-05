@@ -394,11 +394,9 @@ void() target_autohook_hook =
 		victim = nextvictim(victim);
 		if(!victim) break;
 		
-		//Switch to the next victim if the current one is hooked already by the same func_hook.
-		if(victim.autohooked && victim.currenthook == self.animcontroller) continue;
-		
 		//Hook them
-		victim.oldmovetype = victim.movetype;
+		if (!(victim.autohooked && victim.currenthook == self.animcontroller))
+			victim.oldmovetype = victim.movetype;
 		
 		// Disambiguate movetypes based on victim
 		if (victim.classname == "player") {
@@ -416,6 +414,7 @@ void() target_autohook_hook =
 		{
 			victim.think = target_autohook_victim_think;
 			victim.nextthink = time + .1;
+			
 		}
 				
 		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
@@ -434,7 +433,14 @@ void() target_autohook_dehook =
 {
 	if (self.estate != STATE_ACTIVE)
 		return;
+		
+	if (activator.autohooked) {
+		activator.hook_out = 0;
+		activator.autohooked = 0;
+		activator.movetype = activator.oldmovetype;
+	}
 
+	/*
 	entity e = nextent(world);
 	do
 	{
@@ -467,6 +473,7 @@ void() target_autohook_dehook =
 		e = nextent(e);
 	}
 	while(e);
+	*/
 }
 
 void() target_autohook_pair =
