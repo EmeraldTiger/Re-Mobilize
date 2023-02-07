@@ -71,6 +71,11 @@ void() GrappleReset =
 	self.owner.attack_finished = time +0.25;
 	self.owner.autohooked = 0;
 	
+	// Drop corpses
+	if (self.owner.health <= 0) {
+		self.owner.movetype = MOVETYPE_TOSS;
+	}
+	
 	if (self.owner.hooknoise2 != "") {
 		sound (self, CHAN_WEAPON, self.owner.hooknoise2, 1, ATTN_NORM);
 	}

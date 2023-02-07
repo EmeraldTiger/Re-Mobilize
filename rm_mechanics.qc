@@ -388,6 +388,7 @@ void() target_autohook_hook =
 		return;
 
 	entity victim = world;
+	
 	do
 	{
 		//Look for the target_autohook's next victim
@@ -440,6 +441,10 @@ void() target_autohook_dehook =
 			activator.hook_out = 0;
 			activator.autohooked = 0;
 			activator.movetype = activator.oldmovetype;
+			if (activator.flags & FL_ITEM) {
+				activator.think = SUB_Null;
+				activator.nextthink = -1;
+			}
 		}
 	}
 	else {
@@ -452,7 +457,6 @@ void() target_autohook_dehook =
 					e.velocity[0] = 0;
 					e.velocity[1] = 0;
 					e.movetype = MOVETYPE_TOSS;
-					setsize (e, '0 0 0',  '0 0 0');
 					e.think = DropToFloor;
 					e.nextthink = time + 0.2;
 				}

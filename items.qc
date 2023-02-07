@@ -96,6 +96,8 @@ void() DelaySpawnItem =
 	self.solid = SOLID_TRIGGER;
 	setmodel (self, self.mdl);
 	resize(self.pos1, self.pos2);
+	
+	force_retouch = 2;
 
 	if (!(self.spawnflags & ITEM_SPAWNSILENT)) 			// SILENT, gb
 		// sound (self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
