@@ -1885,8 +1885,7 @@ target:
 
 Caveat: this entity doesn't support target2, target3 and target4.
 
-If style is 1 ('Unhook') then ALL the entities autohooked to the paired func_hook are detached, so target is not taken into account.
-target is relevant only with style 0 ('Hook'). So is 'delay'.
+If style is 1 ('Unhook') then this entity will unhook entities. If a target is specified then all targets will be unhooked, otherwise the current activator will be unhooked.
 "
 [
 	target(target_destination) : "Target(s)"
