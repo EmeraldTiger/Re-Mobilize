@@ -442,8 +442,10 @@ void() target_autohook_dehook =
 			activator.autohooked = 0;
 			activator.movetype = activator.oldmovetype;
 			if (activator.flags & FL_ITEM) {
-				activator.think = SUB_Null;
-				activator.nextthink = -1;
+				activator.think = DropToFloor;
+				activator.movetype = MOVETYPE_TOSS;
+				activator.velocity = '0 0 0';
+				activator.nextthink = time + 0.1;
 			}
 		}
 	}
