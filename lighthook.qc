@@ -48,6 +48,8 @@ void(entity h, entity player) GrappleTrail =
 
 void(entity player) NotifyUnhook =
 {
+	if(player.classname != "player") return;
+	
 	if(player.state & STATE_RM_HOOKING)
 	{
 		player.state = player.state - (player.state & STATE_RM_HOOKING);
@@ -63,17 +65,16 @@ void(entity player) NotifyUnhook =
 
 void() GrappleReset =
 {
-
-	if (self.enemy) {
-		if (self.enemy.locked_on) {
-			self.enemy.locked_on = 0;
-		}
-	}
 	self.owner.on_hook = FALSE;
 	self.owner.hook_out = FALSE;
 	self.owner.weaponframe = 0;
 	self.owner.attack_finished = time +0.25;
 	self.owner.autohooked = 0;
+	
+	// Drop corpses
+	if (self.owner.health <= 0) {
+		self.owner.movetype = MOVETYPE_TOSS;
+	}
 	
 	if (self.owner.hooknoise2 != "") {
 		sound (self, CHAN_WEAPON, self.owner.hooknoise2, 1, ATTN_NORM);
@@ -107,7 +108,7 @@ void() GrappleTrack =
 		self.owner.on_hook = FALSE;
 
 	// drop the hook if owner is dead or has released the button
-	if (!self.owner.on_hook || self.owner.health <= 0) {
+	if (!self.owner.on_hook || ((self.owner.classname == "player" || self.owner.flags & FL_MONSTER) && self.owner.health <= 0)) {
 		GrappleReset();
 		return;
 	}
@@ -162,9 +163,6 @@ void () GrappleAnchor =
 	}
 	
 	if (other.classname != "func_hook" || other.estate == STATE_INACTIVE ) {
-			if (self.currenthook) {
-				self.locked_on = 0;
-			}
 			GrappleReset();
 			return;
 	}
@@ -247,53 +245,52 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	vector ray_origin;
 	ray_origin = (targ.mins + targ.maxs) * 0.5;
 	
-	activator.pullspeed = targ.speed;
-	activator.hookstyle = targ.style;
+	hooked.pullspeed = targ.speed;
+	hooked.hookstyle = targ.style;
 	
 	if (targ.sounds) {
-		activator.hooksounds = targ.sounds;
+		hooked.hooksounds = targ.sounds;
 	}
 	else {
-		activator.hooksounds = 0;
+		hooked.hooksounds = 0;
 	}
 	
 	if (targ.noise) {
-		activator.hooknoise1 = targ.noise;
+		hooked.hooknoise1 = targ.noise;
 	}
 	else {
-		activator.hooknoise1 = "";
+		hooked.hooknoise1 = "";
 	}
 	
 	if (targ.noise2) {
-		activator.hooknoise2 = targ.noise2;
+		hooked.hooknoise2 = targ.noise2;
 	}
 	else {
-		activator.hooknoise2 = "";
+		hooked.hooknoise2 = "";
 	}
 	
 	if (targ.noise3) {
-		activator.hooknoise3 = targ.noise3;
+		hooked.hooknoise3 = targ.noise3;
 	}
 	else {
-		activator.hooknoise3 = "";
+		hooked.hooknoise3 = "";
 	}
 	
-	targ.locked_on = 1;
-	activator.currenthook = targ;
+	hooked.currenthook = targ;
 	
-	activator.punchangle_x = -2; // bump him
+	hooked.punchangle_x = -2; // bump him
 	
-	activator.launchtime = time + 1;
+	hooked.launchtime = time + 1;
 	
 	newmis = spawn();
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
-	newmis.owner = activator;		// newmis belongs to me
-	activator.hook = newmis;			// This is my newmis
+	newmis.owner = hooked;		// newmis belongs to me
+	hooked.hook = newmis;			// This is my newmis
 	newmis.classname = "hook";
 	
 	vector norm;
-	norm = normalize(ray_origin - activator.origin);
+	norm = normalize(ray_origin - hooked.origin);
 	newmis.velocity = norm * -5;
 	setorigin (newmis, ray_origin);
 	newmis.angles = vectoangles(norm);
@@ -305,7 +302,7 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	
 	setsize(newmis, '0 0 0' , '0 0 0 ');
 
-	activator.hook_out = TRUE;
+	hooked.hook_out = TRUE;
 	
 }
 
@@ -361,7 +358,6 @@ void () W_FireGrapple =
 		self.hooknoise3 = "";
 	}
 	
-	trace_ent.locked_on = 1;
 	self.currenthook = trace_ent;
 	self.hookpoint = trace_endpos;
 	
@@ -437,8 +433,7 @@ void() GrappleService =
 	}
 
 	// drop the hook if player lets go of button
-	if (
-									self.teleport_time > time) 
+	if (self.teleport_time > time) 
 	{ // release when we get 'ported
 		self = self.hook;
 		GrappleReset();
@@ -469,7 +464,7 @@ void() GrappleService =
 	traceline(self.origin, self.hook.origin, FALSE, self.owner);
 	
 	// check for this in case the lighthook is severed by a moving brush
-	if (trace_ent.classname != "worldspawn")
+	if (trace_ent.classname != "worldspawn" && !(trace_ent.volume && self.autohooked))
 	{
 		self = self.hook;
 		GrappleReset();
@@ -490,7 +485,7 @@ void() GrappleService =
 
 	v = vlen (vel);
 	
-	if (self.volume && v < 4) {
+	if (self.volume && v < 4  && !self.autohooked) {
 			self = self.hook;
 			GrappleReset();
 	}

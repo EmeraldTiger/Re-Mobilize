@@ -441,6 +441,7 @@ void() misc_explobox =
 
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
+	if(self.spawnflags & MISC_MODEL_GRAVITY) self.movetype = MOVETYPE_TOSS;
 	precache_model ("maps/b_explob.bsp");
 	setmodel (self, "maps/b_explob.bsp");
 	precache_sound ("weapons/r_exp3.wav");
@@ -480,6 +481,7 @@ void() misc_explobox2 =
 
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
+	if(self.spawnflags & MISC_MODEL_GRAVITY) self.movetype = MOVETYPE_TOSS;
 	precache_model2 ("maps/b_exbox2.bsp");
 	setmodel (self, "maps/b_exbox2.bsp");
 	precache_sound ("weapons/r_exp3.wav");
