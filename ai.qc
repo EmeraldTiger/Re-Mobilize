@@ -537,7 +537,9 @@ The monster is staying in one place for a while, with slight angle turns
 void() ai_stand =
 {
 	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE && self.autohooked) {
+		entity oself = self;
 		GrappleService();
+		self = oself;
 	}
 	
 	if (FindTarget ())
@@ -732,7 +734,14 @@ The monster has an enemy it is trying to kill
 void(float dist) ai_run =
 {
 	if (self.hook_out && self.currenthook.estate == STATE_ACTIVE && self.autohooked) {
+		entity oself = self;
 		GrappleService();
+		self = oself;
+	}
+	else if (self.currenthook.estate != STATE_ACTIVE) {
+		self.hook_out = 0;
+		self.autohooked = 0;
+		self.movetype = self.oldmovetype;
 	}
 	
 	// dprint("ai_run\n");

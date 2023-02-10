@@ -737,8 +737,6 @@ MONSTER_ONLY(16) will only teleport monsters
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	local vector o;
-
 	InitTrigger ();
 	self.touch = teleport_touch;
 	// find the destination
@@ -749,8 +747,11 @@ MONSTER_ONLY(16) will only teleport monsters
 	if (!(self.spawnflags & SILENT))
 	{
 		precache_sound ("ambience/hum1.wav");
-		o = (self.mins + self.maxs)*0.5;
-		ambientsound (o, "ambience/hum1.wav",0.5 , ATTN_STATIC);
+		if (!self.is_waiting)
+		{
+			vector o = (self.mins + self.maxs)*0.5;
+			ambientsound (o, "ambience/hum1.wav",0.5 , ATTN_STATIC);
+		}
 	}
 
 	SUB_CheckWaiting();
@@ -1486,7 +1487,12 @@ float(entity e) entity_get_state = {
 void(entity e, float state, float flags) entity_set_state = {
 	float closealldoors;
 
-	if(e.classname == "func_button") {
+	if(e.classname == "trigger_teleport") {
+		if (state == STATE_ACTIVE)
+			sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
+		e.estate = state;
+	}
+	else if(e.classname == "func_button") {
 		if (state == STATE_ACTIVE) button_unlock(e, flags & SETSTATE_DONTRESETBUTTON);
 		else button_lock(e);
 	}

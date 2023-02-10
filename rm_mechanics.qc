@@ -364,36 +364,151 @@ Keys:
 
 */
 
-void() target_autohook_hook = {
+void() target_autohook_victim_think =
+{
+	GrappleService();
+	self.nextthink = time + .1;
+};
+
+entity(entity lastv) nextvictim =
+{
+	if(!self.target)
+		return activator;
+	else if(self.target == "player")
+		return find (world, classname, "player");
+	else if (self.target == "other") //The target is the entity having fired a trigger
+		return other;
+	else
+		return find(lastv,targetname,self.target);
+};
+
+void() target_autohook_hook =
+{
+	if (!(self.estate == STATE_ACTIVE && self.animcontroller.estate == STATE_ACTIVE))
+		return;
+
+	entity victim = world;
 	
-	if (!activator.hook_out && self.shadowcontroller.estate == STATE_ACTIVE) {
-		W_FireGrappleAuto(activator, self.shadowcontroller);
-		activator.autohooked = 1;
-	}
-	else if ((activator.flags & FL_MONSTER) && self.shadowcontroller.estate == STATE_ACTIVE) {
-		W_FireGrappleAuto(activator, self.shadowcontroller);
-		activator.autohooked = 1;
-	}
+	do
+	{
+		//Look for the target_autohook's next victim
+		victim = nextvictim(victim);
+		if(!victim) break;
+		
+		//Hook them
+		if (!(victim.autohooked && victim.currenthook == self.animcontroller))
+			victim.oldmovetype = victim.movetype;
+		
+		// Disambiguate movetypes based on victim
+		if (victim.classname == "player") {
+			victim.movetype = MOVETYPE_WALK;
+		}
+		else if (victim.flags & FL_ITEM) {
+			victim.movetype = MOVETYPE_FLYMISSILE;
+		}
+		else {
+			victim.movetype = MOVETYPE_FLY;
+		}
+		W_FireGrappleAuto(victim, self.animcontroller);
+		victim.autohooked = 1;
+		if((!victim.think)||victim.think==PlaceItem||victim.think==SUB_Null||victim.think==DropToFloor)
+		{
+			victim.think = target_autohook_victim_think;
+			victim.nextthink = time + .1;
+			
+		}
+				
+		//Special cases where there is only one target by design, so no looping needed (it would lead to an infinite loop)
+		if(self.target == "player" || self.target == "other" || victim == activator) break;
+	} while (1);
 	
+	//If a delay is set, an automatic dehooking will occur
+	if(self.delay)
+	{
+		self.think = target_autohook_dehook;
+		self.nextthink = time + self.delay;
+	}
 }
 
-void() target_autohook_unhook = {
-	if (activator.autohooked) {
-		activator.hook_out = 0;
-		activator.autohooked = 0;
-		activator.currenthook.locked_on = 0;
+void() target_autohook_dehook =
+{
+	if (self.estate != STATE_ACTIVE)
+		return;
+	
+	// If activator-bound, detach each activator individually rather than as a whole (looks better)
+	if (!self.target) {	
+		if (activator.autohooked) {
+			activator.hook_out = 0;
+			activator.autohooked = 0;
+			activator.movetype = activator.oldmovetype;
+			if (activator.flags & FL_ITEM) {
+				activator.think = DropToFloor;
+				activator.movetype = MOVETYPE_TOSS;
+				activator.velocity = '0 0 0';
+				activator.nextthink = time + 0.1;
+			}
+		}
+	}
+	else {
+		entity e = nextent(world);
+		do
+		{
+			if (e.currenthook == self.animcontroller && e.autohooked)
+			{
+				if (e.flags & FL_ITEM) {
+					e.velocity[0] = 0;
+					e.velocity[1] = 0;
+					e.movetype = MOVETYPE_TOSS;
+					e.think = DropToFloor;
+					e.nextthink = time + 0.2;
+				}
+				else if (e.flags & FL_MONSTER) {
+					e.movetype = MOVETYPE_STEP;
+				}
+				else {
+					e.movetype = e.oldmovetype;
+				}
+				e.hook_out = 0;
+				e.autohooked = 0;
+				if(e.think == target_autohook_victim_think)
+				{
+					e.think = SUB_Null;
+					e.nextthink = -1;
+				}
+				sound (e, CHAN_WEAPON, "grapple/grdetach1.wav", 1, ATTN_NORM);
+			}
+			
+			e = nextent(e);
+		}
+		while(e);
 	}
 }
 
+void() target_autohook_pair =
+{
+	entity lpanel = world;
 
-void() target_autohook = {
-	entity targ;
-	targ = find(world, targetname2, self.target);
-	if (targ && self.style==0) {
-		self.shadowcontroller = targ;
+	//Pairing to the lightpanel with the same netname
+	do
+		if(!(lpanel = find(lpanel, netname, self.netname))) objerror ("target_autohook: no func_hook with a matching netname");
+	while(lpanel.classname != "func_hook");
+	
+	self.animcontroller = lpanel;
+};
+
+void() target_autohook =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+	
+	if(self.style == 0)
 		self.use = target_autohook_hook;
+	else if(self.style == 1)
+	{
+		precache_sound ("grapple/grdetach1.wav");
+		self.use = target_autohook_dehook;
 	}
-	else if (targ && self.style==1) {
-		self.use = target_autohook_unhook;
-	}
+	
+	self.think = target_autohook_pair;
+	self.nextthink = time + 0.3;
 }

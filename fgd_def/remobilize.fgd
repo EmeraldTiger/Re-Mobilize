@@ -1424,8 +1424,20 @@ spawnflags(Flags) =
 	event_lightning : "Chthon's lightning" []
 @PointClass base(Appearflags) model({ "path": ":progs/lavaball.mdl" }) = misc_fireball : "Small fireball"
 	[ speed(integer) : "Speed" : 40 ]
-@PointClass base(Appearflags) size(0 0 0, 32 32 64) model({ "path": ":maps/b_explob.bsp" }) = misc_explobox : "Large exploding container" []
-@PointClass base(Appearflags) size(0 0 0, 32 32 32) model({ "path": ":maps/b_exbox2.bsp" }) = misc_explobox2 : "Small exploding container" []
+@PointClass base(Appearflags) size(0 0 0, 32 32 64) model({ "path": ":maps/b_explob.bsp" }) = misc_explobox : "Large exploding container"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Gravity"
+	]
+]
+@PointClass base(Appearflags) size(0 0 0, 32 32 32) model({ "path": ":maps/b_exbox2.bsp" }) = misc_explobox2 : "Small exploding container"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Gravity"
+	]
+]
 @PointClass base(Appearflags, Effects, CustomMdlsSkin) size(-8 -8 -8, 8 8 8) model(
 	{{
 		mdl_body -> {"path": mdl_body, "skin" : skin}, {"path": "progs/teleport.mdl","skin" : skin} }}) = misc_teleporttrain : "Flying teleporter destination
@@ -1690,7 +1702,7 @@ Player can move freely inside of this entity's volume, on walls and ceilings.
 
 Lightpanels start enabled by default; by assigning a targetname, the lightpanel will be disabled on map startup and must be turned on by a targeting entity. Afterwards, the lightpanel can be toggled off again if targeted once more.
 
-The lightpanel's targetname2 property is used for a different purpose from targetname. Instead of auto-disabling the panel and having it turn on/off, targetname2 allows it to forcefully hook the player, as well as monsters, through the target_autohook entity. See target_autohook for more information.
+The lightpanel's netname is used to pair it with a target_autohook with a matching netname. The lightpanel then become able to forcefully hook the player, monsters or even pickups. See target_autohook for more information.
 
 If the target field of a func_hook points to an info_notnull, the origin of the hook beam will be forced to the location of the target, rather than where the player clicks. This is useful for non-repeating textures where the light beam can only logically come from one place. Bury the info_notnull halfway into the func_hook for best results.
 
@@ -1863,17 +1875,26 @@ You can either replace the current value with a new one, or add/subtract to it (
 	]
 ]
 
-@PointClass base(Appearflags, Targetname) = target_autohook : "A point entity that targets a func_hook's targetname2 field, and causes the autohook's activator to be hooked to (or unhooked from, if already hooked) the target func_hook. Can be used with trigger_everything to hook not only players, but also monsters. If the player is hooked by this entity, they cannot unhook until another target_autohook does so.
+@PointClass base(Appearflags, Targetname) = target_autohook : "A point entity that shares its netname with a func_hook and gives it the ability to hook/unhook entities without their consent. Can be used in a wide variety of scenarios (e.g. with trigger_everything to hook not only players but also monsters or goodies). See the rm_autohook map for examples. If the player is hooked by this entity, they cannot unhook until another target_autohook does so.
+
+target:
+- if not set: the activator
+- if set to the special value 'player': the player
+- if set to the special value 'other': the global entity 'other'
+- else: all entities whose targetname matches 'target'
+
+Caveat: this entity doesn't support target2, target3 and target4.
+
+If style is 1 ('Unhook') then this entity will unhook entities. If a target is specified then all targets will be unhooked, otherwise the current activator will be unhooked.
 "
 [
-	target(target_destination) : "Target"
-	target2(target_destination) : "Target"
-	target3(target_destination) : "Target"
-	target4(target_destination) : "Target"
-	style(choices) : "Determines whether this entity hooks or unhooks the activator." : 0 = [
+	target(target_destination) : "Target(s)"
+	netname(string) : "Give it the same value as a func_hook's own 'netname'"
+	style(choices) : "Determines whether this entity hooks or unhooks its victim(s)." : 0 = [
 		0 : "Hook"
 		1 : "Unhook"
 	]
+	delay(float) : "If set (and if style is 0 - Hook) dehooking automatically occurs after this delay"
 ]
 
 
