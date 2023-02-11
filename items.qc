@@ -217,11 +217,7 @@ Sets the clipping size and plants the object on the floor
 */
 void() StartItem =
 {
-	if(self.mdlsz == '-1 -1 -1')
-	{
-		setsize (self, '0 0 0',  '0 0 0');
-	}
-	else if(self.mdlsz)
+	if(self.mdlsz)
 	{
 		vector vmin, vmax;
 		
