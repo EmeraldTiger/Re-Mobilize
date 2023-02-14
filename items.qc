@@ -89,7 +89,7 @@ DelaySpawnItem //this is from rmq-items.qc
 Makes a SPAWNED item ready for pickup on a trigger event - modified a bit -- dumptruck_ds
 ============
 */
-void() DropToFloor = { droptofloor(); }
+void() DropToFloor = { self.movetype = MOVETYPE_TOSS; }
 
 void() DelaySpawnItem =
 {
