@@ -459,7 +459,7 @@ void() target_autohook_dehook =
 					e.velocity[0] = 0;
 					e.velocity[1] = 0;
 					e.movetype = MOVETYPE_TOSS;
-					e.think = DropToFloor;
+					e.think = SUB_Null;
 					e.nextthink = time + 0.2;
 				}
 				else if (e.flags & FL_MONSTER) {

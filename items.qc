@@ -217,6 +217,23 @@ Sets the clipping size and plants the object on the floor
 */
 void() StartItem =
 {
+	if(self.mdlsz)
+	{
+		vector vmin, vmax;
+		
+		if(!self.centeroffset) self.centeroffset = '0 0 0';
+		
+		vmin_x = self.centeroffset_x - (self.mdlsz_x / 2);
+		vmin_y = self.centeroffset_y - (self.mdlsz_y / 2);
+		vmin_z = self.centeroffset_z - (self.mdlsz_z / 2);
+
+		vmax_x = self.centeroffset_x + (self.mdlsz_x / 2);
+		vmax_y = self.centeroffset_y + (self.mdlsz_y / 2);
+		vmax_z = self.centeroffset_z + (self.mdlsz_z / 2);
+
+		setsize(self, vmin, vmax);
+	}
+
 	self.nextthink = time + 0.3;	// items start after other solids || was 0.2 -- dumptruck_ds
 	self.think = PlaceItem;
 };
