@@ -852,7 +852,7 @@ void() CheckGrapple =
 			self.volume = 0;
 		}
 		
-		player_aim = player_offset + (v_forward * 200);
+		player_aim = player_offset + (v_forward * trace_ent.distance);
 		new.origin = player_aim;
 		
 		if(!(trace_ent.spawnflags & /*Non rotating tracer*/4))

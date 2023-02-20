@@ -335,6 +335,9 @@ void() func_hook =
 		precache_sound(self.noise3);
 	}
 	
+	if(!self.distance)
+		self.distance = 200;
+		
 	if(!self.mdl)
 		self.mdl = "progs/tracer1.mdl";
 	precache_model(self.mdl);
