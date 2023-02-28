@@ -1693,7 +1693,13 @@ void() trigger_filter_use = {
 
 		case FILTER_FIELD_TARGETNAME:
 			fieldtype = FILTER_FIELDTYPE_STRING;
-			targstring = targ.targetname;
+			switch(self.shardvalue)
+			{
+				case  2:	targstring = targ.targetname2; break;
+				case  3:	targstring = targ.targetname3; break;
+				case  4:	targstring = targ.targetname4; break;
+				default:	targstring = targ.targetname; break;
+			}
 			break;
 
 		case FILTER_FIELD_TYPE:
@@ -1761,6 +1767,18 @@ void() trigger_filter_use = {
 			}
 			break;
 
+		case /*target*/23:
+			fieldtype = FILTER_FIELDTYPE_STRING;
+			switch(self.shardvalue)
+			{
+				case -1:	targstring = targ.killtarget; break;
+				case -2:	targstring = targ.killtarget2; break;
+				case  2:	targstring = targ.target2; break;
+				case  3:	targstring = targ.target3; break;
+				case  4:	targstring = targ.target4; break;
+				default:	targstring = targ.target; break;
+			}
+			break;
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
