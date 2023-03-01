@@ -1744,6 +1744,8 @@ Spawnflags:
 	
 	mdl(string) : "Model file for the tracer."
 	
+	distance(integer) : "Distance from the player the tracer model shows up." : 200
+	
 	spawnflags(Flags) =
 	[
 		1 : "Aim only" : 0
