@@ -203,7 +203,7 @@ void() monster_death_use =
 	if (self.flags & FL_SWIM)
 		self.flags = self.flags - FL_SWIM;
 
-	if (!self.target)
+	if (!(self.target||self.target2||self.target3||self.target4||self.killtarget||self.killtarget2))
 		return;
 
 	if(self.infight_activator)
