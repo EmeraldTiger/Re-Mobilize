@@ -1425,27 +1425,78 @@ void() trigger_look =
 
 void() trigger_target_change_use =
 {
+	entity e;
+	
 	if (self.estate != STATE_ACTIVE) return;
 
-    for (entity e = world; (e = find(e, targetname, self.target)); )
-    {
-      if (!self.cnt || self.cnt == 1)
-      {
-        e.target = self.message;
-      }
-      else if (self.cnt == 2)
-      {
-        e.target2 = self.message;
-      }
-      else if (self.cnt == 3)
-      {
-        e.target3 = self.message;
-      }
-      else if (self.cnt == 4)
-      {
-        e.target4 = self.message;
-      }
-    }
+	//Search target by targetname
+	e = find(world, targetname, self.target);
+	while(e != world)
+	{
+		switch(self.cnt)
+		{
+			case -1:	e.killtarget  = self.message; break;
+			case -2:	e.killtarget2 = self.message; break;
+			case -3:	e.pain_target = self.message; break;
+			case  2:	e.target2 =     self.message; break;
+			case  3:	e.target3 =     self.message; break;
+			case  4:	e.target4 =     self.message; break;
+			default:	e.target =      self.message; break;
+		}
+		e = find(e, targetname, self.target);
+	}
+
+	//Search target by targetname2
+	e = find(world, targetname2, self.target);
+	while(e != world)
+	{
+		switch(self.cnt)
+		{
+			case -1:	e.killtarget  = self.message; break;
+			case -2:	e.killtarget2 = self.message; break;
+			case -3:	e.pain_target = self.message; break;
+			case  2:	e.target2 =     self.message; break;
+			case  3:	e.target3 =     self.message; break;
+			case  4:	e.target4 =     self.message; break;
+			default:	e.target =      self.message; break;
+		}
+		e = find(e, targetname2, self.target);
+	}
+
+	//Search target by targetname3
+	e = find(world, targetname3, self.target);
+	while(e != world)
+	{
+		switch(self.cnt)
+		{
+			case -1:	e.killtarget  = self.message; break;
+			case -2:	e.killtarget2 = self.message; break;
+			case -3:	e.pain_target = self.message; break;
+			case  2:	e.target2 =     self.message; break;
+			case  3:	e.target3 =     self.message; break;
+			case  4:	e.target4 =     self.message; break;
+			default:	e.target =      self.message; break;
+		}
+		e = find(e, targetname3, self.target);
+	}
+
+	//Search target by targetname4
+	e = find(world, targetname4, self.target);
+	while(e != world)
+	{
+		switch(self.cnt)
+		{
+			case -1:	e.killtarget  = self.message; break;
+			case -2:	e.killtarget2 = self.message; break;
+			case -3:	e.pain_target = self.message; break;
+			case  2:	e.target2 =     self.message; break;
+			case  3:	e.target3 =     self.message; break;
+			case  4:	e.target4 =     self.message; break;
+			default:	e.target =      self.message; break;
+		}
+		e = find(e, targetname4, self.target);
+	}
+
 };
 
 
