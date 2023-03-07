@@ -2713,6 +2713,7 @@ If you want to make them angry at each other instantly, you can set the spawnfla
 		2 : "target2"
 		3 : "target3"
 		4 : "target4"
+		5 : "message"
 		-1 : "killtarget"
 		-2 : "killtarget2"
 		-3 : "paintarget"

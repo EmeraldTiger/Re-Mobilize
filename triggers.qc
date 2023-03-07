@@ -1441,6 +1441,7 @@ void() trigger_target_change_use =
 			case  2:	e.target2 =     self.message; break;
 			case  3:	e.target3 =     self.message; break;
 			case  4:	e.target4 =     self.message; break;
+			case  5:	e.message =     self.message; break;
 			default:	e.target =      self.message; break;
 		}
 		e = find(e, targetname, self.target);
@@ -1458,6 +1459,7 @@ void() trigger_target_change_use =
 			case  2:	e.target2 =     self.message; break;
 			case  3:	e.target3 =     self.message; break;
 			case  4:	e.target4 =     self.message; break;
+			case  5:	e.message =     self.message; break;
 			default:	e.target =      self.message; break;
 		}
 		e = find(e, targetname2, self.target);
@@ -1475,6 +1477,7 @@ void() trigger_target_change_use =
 			case  2:	e.target2 =     self.message; break;
 			case  3:	e.target3 =     self.message; break;
 			case  4:	e.target4 =     self.message; break;
+			case  5:	e.message =     self.message; break;
 			default:	e.target =      self.message; break;
 		}
 		e = find(e, targetname3, self.target);
@@ -1492,6 +1495,7 @@ void() trigger_target_change_use =
 			case  2:	e.target2 =     self.message; break;
 			case  3:	e.target3 =     self.message; break;
 			case  4:	e.target4 =     self.message; break;
+			case  5:	e.message =     self.message; break;
 			default:	e.target =      self.message; break;
 		}
 		e = find(e, targetname4, self.target);
