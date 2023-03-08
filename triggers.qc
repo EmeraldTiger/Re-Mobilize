@@ -2027,6 +2027,15 @@ void trigger_random_use ()
 		self.target = targ.targetname = oldtargetname;
 		if(self.spawnflags&/*Consume*/1) targ.estate = STATE_INACTIVE; //This target is no longer able to be fired
 	}
+	else
+	{
+		//When no (more) primary target is found, fire pain_target entities instead
+		string oldPainTarget= self.pain_target;
+		SUB_UsePain();
+		
+		//Reset pain_target to its initial value (for some reason it's automatically hard-reset to "" at the end of SUB_UsePain)
+		self.pain_target = oldPainTarget;
+	}
 }
 
 void trigger_random ()

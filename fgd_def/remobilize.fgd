@@ -3729,6 +3729,7 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	[
 		1 : "Consume" : 0
 	]
+	pain_target(string) : "Target(s) to fire when no entity whose targetname is self.target was found (e.g. once all the targets were consumed)"
 ]
 
 @PointClass color(181 132 93) base(Appearflags, Targetname) = trigger_changeskin : "Changes the skin field on an entity.
