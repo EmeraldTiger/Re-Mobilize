@@ -267,8 +267,29 @@ void() func_hook_use = {
 	}
 };
 
+void() hook_helper_think =
+{
+	if (!self.owner || self.owner.classname != "func_hook")
+	{
+		remove(self);
+		return;
+	}
+	
+	if (self.owner.alpha == 1.0)
+	{
+		remove(self);
+		return;
+	}
+	
+	if (!(self.owner.spawnflags & START_OFF))
+		self.owner.alpha = self.alpha * 0.8 + self.alpha * random() * 0.4;
+
+	self.nextthink = time + 0.05;
+};
+
 void() func_hook =
 {
+	local entity helper;
 	
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
@@ -344,6 +365,13 @@ void() func_hook =
 	
 	setmodel (self, self.model);
 	self.classname = "func_hook";
+	
+	//spawn a second entity to handle alpha changes, since MOVETYPE_PUSH doesn't support think functions
+	helper = spawn();
+	helper.alpha = self.alpha;
+	helper.owner = self;
+	helper.nextthink = 0.05;
+	helper.think = hook_helper_think;
 	
 };
 

@@ -604,8 +604,7 @@ void() laser_helper_think =
 		remove(self);
 		return;
 	}
-
-
+	
 	if (!(self.owner.spawnflags & START_OFF))
 		self.owner.alpha = self.alpha * 0.8 + self.alpha * random() * 0.4;
 
