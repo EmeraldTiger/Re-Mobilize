@@ -275,14 +275,7 @@ void() hook_helper_think =
 		return;
 	}
 	
-	if (self.owner.alpha == 1.0)
-	{
-		remove(self);
-		return;
-	}
-	
-	if (!(self.owner.spawnflags & START_OFF))
-		self.owner.alpha = self.alpha * 0.8 + self.alpha * random() * 0.4;
+	self.owner.alpha = self.alpha * 0.8 + self.alpha * random() * 0.4;
 
 	self.nextthink = time + 0.05;
 };
@@ -367,11 +360,13 @@ void() func_hook =
 	self.classname = "func_hook";
 	
 	//spawn a second entity to handle alpha changes, since MOVETYPE_PUSH doesn't support think functions
-	helper = spawn();
-	helper.alpha = self.alpha;
-	helper.owner = self;
-	helper.nextthink = 0.05;
-	helper.think = hook_helper_think;
+	if (self.spawnflags & /*flicker*/8) {
+		helper = spawn();
+		helper.alpha = self.alpha;
+		helper.owner = self;
+		helper.nextthink = 0.05;
+		helper.think = hook_helper_think;
+	}
 	
 };
 
