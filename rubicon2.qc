@@ -283,9 +283,16 @@ void() make_breakable_debris = {
 
 		new = spawn();
 		new.alpha = self.alpha;
-		new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-		new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-		new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+		if(self.origin != '0 0 0')
+		{
+			new.origin = self.origin;
+		}
+		else
+		{
+			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
+			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
+			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+		}
 		// setmodel (new, "progs/debris.mdl"); this was originally just an mdl from Rubicon2, now you set custom model via spawnflag or use the builtin from Rubicon2 -- dumptruck_ds
 		setmodel (new, self.mdl_debris); //dumptruck_ds
 		setsize (new, '0 0 0', '0 0 0');
