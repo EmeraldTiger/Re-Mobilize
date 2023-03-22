@@ -469,6 +469,9 @@ void() func_train =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
+	if (self.takedamage == DAMAGE_YES)
+		func_breakable();
+	
 	if (!self.speed)
 		self.speed = 100;
 	if (!self.target)
