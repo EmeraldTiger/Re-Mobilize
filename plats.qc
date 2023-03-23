@@ -401,7 +401,7 @@ void() train_next = {
 
 	if (!self.state) {
 		self.state = 1;
-		if (self.classname == "misc_modeltrain" && self.style != TRAIN_STYLE_SINGLEANIM)
+		if (self.classname == "misc_modeltrain" && self.launchtime != TRAIN_STYLE_SINGLEANIM)
 			SUB_CallAsSelf(self.animcontroller.think, self.animcontroller);
 	}
 	
@@ -469,7 +469,7 @@ void() func_train =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	if (self.takedamage == DAMAGE_YES)
+	if (self.spawnflags == /*Breakable*/128)
 		func_breakable();
 	
 	if (!self.speed)
@@ -481,8 +481,6 @@ void() func_train =
 
 	if(self.spawnflags & TRAIN_STOPONTRIGGER && self.spawnflags & TRAIN_MOVEONTRIGGER)
 		objerror("func_train: Stop and move on trigger set at the same time");
-
-
 
 	if (self.sounds == 1) {
 		if (self.noise == "") self.noise = ("plats/train2.wav");
@@ -497,14 +495,10 @@ void() func_train =
 		if (self.noise1 == "") self.noise1 = ("misc/null.wav");
 	}
 
-	// backwards compatibility with previous version
-	if (self.noise3 != "") self.noise = self.noise3;
-	if (self.noise4 != "") self.noise1 = self.noise4;
-
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
 	if (self.noise2 != "") precache_sound(self.noise2);
-
+	if (self.noise3 != "") precache_sound(self.noise3); //Breaking sound (applicable to breakable trains)
 
 	self.plat2GoTo = TRAIN_NEXT_WAIT;
 	
@@ -651,7 +645,7 @@ void() misc_modeltrain = {
 	if (self.first_frame2 && !self.last_frame2) self.last_frame2 = self.first_frame2;
 	else if (!self.first_frame2 && self.last_frame2) self.first_frame2 = self.last_frame2;
 
-	if (!self.first_frame2) self.style = TRAIN_STYLE_SINGLEANIM;
+	if (!self.first_frame2) self.launchtime = TRAIN_STYLE_SINGLEANIM;
 
 	if (!self.animtype) self.animtype = TRAIN_ANIMTYPE_FORWARD;
 	if (!self.animtype2) self.animtype2 = self.animtype;

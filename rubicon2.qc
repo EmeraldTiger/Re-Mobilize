@@ -141,7 +141,7 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
-			new.spawnflags = self.spawnflags;
+			new.spawnflags = self.visitflag;
 			new.skin = self.style;
 			new.snd_hit = self.snd_hit;
 			new.dmg_take = self.dmg_take;
@@ -171,7 +171,7 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
-			new.spawnflags = self.spawnflags;
+			new.spawnflags = self.visitflag;
 			new.skin = self.style;
 			new.snd_hit = self.snd_hit;
 			new.dmg_take = self.dmg_take;
@@ -201,7 +201,7 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
-			new.spawnflags = self.spawnflags;
+			new.spawnflags = self.visitflag;
 			new.skin = self.style;
 			new.snd_hit = self.snd_hit;
 			new.dmg_take = self.dmg_take;
@@ -231,7 +231,7 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
-			new.spawnflags = self.spawnflags;
+			new.spawnflags = self.visitflag;
 			new.skin = self.style;
 			new.snd_hit = self.snd_hit;
 			new.dmg_take = self.dmg_take;
@@ -261,7 +261,7 @@ void() make_breakable_templates_debris = {
 			new.ltime = time;
 			new.nextthink = time + 10 + random()*10;
 			new.flags = 0;
-			new.spawnflags = self.spawnflags;
+			new.spawnflags = self.visitflag;
 			new.skin = self.style;
 			new.snd_hit = self.snd_hit;
 			new.dmg_take = self.dmg_take;
@@ -306,7 +306,7 @@ void() make_breakable_debris = {
 		new.ltime = time;
 		new.nextthink = time + 10 + random()*10;
 		new.flags = 0;
-		new.spawnflags = self.spawnflags;
+		new.spawnflags = self.visitflag;
 		new.skin = self.style;
 		new.snd_hit = self.snd_hit;
 		new.dmg_take = self.dmg_take;
@@ -335,7 +335,8 @@ void () func_breakable_die = {
 		// ent.ltime = time;
 		ent.nextthink = time + 60;
 
-		sound(ent, CHAN_AUTO, self.noise1, 1, ATTN_NORM);
+		sound(ent, CHAN_AUTO, self.noise3, 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM); //Stop the looping moving sound of the train (if in a breakable train context)
 		// remove (self);
 	}
 
@@ -344,8 +345,8 @@ void () func_breakable_die = {
 	// floating in mid-air after this entity is removed -- iw
 	SUB_DislodgeRestingEntities ();
 
-	if (self.spawnflags & BREAK_EXPLODE) {
-		if (self.spawnflags & BREAK_CUSTOM) {
+	if (self.visitflag & BREAK_EXPLODE) {
+		if (self.visitflag & BREAK_CUSTOM) {
 			make_breakable_templates_debris ();
 		} else {
 			make_breakable_debris ();
@@ -354,10 +355,10 @@ void () func_breakable_die = {
 		// sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); this is broken as of 1.1.0 no custom explosion sound for now -- dumptruck_ds
 		remove (self);
 	} else {
-		self.origin = ((self.absmin + self.absmax) * 0.5);
+		if(self.origin == '0 0 0') self.origin = ((self.absmin + self.absmax) * 0.5);
 		setorigin (self, self.origin);
 		DropStuff();
-		if (self.spawnflags & BREAK_CUSTOM) {
+		if (self.visitflag & BREAK_CUSTOM) {
 			if (self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
 			make_breakable_templates_debris ();
 			remove (self);
@@ -470,58 +471,75 @@ void () func_breakable = {
 	precache_sound ("blob/hit1.wav");
 	if (self.snd_hit) precache_sound (self.snd_hit);
 
-	if (self.noise1 != "") precache_sound(self.noise1);
-// adding new default sounds for "simple" breakables in 1.2.0 -- dumptruck_ds
-// here's genreic metal breaking
-	if (self.style == 0 || self.style == 11 || self.style == 12 || self.style == 17 || self.style == 18 || self.style == 19
-		|| self.style == 24 || self.style == 31)
-		if !(self.noise1)
+	if(self.spawnflags != /*Breakable*/128)
 	{
-		precache_sound("break/metal2.wav");
-		self.noise1 = "break/metal2.wav";
+		//Regular context: NOT in a breakable train context
+		//self.noise3 and self.visitflag are therefore not set at the train level
+		self.visitflag = self.spawnflags;
+		self.noise3 = self.noise1;
 	}
-	if (self.style == 3 || self.style == 4 || self.style == 5)
-		if !(self.noise1)
-	{
-		precache_sound("break/wood1.wav");
-		precache_sound("break/wood2.wav");
-		if (random() > 0.6) // wood only randomized
-		self.noise1 = "break/wood1.wav";
-		else
-		self.noise1 = "break/wood2.wav";
-	}
-	// glass sounds -- this is more of a shattering sound anyway
-	if (self.style == 6 || self.style == 7 || self.style == 8 || self.style == 9 || self.style == 10)
-		if !(self.noise1)
-	{
-		precache_sound("break/metal1.wav");
-		self.noise1 = "break/metal1.wav";
-	}
-	if (self.style == 1 || self.style == 2 || self.style == 13 || self.style == 14
-		|| self.style == 15 || self.style == 16 || self.style == 20 || self.style == 21
-		|| self.style == 22 || self.style == 23)
-		if !(self.noise1)
-	{
-		precache_sound("break/stones1.wav");
-		precache_sound("break/bricks1.wav");
-		if (random() > 0.6) // wood only randomized
-		self.noise1 = "break/bricks1.wav";
-		else
-		self.noise1 = "break/stones1.wav";
-	}
-	if (self.style == 25 || self.style == 26 || self.style == 27 || self.style == 28 || self.style == 29 || self.style == 30)
-		if !(self.noise1)
-	{
-		precache_sound("break/stones1.wav");
-		precache_sound("break/bricks1.wav");
-		if (random() > 0.6) // wood only randomized
-		self.noise1 = "break/stones1.wav";
-		else
-		self.noise1 = "break/bricks1.wav";
-	}
-	// else
-	// 	(self.noise1 = "blob/hit1.wav");
 
+	if (self.noise3 == "")
+	{
+		switch(self.style)
+		{
+			case 0:
+			case 11:
+			case 12:
+			case 17:
+			case 18:
+			case 19:
+			case 24:
+			case 31:
+				self.noise3 = "break/metal2.wav";
+				break;
+			
+			case 3:
+			case 4:
+			case 5:
+				if (random() > 0.6) // wood only randomized
+					self.noise3 = "break/wood1.wav";
+				else
+					self.noise3 = "break/wood2.wav";
+				break;
+				
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+				self.noise3 = "break/metal1.wav";
+
+			case 1:
+			case 2:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 20:
+			case 21:
+			case 22:
+			case 23:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 29:
+			case 30:
+				if (random() > 0.5) // wood only randomized
+					self.noise3 = "break/bricks1.wav";
+				else
+					self.noise3 = "break/stones1.wav";
+				break;
+
+			default:
+				self.noise3 = "blob/hit1.wav";
+				break;
+		}
+	}
+	precache_sound(self.noise3);
+	precache_sound("misc/null.wav"); //Used to stop the looping moving sound of the train (if in a breakable train context)
+	
 	if (!self.health)
 		self.health = 20;
 	if (!self.cnt)
