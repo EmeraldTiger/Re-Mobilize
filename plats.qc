@@ -251,7 +251,7 @@ void() train_use = {
 	
 	// Train has already moved after startup, and has no "stop on trigger" flag,
 	// so ignore activation.
-	if (self.think != func_train_find && self.cnt != TRAIN_NEXT_STOP)
+	if (self.think != func_train_find && self.plat2GoTo != TRAIN_NEXT_STOP)
 		return;
 
 	train_next();
@@ -261,9 +261,9 @@ void() train_use = {
 // Forces a stop or an instant continue on the next path_corner depending on the spawnflag set
 void() train_moving_use = {
 	if (self.spawnflags & TRAIN_MOVEONTRIGGER || self.wait < 0)
-		self.cnt = TRAIN_NEXT_CONTINUE;
+		self.plat2GoTo = TRAIN_NEXT_CONTINUE;
 	else if (self.spawnflags & TRAIN_STOPONTRIGGER)
-		self.cnt = TRAIN_NEXT_STOP;
+		self.plat2GoTo = TRAIN_NEXT_STOP;
 }
 
 // path_corner has been reached, so decide what to do next
@@ -302,7 +302,7 @@ void() train_wait = {
 	self.think = train_next;
 
 	// train is moving normally and path_corner has a wait set, so pause for that time.
-	if (self.wait > 0 && self.cnt == TRAIN_NEXT_WAIT && !(self.spawnflags & TRAIN_RETRIGGER)) {
+	if (self.wait > 0 && self.plat2GoTo == TRAIN_NEXT_WAIT && !(self.spawnflags & TRAIN_RETRIGGER)) {
 		// state: stopped
 		self.state = 0;
 		if (self.classname == "misc_modeltrain") SUB_CallAsSelf(self.animcontroller.think, self.animcontroller);
@@ -314,7 +314,7 @@ void() train_wait = {
 	}
 	// train is moving normally and path_corner has no wait time,
 	// or has been forced to move instantly through a triggering.
-	else if (self.cnt != TRAIN_NEXT_STOP && !self.wait && !(self.spawnflags & TRAIN_RETRIGGER)) {
+	else if (self.plat2GoTo != TRAIN_NEXT_STOP && !self.wait && !(self.spawnflags & TRAIN_RETRIGGER)) {
 
 		//play "passing by" sound, if any. If path_corner has a custom one, play that instead
 		if (self.enemy.noise2 != "") sound(self, CHAN_WEAPON, self.enemy.noise2, 1, ATTN_NORM);
@@ -367,7 +367,7 @@ void() train_next = {
 	
 	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	
-	if(!(!self.wait && self.cnt == TRAIN_NEXT_CONTINUE)) self.cnt = TRAIN_NEXT_WAIT;
+	if(!(!self.wait && self.plat2GoTo == TRAIN_NEXT_CONTINUE)) self.plat2GoTo = TRAIN_NEXT_WAIT;
 
 	//store up any premature triggerings until current movement is finished
 	self.use = train_moving_use; 
@@ -401,7 +401,7 @@ void() train_next = {
 
 	if (!self.state) {
 		self.state = 1;
-		if (self.classname == "misc_modeltrain" && self.style != TRAIN_STYLE_SINGLEANIM)
+		if (self.classname == "misc_modeltrain" && self.launchtime != TRAIN_STYLE_SINGLEANIM)
 			SUB_CallAsSelf(self.animcontroller.think, self.animcontroller);
 	}
 	
@@ -469,6 +469,9 @@ void() func_train =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
+	if (self.spawnflags == /*Breakable*/128)
+		func_breakable();
+	
 	if (!self.speed)
 		self.speed = 100;
 	if (!self.target)
@@ -478,8 +481,6 @@ void() func_train =
 
 	if(self.spawnflags & TRAIN_STOPONTRIGGER && self.spawnflags & TRAIN_MOVEONTRIGGER)
 		objerror("func_train: Stop and move on trigger set at the same time");
-
-
 
 	if (self.sounds == 1) {
 		if (self.noise == "") self.noise = ("plats/train2.wav");
@@ -494,16 +495,12 @@ void() func_train =
 		if (self.noise1 == "") self.noise1 = ("misc/null.wav");
 	}
 
-	// backwards compatibility with previous version
-	if (self.noise3 != "") self.noise = self.noise3;
-	if (self.noise4 != "") self.noise1 = self.noise4;
-
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
 	if (self.noise2 != "") precache_sound(self.noise2);
+	if (self.noise3 != "") precache_sound(self.noise3); //Breaking sound (applicable to breakable trains)
 
-
-	self.cnt = TRAIN_NEXT_WAIT;
+	self.plat2GoTo = TRAIN_NEXT_WAIT;
 	
 	if (self.spawnflags & TRAIN_NONSOLID) {
 		self.solid = SOLID_NOT;
@@ -648,7 +645,7 @@ void() misc_modeltrain = {
 	if (self.first_frame2 && !self.last_frame2) self.last_frame2 = self.first_frame2;
 	else if (!self.first_frame2 && self.last_frame2) self.first_frame2 = self.last_frame2;
 
-	if (!self.first_frame2) self.style = TRAIN_STYLE_SINGLEANIM;
+	if (!self.first_frame2) self.launchtime = TRAIN_STYLE_SINGLEANIM;
 
 	if (!self.animtype) self.animtype = TRAIN_ANIMTYPE_FORWARD;
 	if (!self.animtype2) self.animtype2 = self.animtype;

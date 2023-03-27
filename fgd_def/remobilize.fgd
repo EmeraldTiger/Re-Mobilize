@@ -2244,6 +2244,11 @@ Spawnflags:
 - 'Stop on trigger' will stop the train at the next path_corner when triggered. Trigger it again to resume.
 The flags above are mutually exclusive and will cause an objerror when selected simultaneously.
 - 'Custom alignment' allows you to directly specify how the train is offset relative to its path_corners using an 'origin' brush instead of using the vanilla corner alignment.
+- 'Breakable' turns the train into a moving func_breakable.
+  Special rules then apply:
+  * Use the visitflag property as the train's ''spawnflags as a breakable''
+  * Use noise3 as the breaking sound
+  * Use the same settings as func_breakable for the rest (number of chunks, model used, style, etc.)
 "
 [
 	sounds(choices) : "Sound" : 1 =
@@ -2266,11 +2271,55 @@ The flags above are mutually exclusive and will cause an objerror when selected 
 		4: "Stop on trigger" : 0
 		8: "Non-solid" : 0
 		64: "Custom alignment" : 0
+		128: "Breakable" : 0
+	]
+	visitflag(flags) =
+	[
+		1 :	"No Monster Damage" : 0 : "Only the player can break"
+		2 : "Explosion" : 0 : "Produces explosion effect and sound"
+		4 : "Use custom mdls or bsp models" : 0 : "Uses models specified in break_template1, 2, etc"
+		8 : "Cascading destruction" : 0 : "Bouncing debris can break func_breakables in turn"
+	]
+	noise3(string) : "Path to custom break sound (breakable trains only)"
+	style(choices) : "Built-in debris style (breakable trains only)" : 0 =
+	[
+		0 : "Green Metal (default)"
+		1 : "Red Metal"
+		2 : "Concrete"
+		3 : "Pine wood -- wood1_1"
+		4 : "Brown wood -- wizwood1_3"
+		5 : "Red wood -- dung01_2"
+		6 : "Stained Glass Yellow Flames -- window02_1"
+		7 : "Stained Glass Red Rays -- window01_4"
+		8 : "Stained Glass Yellow Dragon -- window01_3"
+		9 : "Stained Glass Blue Dragon -- window01_2"
+		10 : "Stained Glass Red Dragon -- window01_1"
+		11 : "Light Copper -- cop2_3"
+		12 : "Dark Copper -- cop1_1"
+		13 : "Tan Bricks Large -- wiz1_4"
+		14 : "Brown Bricks Large -- wbrick1_5"
+		15 : "Green Bricks Large -- wswamp2_1"
+		16 : "Generic Light Brown -- tlight08"
+		17 : "Red Brown Computer -- comp1_5"
+		18 : "Grey Black Computer -- comp1_1"
+		19 : "Blue Green Metal -- metal4_5"
+		20 : "Blue Green Runic Wall -- metal4_4"
+		21 : "Brown Metal -- metal2_2"
+		22 : "Dark Brown Metal -- metal1_3"
+		23 : "Medium Brown Metal -- metal1_2"
+		24 : "Blue Metal -- m5_8"
+		25 : "Green Stonework -- city8_2"
+		26 : "Blue Stonework -- city6_7"
+		27 : "Brown Bricks -- city2_8"
+		28 : "Tan Blue Bricks -- city2_7"
+		29 : "Red Bricks -- city2_1"
+		30 : "Blue Bricks -- city2_5"
+		31 : "Metal Rivets -- wizmet1_2"
 	]
 ]
 
 
-@PointClass base(Targetname) studio({ "path" : mdl, "skin" : skin, "frame" : first_frame}) = misc_modeltrain :
+@PointClass base(Appearflags, Targetname) studio({ "path" : mdl, "skin" : skin, "frame" : first_frame}) = misc_modeltrain :
 "Trains are moving platforms that players can ride. The target's origin specifies the min point of the train at each corner. The train spawns at the first target it is pointing at.
 Use path_corner as targets.
 If given a targetname, it'll only start moving after triggered.
@@ -2289,6 +2338,11 @@ If you want to explicitly set frame 0 in any '*_frame' fields, you must use -1 i
 Spawnflags:
 - No rotation: model doesn't rotate when moving towards path_corners.
 - Rotate Y only: model only rotates around the Y axis, so pitch/roll angles are kept as initially set (useful to fake walking NPCs).
+- 'Breakable' turns the train into a moving func_breakable.
+  Special rules then apply:
+  * Use the visitflag property as the train's ''spawnflags as a breakable''
+  * Use noise3 as the breaking sound
+  * Use the same settings as func_breakable for the rest (number of chunks, model used, style, etc.)
 "
 [
 	sounds(choices) : "Sound" : 1 =
@@ -2331,6 +2385,50 @@ Spawnflags:
 		8: "Non-solid" : 0
 		16: "No rotation" : 0
 		32: "Rotate Y only" : 0
+		128: "Breakable" : 0
+	]
+	visitflag(flags) =
+	[
+		1 :	"No Monster Damage" : 0 : "Only the player can break"
+		2 : "Explosion" : 0 : "Produces explosion effect and sound"
+		4 : "Use custom mdls or bsp models" : 0 : "Uses models specified in break_template1, 2, etc"
+		8 : "Cascading destruction" : 0 : "Bouncing debris can break func_breakables in turn"
+	]
+	noise3(string) : "Path to custom break sound (breakable trains only)"
+	style(choices) : "Built-in debris style (breakable trains only)" : 0 =
+	[
+		0 : "Green Metal (default)"
+		1 : "Red Metal"
+		2 : "Concrete"
+		3 : "Pine wood -- wood1_1"
+		4 : "Brown wood -- wizwood1_3"
+		5 : "Red wood -- dung01_2"
+		6 : "Stained Glass Yellow Flames -- window02_1"
+		7 : "Stained Glass Red Rays -- window01_4"
+		8 : "Stained Glass Yellow Dragon -- window01_3"
+		9 : "Stained Glass Blue Dragon -- window01_2"
+		10 : "Stained Glass Red Dragon -- window01_1"
+		11 : "Light Copper -- cop2_3"
+		12 : "Dark Copper -- cop1_1"
+		13 : "Tan Bricks Large -- wiz1_4"
+		14 : "Brown Bricks Large -- wbrick1_5"
+		15 : "Green Bricks Large -- wswamp2_1"
+		16 : "Generic Light Brown -- tlight08"
+		17 : "Red Brown Computer -- comp1_5"
+		18 : "Grey Black Computer -- comp1_1"
+		19 : "Blue Green Metal -- metal4_5"
+		20 : "Blue Green Runic Wall -- metal4_4"
+		21 : "Brown Metal -- metal2_2"
+		22 : "Dark Brown Metal -- metal1_3"
+		23 : "Medium Brown Metal -- metal1_2"
+		24 : "Blue Metal -- m5_8"
+		25 : "Green Stonework -- city8_2"
+		26 : "Blue Stonework -- city6_7"
+		27 : "Brown Bricks -- city2_8"
+		28 : "Tan Blue Bricks -- city2_7"
+		29 : "Red Bricks -- city2_1"
+		30 : "Blue Bricks -- city2_5"
+		31 : "Metal Rivets -- wizmet1_2"
 	]
 ]
 
@@ -3106,6 +3204,7 @@ Use spawnflag 2 for an explosion, dmg is amount of damage inflicted" [
 	        2 : "Explosion" : 0 : "Produces explosion effect and sound"
 	        4 : "Use custom mdls or bsp models" : 0 : "Uses models specified in break_template1, 2, etc"
 			8 : "Cascading destruction" : 0 : "Bouncing debris can break func_breakables in turn"
+			128 : "DO NOT USE" : 0 : "Reserved for breakable trains"
 	    ]
 		snd_hit(string) : "Path to custom impact sound for bouncing debris"
 		dmg_take(integer) : "Damage inflicted by each debris on touch"
