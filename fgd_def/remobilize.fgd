@@ -3815,6 +3815,9 @@ sounds(choices) : "Sound style" : 0 =
 @PointClass base(Appearflags, Target, Targetname) size(-8 -8 -8, 8 8 8) color(161 255 39) = trigger_random : "
 Randomly triggers only one of its targets.
 
+Suppose you have N entities and want to only trigger one of them randomly. Then give them all the same targetname, and put that targetname in trigger_random's target property.
+Don't use target2-target4: they are processed like normal, so they're ALL triggered each time trigger_random is used.
+
 Eligible target entities are only those which are not inactive and whose targetname property matches trigger_random's target property.
 Entities whose targetname2, targetname3 or targetname4 matches trigger_random's target property are not taken into account.
 If trigger_random has target2, target3, target4, killtarget or killtarget2, those are treated like usual targets and are all fired each time trigger_random is used.
