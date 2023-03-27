@@ -111,7 +111,7 @@ moving towards it, change the next destination and continue.
 */
 void() t_movetarget =
 {
-local entity	temp;
+local entity	temp, temp2;
 
 	if (other.movetarget != self)
 		return;
@@ -119,6 +119,12 @@ local entity	temp;
 	if (other.enemy)
 		return;		// fighting, not following a path
 
+	//Monster fires the path_corner's targets when reaching it
+	temp2 = activator;
+	activator = other;
+	SUB_UseTargets();
+	activator = temp2;
+	
 	temp = self;
 	self = other;
 	other = temp;
