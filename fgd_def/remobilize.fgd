@@ -1746,6 +1746,8 @@ Spawnflags:
 	
 	distance(integer) : "Distance from the player the tracer model shows up." : 200
 	
+	alpha(integer) : "Transparancy (.1 barely visible - .9 almost opaque)" : 1
+	
 	spawnflags(Flags) =
 	[
 		1 : "Aim only" : 0
