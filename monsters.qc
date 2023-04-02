@@ -214,6 +214,19 @@ void() monster_death_use =
 	{
 		activator = self.enemy;
 	}
+	if (self.drop_item == 7) //Drop a custom key upon death
+	{
+		entity k = world;
+		do
+		{
+			k = find(k,targetname,self.target);
+			if(k.classname=="item_key_custom")
+			{
+				k.origin = self.origin + '0 0 24';
+				break;
+			}
+		} while(k);
+	}
 	SUB_UseTargets ();
 };
 
