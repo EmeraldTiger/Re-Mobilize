@@ -702,6 +702,9 @@ added noclip check because Quake's default still-touch-everything noclip is awfu
 */
 float() CheckValidTouch =
 {
+	if (self.estate != STATE_ACTIVE)
+		return FALSE;
+
 	//Validation externally operated by a trigger_filter
 	if (self.filtertarget)
 	{
@@ -721,8 +724,6 @@ float() CheckValidTouch =
 	if (other.health <= 0)
 		return FALSE;
 	if (other.movetype == MOVETYPE_NOCLIP)
-		return FALSE;
-	if (self.estate != STATE_ACTIVE)
 		return FALSE;
 	return TRUE;
 }
