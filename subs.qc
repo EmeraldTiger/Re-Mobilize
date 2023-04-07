@@ -702,6 +702,20 @@ added noclip check because Quake's default still-touch-everything noclip is awfu
 */
 float() CheckValidTouch =
 {
+	//Validation externally operated by a trigger_filter
+	if (self.filtertarget)
+	{
+		entity filter = find(world,targetname,self.filtertarget);
+		self.attack_state = 0;
+		filter.owner = self;
+		entity oact = activator;
+		activator = other;
+		SUB_UseSpecificTarget(self.filtertarget, targetname);
+		activator = oact;
+		return (self.attack_state == 1);
+	}
+	
+	//Clasic hard-coded validation
 	if (other.classname != "player")
 		return FALSE;
 	if (other.health <= 0)

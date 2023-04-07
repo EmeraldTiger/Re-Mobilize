@@ -1870,18 +1870,29 @@ void() trigger_filter_use = {
 
 		if (self.spawnflags & 2 && activator.owner) activator = activator.owner; // relay activator as owner
 
-		SUB_UseTargets();
-		if (other.classname == "trigger_everything" && other.spawnflags & 1) {
-			if (other.wait)	other.attack_finished = time + other.wait;
+		if (self.owner)
+			self.owner.attack_state = 1;
+		else
+		{
+			SUB_UseTargets();
+			if (other.classname == "trigger_everything" && other.spawnflags & 1) {
+				if (other.wait)	other.attack_finished = time + other.wait;
+			}
 		}
 	}
 	else if(self.pain_target)
 	{
 		if (self.spawnflags & 2 && activator.owner) activator = activator.owner; // relay activator as owner
-		SUB_UseSpecificTarget(self.pain_target, targetname);
-		SUB_UseSpecificTarget(self.pain_target, targetname2);
-		SUB_UseSpecificTarget(self.pain_target, targetname3);
-		SUB_UseSpecificTarget(self.pain_target, targetname4);
+		
+		if (self.owner)
+			self.owner.attack_state = 0;
+		else
+		{
+			SUB_UseSpecificTarget(self.pain_target, targetname);
+			SUB_UseSpecificTarget(self.pain_target, targetname2);
+			SUB_UseSpecificTarget(self.pain_target, targetname3);
+			SUB_UseSpecificTarget(self.pain_target, targetname4);
+		}
 	}
 };
 
