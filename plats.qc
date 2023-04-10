@@ -372,6 +372,8 @@ void() train_next = {
 	//store up any premature triggerings until current movement is finished
 	self.use = train_moving_use; 
 
+	float waitwascalled =0;
+	
 	if (self.classname == "misc_modeltrain") {
 		if (!(self.spawnflags & TRAIN_NOROTATE)) {
 			void() angleMoveDone = SUB_Null;
@@ -392,7 +394,10 @@ void() train_next = {
 					destang_z = self.angles_z;
 				}
 				if (self.multiplier > 0)
+				{
+					if(angleMoveDone == train_wait) waitwascalled = 1;
 					SUB_CalcAngleMoveController(destang, self.speed2*self.multiplier, angleMoveDone, self.rotatecontroller);
+				}
 				else
 					self.angles = destang;
 			}
@@ -406,7 +411,10 @@ void() train_next = {
 	}
 	
 	if (targ.origin == self.origin) //Rotation done, no translation
+	{
+		if(!waitwascalled) train_wait();
 		return;
+	}
 	
 	// if the TRAIN_CUSTOMALIGN flag is checked then the train should align
 	// with its path_corners based on the location of an "origin" brush added
@@ -542,7 +550,7 @@ void() animcontroller_think = {
 
 	// train just went from stopped to moving or vice-versa,
 	// and have both animations set
-	if (self.state != tr.state && tr.style != TRAIN_STYLE_SINGLEANIM) {
+	if (self.state != tr.state && tr.launchtime != TRAIN_STYLE_SINGLEANIM) {
 		if (tr.state) { // just started moving
 			tr.frame = zeroconvert(tr.first_frame2);
 		}
@@ -554,7 +562,7 @@ void() animcontroller_think = {
 	}
 	
 	else {
-		if (self.state && tr.style != TRAIN_STYLE_SINGLEANIM) { // moving train animation, if set
+		if (self.state && tr.launchtime != TRAIN_STYLE_SINGLEANIM) { // moving train animation, if set
 			first = zeroconvert(tr.first_frame2);
 			last = zeroconvert(tr.last_frame2);
 			atype = tr.animtype2;
@@ -573,13 +581,15 @@ void() animcontroller_think = {
 		
 		nextframe = tr.frame + step;
 
-		if (atype == TRAIN_ANIMTYPE_BACKFORTH){
-			if (dir > 0 && (nextframe > last || nextframe < first) ||
-				dir < 0 && (nextframe > first || nextframe < last)
-			) {
+		if (dir > 0 && (nextframe > last || nextframe < first) ||
+			dir < 0 && (nextframe > first || nextframe < last)
+		) {
+			if (atype == TRAIN_ANIMTYPE_BACKFORTH){
 				nextframe = tr.frame - step;
 				tr.distance = tr.distance * (-1);
 			}
+			else if (atype == /*Animate once*/3)
+				nextframe = tr.frame;
 		}
 
 		if (dir > 0) nextframe = wrap(nextframe, first, last);
@@ -590,7 +600,7 @@ void() animcontroller_think = {
 	}
 
 	self.think = animcontroller_think;
-	if (self.state || tr.style == TRAIN_STYLE_SINGLEANIM) self.nextthink = time + tr.frtime;
+	if (self.state || tr.launchtime == TRAIN_STYLE_SINGLEANIM) self.nextthink = time + tr.frtime;
 	else self.nextthink = time + tr.frtime2;
 };
 

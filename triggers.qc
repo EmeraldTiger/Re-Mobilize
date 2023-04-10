@@ -2249,3 +2249,53 @@ void() trigger_enterleave =
     self.touch = trigger_enterleave_enter;
     self.wait = 0; // 0 is left, 1 is touched
 };
+
+/*QUAKED trigger_random_time
+Fires its targets every now and then at random intervals
+"delay" minimum time between firing targets (default 2)
+"wait"  maximum time between firing targets (default 20)
+*/
+void() random_time_think =
+{
+ 	if (self.estate != STATE_ACTIVE)
+		return;
+	
+	float t = self.wait * random();
+	if (t < self.delay)
+		t = self.delay;
+	self.nextthink = time + t;
+	SUB_UseTargets();
+};
+
+void() random_time_use =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.estate = STATE_ACTIVE;
+		self.think = random_time_think;
+		self.think();
+	}
+	else
+	{
+		self.estate = STATE_INACTIVE;
+		self.think = SUB_Null;
+	}
+};
+
+void() trigger_random_time =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	if (self.wait == 0)
+		self.wait = 20;
+	if (self.delay == 0)
+		self.delay = 2;
+
+	self.think = random_time_think;
+	self.use = random_time_use;
+	if(self.targetname)
+		self.estate = STATE_INACTIVE;
+	else
+		self.nextthink = time + 0.2;
+};

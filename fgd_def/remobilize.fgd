@@ -2371,11 +2371,13 @@ Spawnflags:
 	[
 		1 : "One way"
 		2 : "Back and forth"
+		3 : "Once"
 	]
 	animtype2(choices) : "Animation type (moving)" : 1 =
 	[
 		1 : "One way"
 		2 : "Back and forth"
+		3 : "Once"
 	]
 	multiplier(integer) : "Turning speed" : 1 : "Turning speed multiplier. Set to -1 to turn instantly"
 	noise1(string) : "Custom moving loop sound (if set, overrides 'sounds')"
@@ -2450,11 +2452,13 @@ Check each field's description for more details.
 	[
 		1 : "One way"
 		2 : "Back and forth"
+		3 : "Once"
 	]
 	animtype2(choices) : "Animation type (moving)" : 1 =
 	[
 		1 : "One way"
 		2 : "Back and forth"
+		3 : "Once"
 	]
 	multiplier(integer) : "Turning speed" : 1 : "Turning speed multiplier. Set to -1 to turn instantly"
 	noise(string) : "Custom stopping sound for this point"
@@ -3894,3 +3898,13 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 ]
 
 @SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []
+
+@PointClass base(Appearflags, Target, Targetname) size (16 16 16) color(192 0 192) = trigger_random_time : "Fire targets at random intervals
+
+Starts off if a targetname is specified
+Toggles ON/OFF when used
+"
+[
+	delay(integer) : "Minimum time between events" : 2
+	wait(integer) : "Maximum time between events" : 20
+]
