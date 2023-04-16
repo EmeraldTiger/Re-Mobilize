@@ -709,6 +709,7 @@ float() CheckValidTouch =
 	if (self.filtertarget)
 	{
 		entity filter = find(world,targetname,self.filtertarget);
+		if(!filter) return FALSE;
 		self.attack_state = 0;
 		filter.owner = self;
 		entity oact = activator;
