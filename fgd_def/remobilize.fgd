@@ -3907,4 +3907,8 @@ Toggles ON/OFF when used
 [
 	delay(integer) : "Minimum time between events" : 2
 	wait(integer) : "Maximum time between events" : 20
+	spawnflags(flags) =
+	[
+		1: "Once" : 0 : "Acts like a trigger_relay with a random delay and fires its targets just once; no subsequent random calls afterwards unless retriggered"
+	]
 ]

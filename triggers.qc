@@ -2260,11 +2260,21 @@ void() random_time_think =
  	if (self.estate != STATE_ACTIVE)
 		return;
 	
-	float t = self.wait * random();
-	if (t < self.delay)
-		t = self.delay;
-	self.nextthink = time + t;
 	SUB_UseTargets();
+
+	if (self.spawnflags&/*Once*/1)
+	{
+		//Reset to inactive
+		random_time_use();
+	}
+	else
+	{
+		//Prepare the next random call
+		float t = self.wait * random();
+		if (t < self.delay)
+			t = self.delay;
+		self.nextthink = time + t;
+	}
 };
 
 void() random_time_use =
@@ -2273,7 +2283,12 @@ void() random_time_use =
 	{
 		self.estate = STATE_ACTIVE;
 		self.think = random_time_think;
-		self.think();
+		
+		//Call think at a random time
+		float t = self.wait * random();
+		if (t < self.delay)
+			t = self.delay;
+		self.nextthink = time + t;
 	}
 	else
 	{
