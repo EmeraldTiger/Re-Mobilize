@@ -1513,13 +1513,17 @@ void() key_touch =
 // support for item_key_custom -- iw
 	if (HasKeys (other, self.items, self.customkeys))
 		return;
-
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	
+	if (other.flags & FL_CLIENT) {
+		sprint (other, "You got the ");
+		sprint (other, self.netname);
+		sprint (other,"\n");
+	}
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	if (other.flags & FL_CLIENT) {
+		stuffcmd (other, "bf\n");
+	}
 
 // support for item_key_custom -- iw
 	GiveKeys (other, self.items, self.customkeys);
