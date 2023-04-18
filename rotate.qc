@@ -154,20 +154,21 @@ void() RotateTargets =
 };
 
 void() RotateTargetsFinal =
-   {
-   local entity ent;
+{
+	local entity ent;
 
-   ent = find( world, targetname, self.target);
-   while( ent )
-      {
-      ent.velocity = '0 0 0';
-      if ( ent.rotate_type == OBJECT_ROTATE )
-         {
-         ent.angles = self.angles;
-         }
-      ent = find( ent, targetname, self.target);
-      }
-   };
+	ent = find( world, targetname, self.target);
+	while( ent )
+	{
+		ent.velocity = '0 0 0';
+		if ( ent.rotate_type == OBJECT_ROTATE )
+		{
+			ent.angles = self.angles;
+		}
+		ent = find( ent, targetname, self.target);
+	}
+	SUB_UseTargets();
+};
 
 void() SetTargetOrigin =
    {
