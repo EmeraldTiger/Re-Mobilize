@@ -111,6 +111,9 @@
 		65536 : "Not on Nightmare Only" : 0
 	]
 ]
+
+@baseclass = FilterTouch [ filtertarget(string) : "Targetname of a trigger_filter telling if the touching entity is allowed to trigger this entity" ]
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // bassclass modified by dumptruck_ds to include multiple targets and targetnames via custents //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1626,14 +1629,14 @@ Default is 0.3 seconds.
 	weapon(float) : "Duration of each strike" : "0.3"
 ]
 
-@SolidClass base(Appearflags, TriggerWait, Targetname) = trigger_ladder : "Invisible ladder entity.
+@SolidClass base(Appearflags, TriggerWait, Targetname, FilterTouch) = trigger_ladder : "Invisible ladder entity.
 
 When player is touching this entity, she can climb by pushing jump."
 [
 	angle(integer) : "the direction player must be facing to climb ladder"
 ]
 
-@SolidClass base(Appearflags, Target) = trigger_trampoline : "Invisible trampoline entity.
+@SolidClass base(Appearflags, Target, FilterTouch) = trigger_trampoline : "Invisible trampoline entity.
 
 Player will bounce off of this like a trampoline, reflecting velocity.
 
@@ -1675,7 +1678,7 @@ Spawnflags:
 	]
 ]
 
-@SolidClass base(Appearflags, Target) = trigger_wiremesh : "Invisible wiremesh entity.
+@SolidClass base(Appearflags, Target, FilterTouch) = trigger_wiremesh : "Invisible wiremesh entity.
 
 Player can move freely inside of this entity's volume, on walls and ceilings.
 
@@ -1933,7 +1936,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 //
 
 
-@SolidClass base(Angle, Appearflags, Targetname, Target) = func_door : "Basic door"
+@SolidClass base(Angle, Appearflags, Targetname, Target, FilterTouch) = func_door : "Basic door"
 [
 	speed(integer) : "Speed" : 100
 	sounds(choices) : "Sound" : 0 =
@@ -1975,7 +1978,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	]
 ]
 
-@SolidClass base(Appearflags, Targetname, Target) = func_door_secret : "Secret door"
+@SolidClass base(Appearflags, Targetname, Target, FilterTouch) = func_door_secret : "Secret door"
 [
 	angle(integer) : "Direction of second move"
 	t_width(integer) : "First move length"
@@ -2211,7 +2214,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 	message(string) : "Message"
 	_shadow(integer) : "Shadows"
 ]
-@SolidClass base(Angle, Appearflags, Targetname, Target) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
+@SolidClass base(Angle, Appearflags, Targetname, Target, FilterTouch) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
 [
 	spawnflags(Flags) =
 	[
@@ -2474,7 +2477,7 @@ Check each field's description for more details.
 	speed(integer) : "Speed" : : "Sets a new speed for the train to move from this point onwards."
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_plat : "Elevator"
+@SolidClass base(Appearflags, Targetname, FilterTouch) = func_plat : "Elevator"
 [
 	spawnflags(Flags) =
 	[
@@ -2554,7 +2557,7 @@ Check each field's description for more details.
 	message(string) : "Message"
 ]
 
-@SolidClass base(OneTarget, OneTargetname, Appearflags, TriggerWait) = trigger_changelevel : "Trigger: Change level"
+@SolidClass base(OneTarget, OneTargetname, Appearflags, TriggerWait, FilterTouch) = trigger_changelevel : "Trigger: Change level"
 [
 	map(string) : "Next map"
 	//target(target_destination) : "Target"
@@ -2579,7 +2582,7 @@ Check each field's description for more details.
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
 
-@SolidClass base(Appearflags, TriggerWait) = trigger_setgravity : "Trigger: sets the gravity of a player or monsters
+@SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_setgravity : "Trigger: sets the gravity of a player or monsters
 
 gravity = what to set the players gravity to
 
@@ -2601,7 +2604,7 @@ If using multiple triggers, do not have them touching. Leave a 'buffer' between 
 ]
 
 //dumptruck_ds added from Hipnotic Mission Pack
-@SolidClass base(Appearflags, Target, Targetname, TriggerWait) = trigger_usekey :
+@SolidClass base(Appearflags, Target, Targetname, TriggerWait, FilterTouch) = trigger_usekey :
 "Trigger: Requires a Key
 
 NOTE: You must specify either the silver or gold key by setting the relevant spawnflag, or specify an item_key_custom by setting the 'keyname' value so that it matches the 'keyname' value of the item_key_custom."
@@ -2638,7 +2641,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 		1 : "Wait for Trigger"
 	]
 ]
-@SolidClass base(OneTarget, OneTargetname, TriggerWait) = trigger_onlyregistered : "only Triggers only if game is registered (registered == 1)"
+@SolidClass base(OneTarget, OneTargetname, TriggerWait, FilterTouch) = trigger_onlyregistered : "only Triggers only if game is registered (registered == 1)"
 [
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
@@ -2691,7 +2694,7 @@ MONSTER_ONLY(16) will only teleport monsters"
 	]
 ]
 
-@SolidClass base(Appearflags, TriggerWait) = trigger_setskill : "Trigger: Set skill"
+@SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_setskill : "Trigger: Set skill"
 [
 	message(choices) : "Skill to change to" : 1 =
 	[
@@ -2704,7 +2707,7 @@ MONSTER_ONLY(16) will only teleport monsters"
 @PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
 ]
-@SolidClass base(Appearflags, TriggerWait) = trigger_take_weapon : "
+@SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_take_weapon : "
 Trigger: Remove weapon (and/or ammo) on touch.
 
 Classic progs_dump 3.0 behavior:
@@ -3564,7 +3567,7 @@ delay how much time to wait before firing after being switched on."
 		]
 	]
 
-@SolidClass base(Appearflags, TriggerWait, OneTargetname) = trigger_changemusic : "Trigger that changes the currently playing music track. The number of the track to play goes in sounds just like worldspawn."
+@SolidClass base(Appearflags, TriggerWait, OneTargetname, FilterTouch) = trigger_changemusic : "Trigger that changes the currently playing music track. The number of the track to play goes in sounds just like worldspawn."
 [
 sounds(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to play from within music folder"
 ]
@@ -3572,7 +3575,7 @@ sounds(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to pla
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) color(200 128 0) = trigger_cdtrack : "Trigger that changes the currently playing music track. The number of the track to play goes in the count key." [
     count(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to play from within music folder"
 ]
-@SolidClass base(Appearflags, Trigger, Target, TriggerWait) = trigger_look : "Trigger: Trigger something when a player enters this volume and looks directly at a targeted brush entity. Use the first target key for the looked at item and subsequent targets to trigger events. Add a wait key to make this a trigger_multiple"
+@SolidClass base(Appearflags, Trigger, Target, TriggerWait, FilterTouch) = trigger_look : "Trigger: Trigger something when a player enters this volume and looks directly at a targeted brush entity. Use the first target key for the looked at item and subsequent targets to trigger events. Add a wait key to make this a trigger_multiple"
 [
 	speed(integer) : "Distance from player to search for trigger, adjust if the target is too far from the trigger" : 500
 	wait(integer) : "Time between re-triggering"

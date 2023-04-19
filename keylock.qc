@@ -193,11 +193,14 @@ void(entity client, string failure_message, string success_message,
 // support for item_key_custom -- iw
 	if (!HasKeys (client, self.items, self.customkeys))
 	{
-		if (failure_message != "")
-			centerprint (client, failure_message);
-		else
-			centerprint2 (client, "You need the ", self.netname);
-		sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+		if (client.flags & FL_CLIENT)
+		{
+			if (failure_message != "")
+				centerprint (client, failure_message);
+			else
+				centerprint2 (client, "You need the ", self.netname);
+			sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+		}
 		return;
 	}
 
@@ -212,18 +215,20 @@ void(entity client, string failure_message, string success_message,
 		s = "You used the ";
 	}
 
-	if (success_message != "")
+	if (client.flags & FL_CLIENT)
 	{
-		sprint (client, success_message);
-		sprint (client, "\n");
+		if (success_message != "")
+		{
+			sprint (client, success_message);
+			sprint (client, "\n");
+		}
+		else
+		{
+			sprint (client, s);
+			sprint (client, self.netname);
+			sprint (client, "\n");
+		}
 	}
-	else
-	{
-		sprint (client, s);
-		sprint (client, self.netname);
-		sprint (client, "\n");
-	}
-
 	sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 	
 	success_func ();
