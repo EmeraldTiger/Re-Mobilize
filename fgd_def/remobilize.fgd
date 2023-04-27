@@ -712,7 +712,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		4 : "Drop an Armor Shard upon death"
 		5 : "Drop a Health Vial & Armor Shard"
 		6 : "Random combination of 3 Vials and/or Shards"
-		7 : "Drop a custom key upon death (must exist somewhere else in the level as trigger spawned and be targeted with a target->targetname relationship)"
+		7 : "Drop whatever (custom key, weapon, quad, ammo, rune, health, etc.) upon death (must exist somewhere else in the level as trigger spawned and be targeted with a target->targetname relationship)"
 	]
 ]
 
