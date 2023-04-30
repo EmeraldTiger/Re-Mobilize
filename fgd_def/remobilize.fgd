@@ -354,7 +354,7 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 // items
 //
 
-@BaseClass base(Appearflags, Target, Targetname, Effects, Angle) =
+@BaseClass base(Appearflags, Target, Targetname, Effects, Angle, FilterTouch) =
 	NonRespawnableItem
 [
 	spawnflags(flags) =
@@ -1426,8 +1426,6 @@ spawnflags(Flags) =
 @SolidClass base(Appearflags, ModelLight) = func_illusionary : "Static nonsolid model"  []
 
 @PointClass base(Appearflags) color(0 150 220) model({ "path": ":progs/s_bubble.spr" }) = air_bubbles : "Air bubbles" []
-@PointClass base(Appearflags, Targetname) =
-	event_lightning : "Chthon's lightning" []
 @PointClass base(Appearflags, Targetname) = event_lightning : "Chthon's lightning"
 [
 	lip(integer) : "Lip (how far lower than the electrodes' bottom does the lightning go)" : 16
@@ -2218,7 +2216,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 	message(string) : "Message"
 	_shadow(integer) : "Shadows"
 ]
-@SolidClass base(Angle, Appearflags, Targetname, Target, FilterTouch) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
+@SolidClass base(Angle, Appearflags, Targetname, Target) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
 [
 	spawnflags(Flags) =
 	[
@@ -3887,7 +3885,7 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	]
 ]
 
-@SolidClass color(181 132 93) base(Appearflags, Targetname) = trigger_enterleave : "A trigger that fires its targets when entering it, leaving it, or both.
+@SolidClass color(181 132 93) base(Appearflags, Targetname, FilterTouch) = trigger_enterleave : "A trigger that fires its targets when entering it, leaving it, or both.
 
 'target' and 'target2' are the targets fired upon entering the trigger.
 'target3' and 'target4' are the targets fired upon leaving the trigger.
