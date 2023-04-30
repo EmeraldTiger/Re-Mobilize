@@ -1428,6 +1428,10 @@ spawnflags(Flags) =
 @PointClass base(Appearflags) color(0 150 220) model({ "path": ":progs/s_bubble.spr" }) = air_bubbles : "Air bubbles" []
 @PointClass base(Appearflags, Targetname) =
 	event_lightning : "Chthon's lightning" []
+@PointClass base(Appearflags, Targetname) = event_lightning : "Chthon's lightning"
+[
+	lip(integer) : "Lip (how far lower than the electrodes' bottom does the lightning go)" : 16
+]
 @PointClass base(Appearflags) model({ "path": ":progs/lavaball.mdl" }) = misc_fireball : "Small fireball"
 	[ speed(integer) : "Speed" : 40 ]
 @PointClass base(Appearflags) size(0 0 0, 32 32 64) model({ "path": ":maps/b_explob.bsp" }) = misc_explobox : "Large exploding container"
