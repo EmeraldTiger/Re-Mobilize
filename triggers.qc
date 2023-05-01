@@ -1149,13 +1149,13 @@ void() take_weapon_use2 =
 	
 	//Taking weapons...
 	
-	if(self.flags & IT_SHOTGUN)          other.items &= ~IT_SHOTGUN;
-	if(self.flags & IT_SUPER_SHOTGUN)    other.items &= ~IT_SUPER_SHOTGUN;
-	if(self.flags & IT_NAILGUN)          other.items &= ~IT_NAILGUN;
-	if(self.flags & IT_SUPER_NAILGUN)    other.items &= ~IT_SUPER_NAILGUN;
-	if(self.flags & IT_GRENADE_LAUNCHER) other.items &= ~IT_GRENADE_LAUNCHER;
-	if(self.flags & IT_ROCKET_LAUNCHER)  other.items &= ~IT_ROCKET_LAUNCHER;
-	if(self.flags & IT_LIGHTNING)        other.items &= ~IT_LIGHTNING;
+	if(self.visitflag & IT_SHOTGUN)          other.items &= ~IT_SHOTGUN;
+	if(self.visitflag & IT_SUPER_SHOTGUN)    other.items &= ~IT_SUPER_SHOTGUN;
+	if(self.visitflag & IT_NAILGUN)          other.items &= ~IT_NAILGUN;
+	if(self.visitflag & IT_SUPER_NAILGUN)    other.items &= ~IT_SUPER_NAILGUN;
+	if(self.visitflag & IT_GRENADE_LAUNCHER) other.items &= ~IT_GRENADE_LAUNCHER;
+	if(self.visitflag & IT_ROCKET_LAUNCHER)  other.items &= ~IT_ROCKET_LAUNCHER;
+	if(self.visitflag & IT_LIGHTNING)        other.items &= ~IT_LIGHTNING;
 	
 	//Handling ammo...
 	
@@ -1230,7 +1230,7 @@ void() trigger_take_weapon =
 	if (self.spawnflags > 0 || self.ammo_shells > 0 || self.ammo_nails > 0 || self.ammo_rockets > 0 || self.ammo_cells > 0)
 	{
 		//New Re:Mobilize behavior
-		self.flags = self.spawnflags; //Moving the settings to a safe field as spawnflags may conflict with standard trigger behavior (slot 2 already used for SPAWNFLAG_TURNS_OFF)
+		self.visitflag = self.spawnflags; //Moving the settings to a safe field as spawnflags may conflict with standard trigger behavior (slot 2 already used for SPAWNFLAG_TURNS_OFF)
 		self.spawnflags = 0;
 		
 		trigger_multiple();
