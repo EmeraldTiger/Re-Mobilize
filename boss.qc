@@ -259,11 +259,14 @@ void() boss_awake =
 	// setmodel (self, "progs/boss.mdl"); //custom_mdl -- dumptruck_ds
 	resize('-128 -128 -24', '128 128 256');
 
-	if (skill == 0)
-		self.health = 1;
-	else
-		self.health = 3;
-
+	if(!self.health)
+	{
+		if (skill == 0)
+			self.health = 1;
+		else
+			self.health = 3;
+	}
+	
 	self.enemy = activator;
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);

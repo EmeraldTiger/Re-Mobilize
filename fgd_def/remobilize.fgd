@@ -919,7 +919,10 @@ style(Choices) : "Attack type" =
 	{{
 	        mdl_body -> {"path" : mdl_body, "skin" : skin}, {"path": "progs/boss.mdl" , "skin" : skin}
 	}}
-) = monster_boss : "Chthon" []
+) = monster_boss : "Chthon"
+[
+	health(integer) : "Number of lightning shots required (default easy:1 other:3)" : 20
+]
 @PointClass base(Monster, CustomMdls) size(-128 -128 -24, 128 128 256) model(
 	{{
 	        mdl_body -> {"path" : mdl_body, "skin" : skin}, {"path": "progs/boss.mdl" , "skin" : skin, "frame" : 80}
