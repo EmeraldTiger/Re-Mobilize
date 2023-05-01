@@ -259,11 +259,14 @@ void() boss_awake =
 	// setmodel (self, "progs/boss.mdl"); //custom_mdl -- dumptruck_ds
 	resize('-128 -128 -24', '128 128 256');
 
-	if (skill == 0)
-		self.health = 1;
-	else
-		self.health = 3;
-
+	if(!self.health)
+	{
+		if (skill == 0)
+			self.health = 1;
+		else
+			self.health = 3;
+	}
+	
 	self.enemy = activator;
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -329,10 +332,10 @@ void() lightning_fire =
 	}
 
 	p1 = (le1.mins + le1.maxs) * 0.5;
-	p1_z = le1.absmin_z - 16;
+	p1_z = le1.absmin_z - self.lip;
 
 	p2 = (le2.mins + le2.maxs) * 0.5;
-	p2_z = le2.absmin_z - 16;
+	p2_z = le2.absmin_z - self.lip;
 
 	// compensate for length of bolt
 	p2 = p2 - normalize(p2-p1)*100;
@@ -408,5 +411,8 @@ void() event_lightning =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
+	if(!self.lip)
+		self.lip = 16;
+	
 	self.use = lightning_use;
 };

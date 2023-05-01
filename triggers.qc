@@ -2106,7 +2106,8 @@ void trigger_random_use ()
 
 void trigger_random ()
 {
-	self.model="trigger_random by Inky";
+	float r = random(1,32767);
+	self.model = ftos(r);
 	self.use = trigger_random_use;
 }
 

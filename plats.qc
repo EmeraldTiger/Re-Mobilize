@@ -17,6 +17,7 @@ void() plat_spawn_inside_trigger =
 // middle trigger
 //
 	trigger = spawn();
+	trigger.filtertarget = self.filtertarget;
 	trigger.touch = plat_center_touch;
 	trigger.movetype = MOVETYPE_NONE;
 	trigger.solid = SOLID_TRIGGER;
