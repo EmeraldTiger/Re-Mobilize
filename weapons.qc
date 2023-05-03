@@ -1475,7 +1475,7 @@ void() CheatCommand =
 		IT_SUPER_NAILGUN |
 		IT_GRENADE_LAUNCHER |
 		IT_ROCKET_LAUNCHER;
-	GiveAllKeys (self);  // support for item_key_custom -- iw
+	//GiveAllKeys (self);  // support for item_key_custom -- iw
 
 	self.ammo_cells = 100;
 	self.items = self.items | IT_LIGHTNING;
