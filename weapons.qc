@@ -1681,6 +1681,8 @@ void() ImpulseCommands =
 		ServerflagsCommand ();
 	if (self.impulse == 12)
 		CycleWeaponReverseCommand ();
+	if (self.impulse == 13)
+		GiveAllKeys (self);
 
 	if (self.impulse == 255)
 		QuadCheat ();
