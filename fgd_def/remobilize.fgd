@@ -1957,6 +1957,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	dmg(integer) : "Damage inflicted when blocked" : 2
 	message(string) : "Message if touched"
 	message2(string) : "Message when key used"
+	pain_target(string) : "Target to fire when not having key"
 	health(integer) : "Health (shootable)" : 0
 	cnt(choices) : "Leave key in player's inventory?" : 0 =
 	[
@@ -2634,6 +2635,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 		8 : "Silver Key Required" : 0
 		16 : "Gold Key Required" : 0
 	]
+	pain_target(string) : "Target to fire when not having key"
 ]
 
 @SolidClass base(Trigger) = trigger_multiple : "Trigger: Activate multiple"

@@ -296,7 +296,7 @@ void() door_touch =
 	if (!keylock_has_key_set ())
 		return;
 
-	keylock_try_to_unlock (other, "", self.owner.message2, door_unlock);
+	keylock_try_to_unlock (other, "", self.owner.message2, door_unlock, SUB_UsePain2);
 };
 
 

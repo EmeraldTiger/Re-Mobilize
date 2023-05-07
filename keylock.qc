@@ -186,7 +186,7 @@ of the original game.  -- iw
 ================
 */
 void(entity client, string failure_message, string success_message,
-		void() success_func) keylock_try_to_unlock =
+		void() success_func, void() failure_func) keylock_try_to_unlock =
 {
 	local string s = "";
 
@@ -201,6 +201,7 @@ void(entity client, string failure_message, string success_message,
 				centerprint2 (client, "You need the ", self.netname);
 			sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 		}
+		failure_func();
 		return;
 	}
 
