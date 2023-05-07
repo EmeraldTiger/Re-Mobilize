@@ -116,6 +116,11 @@ entity() FindIntermission =
 	local	entity spot;
 	local	float cyc;
 
+	
+	spot = find (world, targetname, self.target);
+	if (spot != world && spot.classname == "info_intermission")
+		return spot;
+	
 // look for info_intermission first
 	spot = find (world, classname, "info_intermission");
 	if (spot)
