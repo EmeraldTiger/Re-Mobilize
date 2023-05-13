@@ -341,7 +341,7 @@ void() CastLightning =
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 
-	LightningDamage (org, trace_endpos, self, 10);
+	LightningDamage (org, trace_endpos + dir, self, 10);
 };
 
 void() sham_magic1     =[      $magic1,       sham_magic2    ] {ai_face();
