@@ -624,6 +624,17 @@ void() SUB_UsePain =
 	self.pain_target = "";  //dumptruck_ds via Discord - thanks Spike, Snaut and QueenJazz
 };
 
+void() SUB_UsePain2 =
+{
+	if (self.pain_target != "")
+	{
+		SUB_UseSpecificTarget (self.pain_target, targetname);
+		SUB_UseSpecificTarget (self.pain_target, targetname2);
+		SUB_UseSpecificTarget (self.pain_target, targetname3);
+		SUB_UseSpecificTarget (self.pain_target, targetname4);
+	}
+};
+
 /*
 
 in nightmare mode, all attack_finished times become 0

@@ -333,6 +333,7 @@ NOTE when a trigger_teleport has a targetname it must be triggered to operate, s
 @PointClass base(Appearflags, Fog) = info_intermission : "Intermission camera"
 [
 	mangle(string) : "Camera angle (Pitch Yaw Roll)"
+	targetname(string) : "Use to force this intermission camera by making it the target of a trigger_changelevel"
 ]
 
 @PointClass = info_intermissiontext : "Intermission Text
@@ -1957,6 +1958,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	dmg(integer) : "Damage inflicted when blocked" : 2
 	message(string) : "Message if touched"
 	message2(string) : "Message when key used"
+	pain_target(string) : "Target to fire when not having key"
 	health(integer) : "Health (shootable)" : 0
 	cnt(choices) : "Leave key in player's inventory?" : 0 =
 	[
@@ -2578,6 +2580,7 @@ Check each field's description for more details.
 		8: "Start Off" : 0
 		16: "Use info_player_start2" : 0
 	]
+	target(string) : "Specific intermission camera to use (works only if matching an info_intermission's targetname), otherwise a regular target to fire"
 ]
 
 @SolidClass base(Trigger) = trigger_once : "Trigger: Activate once"
@@ -2634,6 +2637,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 		8 : "Silver Key Required" : 0
 		16 : "Gold Key Required" : 0
 	]
+	pain_target(string) : "Target to fire when not having key"
 ]
 
 @SolidClass base(Trigger) = trigger_multiple : "Trigger: Activate multiple"
