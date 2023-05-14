@@ -169,6 +169,7 @@ the customkey_flags, otherwise return FALSE.  -- iw
 */
 float(entity client, float item_flags, float customkey_flags) HasKeys =
 {
+	if(client.cheater) return FALSE;
 	return (client.items & item_flags) == item_flags &&
 			(client.customkeys & customkey_flags) == customkey_flags;
 };
@@ -200,6 +201,7 @@ custom keys that have been defined for the current map.  -- iw
 */
 void(entity client) GiveAllKeys =
 {
+	client.cheater = 1;
 	GiveKeys (client, IT_KEY1 | IT_KEY2, highest_custom_key * 2 - 1);
 };
 
