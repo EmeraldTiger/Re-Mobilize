@@ -169,7 +169,7 @@ the customkey_flags, otherwise return FALSE.  -- iw
 */
 float(entity client, float item_flags, float customkey_flags) HasKeys =
 {
-	if(client.cheater) return FALSE;
+	if(client.cheater) return TRUE;
 	return (client.items & item_flags) == item_flags &&
 			(client.customkeys & customkey_flags) == customkey_flags;
 };
