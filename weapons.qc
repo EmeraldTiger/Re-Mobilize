@@ -951,6 +951,8 @@ void() W_FireGrenade =
 	missile.angles = vectoangles(missile.velocity);
 
 	missile.touch = GrenadeTouch;
+	
+	missile.gravity = self.gravity;
 
 // set missile duration
 	missile.nextthink = time + 2.5;
