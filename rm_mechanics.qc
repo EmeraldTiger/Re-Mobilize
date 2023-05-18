@@ -350,7 +350,10 @@ void() func_hook =
 	}
 	
 	if(!self.distance)
-		self.distance = 200;
+		self.distance = 300;
+		
+	if(!self.lip)
+		self.lip = 200;
 		
 	if(!self.mdl)
 		self.mdl = "progs/tracer1.mdl";
