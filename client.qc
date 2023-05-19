@@ -852,12 +852,12 @@ void() CheckGrapple =
 			self.volume = 0;
 		}
 		
-		player_aim = player_offset + (v_forward * trace_ent.distance);
+		player_aim = player_offset + (v_forward * trace_ent.lip);
 		new.origin = player_aim;
 		
 		if(!(trace_ent.spawnflags & /*Non rotating tracer*/4))
 			new.angles[2] = (time * 100) % 360;
-		new.alpha = (dist / 300) - (0.5);
+		new.alpha = (dist / trace_ent.distance) - (0.5);
 		setmodel (new, trace_ent.mdl);
 
 		setsize (new, '0 0 0', '0 0 0');

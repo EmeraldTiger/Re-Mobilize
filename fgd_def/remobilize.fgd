@@ -1754,7 +1754,9 @@ Spawnflags:
 	
 	mdl(string) : "Model file for the tracer."
 	
-	distance(integer) : "Distance from the player the tracer model shows up." : 200
+	distance(integer) : "Minimum distance between the player and the func_hook for the tracer model to show up." : 300
+	
+	lip(integer) : "How many units away from the player the tracer model shows up." : 200
 	
 	alpha(integer) : "Transparancy (.1 barely visible - .9 almost opaque)" : 1
 	
@@ -1763,6 +1765,7 @@ Spawnflags:
 		1 : "Aim only" : 0
 		2 : "Player noclip" : 0
 		4 : "Non rotating tracer" : 0
+		8 : "Flicker" : 0
 	]
 ]
 
