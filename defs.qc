@@ -1123,3 +1123,6 @@ entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, in
 
 //Inky 20230407 External validator
 .string filtertarget;
+
+//Inky 20230514 User used the key cheat code
+.float cheater;

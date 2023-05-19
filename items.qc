@@ -1511,7 +1511,10 @@ void() key_touch =
 	if (!CheckValidTouch()) return;
 
 // support for item_key_custom -- iw
-	if (HasKeys (other, self.items, self.customkeys))
+	
+	//Don't grab the key if you already have it... except if you are a cheater (since in that case you don't REALLY have it)
+	float haskey = HasKeys (other, self.items, self.customkeys);
+	if (haskey && (other.cheater == 0))
 		return;
 	
 	if (other.flags & FL_CLIENT) {
