@@ -902,7 +902,7 @@ void() CheckGrapple =
     if (self.impulse==24 && !self.hook_out && loc_trace_ent.classname=="func_hook")
     {
         if (!(loc_trace_ent.spawnflags & /*Aim only*/1)) {
-            dprint2(ftos(framecount), ": firing hook\n");
+            //dprint2(ftos(framecount), ": firing hook\n");
             W_FireGrapple();
         }
         

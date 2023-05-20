@@ -461,7 +461,14 @@ void() GrappleService =
 		return;
 	}
 	
-	traceline(self.origin, self.hook.origin, FALSE, self.owner);
+	if (self.classname == "player" && trace_ent.target == "" && !self.autohooked)
+	{
+		traceline(self.origin, self.hook.origin, FALSE, self);
+	}
+	else
+	{
+		traceline(self.origin, self.hook.origin, FALSE, self.owner);
+	}
 	
 	// check for this in case the lighthook is severed by a moving brush
 	if (trace_ent.classname != "worldspawn" && !(trace_ent.volume && self.autohooked))
