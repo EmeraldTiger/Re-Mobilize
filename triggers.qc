@@ -2215,7 +2215,7 @@ void() trigger_enterleave_leave =
 		self.target = "";
 		self.target2 = "";
 		self.killtarget = "";
-		activator = other;
+		activator = self.enemy;
 		SUB_UseTargets();
 		self.target = otarget;
 		self.target2 = otarget2;
@@ -2239,7 +2239,8 @@ void() trigger_enterleave_enter =
 			self.target3 = "";
 			self.target4 = "";
 			self.killtarget2 = "";
-			activator = other;
+			self.enemy = other;
+			activator = self.enemy;
             SUB_UseTargets();
 			self.target3 = otarget3;
 			self.target4 = otarget4;
