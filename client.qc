@@ -822,100 +822,106 @@ void(entity player) NotifyUnhook;
 
 void() CheckGrapple =
 {
-	
-	local vector player_offset;
-	player_offset = self.origin + self.view_ofs;
-	
-	// (Credit to Inky for this)
-	self.solid = SOLID_NOT;
-	traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, aimIgnore);
-	self.solid = SOLID_SLIDEBOX;
-	
-	local	entity new, oself;
-	local	float dist;
-	local	vector panel_origin;
-	local	vector player_aim;
-	
-	if ((trace_ent.classname=="func_hook") && trace_ent.estate == STATE_ACTIVE && self.hook_out == FALSE) {
-		new = spawn();
-		new.origin_x = trace_endpos[0];
-		new.origin_y = trace_endpos[1];
-		new.origin_z = trace_endpos[2];
-		panel_origin = new.origin;
-		dist = vlen(trace_endpos - self.origin);
-		new.angles = vectoangles(self.origin - trace_endpos);
-		
-		if (trace_ent.volume) {
-			self.volume = 1;
-		}
-		else {
-			self.volume = 0;
-		}
-		
-		player_aim = player_offset + (v_forward * trace_ent.lip);
-		new.origin = player_aim;
-		
-		if(!(trace_ent.spawnflags & /*Non rotating tracer*/4))
-			new.angles[2] = (time * 100) % 360;
-		new.alpha = (dist / trace_ent.distance) - (0.5);
-		setmodel (new, trace_ent.mdl);
+    
+    local vector player_offset;
+    player_offset = self.origin + self.view_ofs;
+    
+    // (Credit to Inky for this)
+    self.solid = SOLID_NOT;
+    traceline(player_offset, (player_offset + (v_forward * 10000)), FALSE, aimIgnore);
+    
+    // cache traceline results so their values won't be lost
+    entity loc_trace_ent = trace_ent;
+    vector loc_trace_endpos = trace_endpos;
 
-		setsize (new, '0 0 0', '0 0 0');
-		new.think = SUB_Remove;
-		new.ltime = time;
-		new.nextthink = time + 0.02;
-		
-		//Fire lightpanel targets on entering aiming mode
-		if(!(self.state & STATE_RM_AIMING))
-		{
-			self.state |= STATE_RM_AIMING;
-			self.rotatecontroller = trace_ent; //The .rotatecontroller property is reused in the lightpanel context to keep trace of what lightpanel was aimed at upon exiting aiming state (see if case below)
-			activator = self;
-			oself = self;
-			self = trace_ent;
-			SUB_UseTargets();
-			self = oself;
-		}
-	}
-	else if(self.state & STATE_RM_AIMING && self.rotatecontroller) //Fire lightpanel targets on exiting aiming mode
-	{
-		self.state = self.state - (self.state & STATE_RM_AIMING);
-		self.state |= STATE_RM_UNAIMING;
-		activator = self;
-		oself = self;
-		self = self.rotatecontroller;
-		SUB_UseTargets();
-		self = oself;
-		self.rotatecontroller = world;
-		self.state = self.state - (self.state & STATE_RM_UNAIMING);
-	}
-	
-	if (trace_ent.volume) {
-		trace_ent.owner = self;
-	}
-	
-	if (self.impulse==24 && !self.hook_out && trace_ent.classname=="func_hook")
-	{
-		if (!(trace_ent.spawnflags & /*Aim only*/1)) {
-			W_FireGrapple();
-		}
-		
-		//Fire lightpanel targets on hooking
-		if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
-		{
-			self.state = self.state - (self.state & STATE_RM_AIMING);
-			self.state |= STATE_RM_HOOKING;
-			activator = self;
-			oself = self;
-			self = trace_ent;
-			SUB_UseTargets();
-			self = oself;
-		}
-	}
-	else if(self.impulse==24 && trace_ent.classname!="func_hook" && vlen(trace_endpos-player_offset)>250)
-	{
-		toggle_inventory(self, TRUE);
-	}
+    self.solid = SOLID_SLIDEBOX;
+    
+    local    entity new, oself;
+    local    float dist;
+    local    vector panel_origin;
+    local    vector player_aim;
+    
+    if ((loc_trace_ent.classname=="func_hook") && loc_trace_ent.estate == STATE_ACTIVE && self.hook_out == FALSE) {
+        new = spawn();
+        new.origin_x = loc_trace_endpos[0];
+        new.origin_y = loc_trace_endpos[1];
+        new.origin_z = loc_trace_endpos[2];
+        panel_origin = new.origin;
+        dist = vlen(loc_trace_endpos - self.origin);
+        new.angles = vectoangles(self.origin - loc_trace_endpos);
+        
+        if (loc_trace_ent.volume) {
+            self.volume = 1;
+        }
+        else {
+            self.volume = 0;
+        }
+        
+        player_aim = player_offset + (v_forward * loc_trace_ent.lip);
+        new.origin = player_aim;
+        
+        if(!(loc_trace_ent.spawnflags & /*Non rotating tracer*/4))
+            new.angles[2] = (time * 100) % 360;
+        new.alpha = (dist / loc_trace_ent.distance) - (0.5);
+        setmodel (new, loc_trace_ent.mdl);
+
+        setsize (new, '0 0 0', '0 0 0');
+        new.think = SUB_Remove;
+        new.ltime = time;
+        new.nextthink = time + 0.02;
+        
+        //Fire lightpanel targets on entering aiming mode
+        if(!(self.state & STATE_RM_AIMING))
+        {
+            self.state |= STATE_RM_AIMING;
+            self.rotatecontroller = loc_trace_ent; //The .rotatecontroller property is reused in the lightpanel context to keep trace of what lightpanel was aimed at upon exiting aiming state (see if case below)
+            activator = self;
+            oself = self;
+            self = loc_trace_ent;
+            SUB_UseTargets();
+            self = oself;
+        }
+    }
+    else if(self.state & STATE_RM_AIMING && self.rotatecontroller) //Fire lightpanel targets on exiting aiming mode
+    {
+        self.state = self.state - (self.state & STATE_RM_AIMING);
+        self.state |= STATE_RM_UNAIMING;
+        activator = self;
+        oself = self;
+        self = self.rotatecontroller;
+        SUB_UseTargets();
+        self = oself;
+        self.rotatecontroller = world;
+        self.state = self.state - (self.state & STATE_RM_UNAIMING);
+    }
+    
+    if (loc_trace_ent.volume) {
+        loc_trace_ent.owner = self;
+    }
+    
+    if (self.impulse==24 && !self.hook_out && loc_trace_ent.classname=="func_hook")
+    {
+        if (!(loc_trace_ent.spawnflags & /*Aim only*/1)) {
+            dprint2(ftos(framecount), ": firing hook\n");
+            W_FireGrapple();
+        }
+        
+        //Fire lightpanel targets on hooking
+        if((self.state & STATE_RM_AIMING) && !(self.state & STATE_RM_HOOKING))
+        {
+            self.state = self.state - (self.state & STATE_RM_AIMING);
+            self.state |= STATE_RM_HOOKING;
+            activator = self;
+            oself = self;
+            self = loc_trace_ent;
+            SUB_UseTargets();
+            self = oself;
+        }
+    }
+    else if(self.impulse==24 && loc_trace_ent.classname!="func_hook" && vlen(loc_trace_endpos-player_offset)>250)
+    {
+        toggle_inventory(self, TRUE);
+    }
 
 }
 
