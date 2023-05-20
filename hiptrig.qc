@@ -37,9 +37,6 @@ void() keytrigger_unlock =
 
 void() keytrigger_use =
 {
-  // from Copper -- dumptruck_ds
-  if (!CheckValidTouch()) return;
-
 	if (self.attack_finished > time)
 		return;
 
@@ -49,6 +46,9 @@ void() keytrigger_use =
 
 void() keytrigger_touch =
 {
+	// from Copper -- dumptruck_ds
+	if (!CheckValidTouch()) return;
+
 	activator = other;
 	keytrigger_use();
 };
