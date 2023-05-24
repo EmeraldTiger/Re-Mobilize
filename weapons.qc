@@ -952,7 +952,9 @@ void() W_FireGrenade =
 
 	missile.touch = GrenadeTouch;
 	
-	missile.gravity = self.gravity;
+	if (!self.onWiremesh) {
+		missile.gravity = self.gravity;
+	}
 
 // set missile duration
 	missile.nextthink = time + 2.5;
