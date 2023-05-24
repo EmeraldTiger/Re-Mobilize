@@ -1266,6 +1266,10 @@ float() W_BestWeapon =
 		return IT_NAILGUN;
 	if(self.ammo_shells >= 1 && (it & IT_SHOTGUN) )
 		return IT_SHOTGUN;
+	if(self.ammo_rockets >= 1 && (it & IT_ROCKET_LAUNCHER) )
+		return IT_ROCKET_LAUNCHER;
+	if(self.ammo_rockets >= 1 && (it & IT_GRENADE_LAUNCHER) )
+		return IT_GRENADE_LAUNCHER;
 	return IT_AXE;
 };
 
