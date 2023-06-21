@@ -1079,6 +1079,8 @@ void(entity client, float density, vector color) csf_set;
 .float elasticity;
 .float maxbounce;
 
+.entity bouncecontroller;
+
 // wiremesh-related
 
 .float onWiremesh;

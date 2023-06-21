@@ -19,79 +19,128 @@ speed indefinitely. Default of 0 means no limit.
 
 float TRACE_TO_SURFACE = 1;
 
+
+void() bouncecontroller_think = {
+
+	if (self != self.owner.bouncecontroller) { // lost link
+		remove(self);
+		return;
+	}
+
+	entity bouncee = self.owner;
+	entity trp = self.enemy;
+	
+	if (bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX)) {
+		bouncee.flags &~= FL_ONGROUND;
+		dprint6(bouncee.classname, " (", ftos(time), "s): Bounce velocity ", vtos(self.movedir), "\n");
+		bouncee.velocity = self.movedir;
+
+		if (trp.noise != "")
+			sound (trp, CHAN_AUTO, trp.noise, 1, ATTN_NORM);
+		else if (trp.sounds == 1)
+			sound (trp, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 2)
+			sound (trp, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 3)
+			sound (trp, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 4)
+			sound (trp, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 5)
+			sound (trp, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
+		else
+			sound (trp, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
+					
+		float ostate = bouncee.state;
+		bouncee.maxbounce++;
+		bouncee.state = ostate | STATE_RM_BOUNCING;
+		activator = bouncee;
+		SUB_UseTargets();
+		bouncee.state = ostate;
+	}
+	self.nextthink = 0;
+}
+
 void() trampoline_touch =
 {
-	// Enforce a minimum velocity the player must fall so they won't just bounce endlessly
-	float minSpeed = -fabs(self.speed);
-
+		
 	// from Copper -- dumptruck_ds
-	if (!((other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX))	
-	|| (CheckValidTouch()))) return;
+	if (!(CheckValidTouch() || (other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) ))
+		return;
 	
-	vector up = '0 0 1';
+	vector up;
 	
-	if (self.spawnflags & TRACE_TO_SURFACE) {
-		vector offset = other.origin;
-		offset[2] -= 300;
-		traceline(other.origin, offset, FALSE, other);
+	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
+
+	if (self.spawnflags & TRACE_TO_SURFACE)
 		up = trace_plane_normal;
-	}
+	else
+		up = '0 0 1';
 	
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
 	
+	// Set cushion sounds to be fired in PlayerPostThink
 	other.cushionnoise = self.noise2;
-	
 	other.cushionsounds = self.sounds;
 	
-	if(self.speed == -1) return; //Cushion only (no bounce)
 	
-	if (other.button2 || other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) {
-	
-		if (other.velocity[2] < minSpeed) {
-			vector playervel = other.velocity;
-			// reflection equation
-			playervel = playervel - 2 * playervel * up * up * (self.elasticity);
-			
-			// if maxbounce is set, cap vertical movement speed at maxbounce
-			if (self.maxbounce > 0 && playervel[2] > self.maxbounce)
-				playervel[2] = self.maxbounce;
-			
-			other.velocity = playervel;
-			if (self.noise != "")
-				sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-			else if (self.sounds == 1)
-				sound (self, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
-			else if (self.sounds == 2)
-				sound (self, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
-			else if (self.sounds == 3)
-				sound (self, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
-			else if (self.sounds == 4)
-				sound (self, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
-			else if (self.sounds == 5)
-				sound (self, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
-			else
-				sound (self, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
-				
-			//Fire trampoline targets on bounce
-			entity bouncee = other;
-			float ostate = bouncee.state;
-			bouncee.maxbounce++;
-			bouncee.state = ostate | STATE_RM_BOUNCING;
-			activator = other;
-			SUB_UseTargets();
-			bouncee.state = ostate;
-		}
+	if (
+		other.velocity_z > -fabs(self.speed) // Enforce a minimum velocity the player must fall so they won't just bounce endlessly
+		|| self.speed == -1 // Cushion only (no bounce)
+	) 
+		return;
+
+	entity ctrl;
+
+	// setup bounce controller if not created yet
+	if (other.bouncecontroller.classname != "bouncecontroller") {
+		
+		ctrl = spawn();
+		other.bouncecontroller = ctrl;
+		ctrl.classname = "bouncecontroller";
+		ctrl.owner = other;
 	}
+	// otherwise, just fetch a reference to the existing one
+	else
+		ctrl = other.bouncecontroller;
+
+	ctrl.enemy = self;
+
+	vector playervel = other.velocity;
 	
+	// calculates at which time the bounce will happen.
+	// 16u off the surface, so it's equivalent to the bounce point of the original code,
+	// but could theoretically set to 0
+	float timetobounce = fabs((trace_fraction*512 - 16)/other.velocity_z);
+
+	// calculates the downwards velocity the player will have at the bounce point, accounting for gravity
+	float grav = cvar("sv_gravity");
+	if (other.gravity) grav *= other.gravity;
+	playervel_z -= timetobounce * grav;
+
+	// reflection equation
+	// small correction factor for bounce velocity to be more or less consistent between jumps
+	playervel = playervel - 2 * playervel * up * up * self.elasticity + [0, 0, 6];
+	
+	// if maxbounce is set, cap vertical movement speed at maxbounce
+	if (self.maxbounce > 0 && playervel_z > self.maxbounce)
+		playervel_z = self.maxbounce;
+
+	ctrl.movedir = playervel;
+	ctrl.think = bouncecontroller_think;
+	ctrl.nextthink = time + timetobounce;
 }
 
-void() trigger_trampoline =
-{
+
+void() trigger_trampoline = {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
 	InitTrigger ();
+	// stretches the trigger so it's at least 64u tall
+	if (self.size_z < 64)
+		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 64]);
+
 	precache_sound ("misc/bounce1.wav");
 	precache_sound ("misc/bounce2.wav");
 	precache_sound ("misc/bounce3.wav");
@@ -104,7 +153,7 @@ void() trigger_trampoline =
 		
 	if (self.noise2 != "")
 		precache_sound(self.noise2);
-		
+	
 	self.touch = trampoline_touch;
 	if (!self.speed)
 		self.speed = 200;
@@ -115,6 +164,7 @@ void() trigger_trampoline =
 	if (!self.maxbounce)
 		self.maxbounce = 0;
 };
+
 
 /*
 ===============================================================================
