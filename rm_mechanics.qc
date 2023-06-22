@@ -98,18 +98,7 @@ void() trampoline_touch = {
 	
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
-	
-	// Set cushion sounds to be fired in PlayerPostThink
-	other.cushionnoise = self.noise2;
-	other.cushionsounds = self.sounds;
-	
-	
-	if (
-		other.velocity_z > -fabs(self.speed) // Enforce a minimum velocity the player must fall so they won't just bounce endlessly
-		|| self.speed == -1 // Cushion only (no bounce)
-	) 
-		return;
-
+		
 	entity ctrl;
 
 	// setup bounce controller if not created yet
@@ -125,6 +114,14 @@ void() trampoline_touch = {
 		ctrl = other.bouncecontroller;
 
 	ctrl.enemy = self;
+
+	if (
+		other.velocity_z > -fabs(self.speed) // Enforce a minimum velocity the player must fall so they won't just bounce endlessly
+		|| self.speed == -1 // Cushion only (no bounce)
+	) {
+		ctrl.movedir = '0 0 0';
+		return;
+	}
 
 	vector playervel = other.velocity;
 	

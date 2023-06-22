@@ -1426,15 +1426,18 @@ void() PlayerPostThink =
 
 	if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0)) 
 	{
-		if (self.cushion) 
+		//dprint6(self.classname, " (", ftos(framecount), "): jump flag: ", ftos(self.jump_flag), "\n");
+		//dprint6(self.classname, " (", ftos(framecount), "): cushion entity: ", self.cushion.classname, "\n");
+
+		//dprint5(self.classname, " (", ftos(framecount), "): nextthink: ", ftos(self.bouncecontroller.nextthink));
+		//dprint3(", time: ", ftos(time), "\n");
+		if (self.cushion)
 		{
 			// checks if the player hit the ground before any scheduled trampoline push happened
 			// if there's one, forces it to happen now
-			if (self.bouncecontroller.nextthink > time) {
-				dprint4(self.classname, " (", ftos(time), "s): Hit the ground before think\n");
-				SUB_CallAsSelf(bouncecontroller_think, self.bouncecontroller);
-			}
-			
+			dprint4(self.classname, " (", ftos(framecount), "): Hit the ground, running think\n");
+
+			SUB_CallAsSelf(bouncecontroller_think, self.bouncecontroller);
 			self.jump_flag = 0;
 		}
 	}
