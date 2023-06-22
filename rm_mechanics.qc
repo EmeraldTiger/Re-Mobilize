@@ -88,13 +88,71 @@ void() trampoline_touch = {
 		return;
 	
 	vector up;
-	
-	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
+	vector normal;
+	float fraction;
 
-	if (self.spawnflags & TRACE_TO_SURFACE)
-		up = trace_plane_normal;
-	else
-		up = '0 0 1';
+	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+		dprint("Trace 1 out of bounds.\n");
+		return;
+	}
+	fraction = trace_fraction;
+	normal = trace_plane_normal;
+
+	traceline(other.origin + [other.mins_x, other.mins_y, other.mins_z] , other.origin + [other.mins_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 2 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+			dprint("Trace 2 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.maxs_x, other.mins_y, other.mins_z] , other.origin + [other.maxs_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 3: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 3 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+			dprint("Trace 3 out of bounds.\n");
+			return;
+		}
+
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.mins_x, other.maxs_y, other.mins_z] , other.origin + [other.mins_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 4: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 4 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+			dprint("Trace 4 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.maxs_x, other.maxs_y, other.mins_z] , other.origin + [other.maxs_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 5: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 5 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+			dprint("Trace 5 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	//if (self.spawnflags & TRACE_TO_SURFACE)
+	up = normal;
+	//else
+	//	up = '0 0 1';
 	
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
@@ -103,7 +161,6 @@ void() trampoline_touch = {
 
 	// setup bounce controller if not created yet
 	if (other.bouncecontroller.classname != "bouncecontroller") {
-		
 		ctrl = spawn();
 		other.bouncecontroller = ctrl;
 		ctrl.classname = "bouncecontroller";
@@ -153,9 +210,11 @@ void() trigger_trampoline = {
 		return;
 
 	InitTrigger ();
-	// stretches the trigger so it's at least 64u tall
-	if (self.size_z < 64)
-		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 64]);
+	// stretches the trigger upwards so it's at least 48u tall
+	// 48 is enough to catch an entity falling 1500ups downwards at 30fps
+	// taller than that risks making the trigger to fire when it's not supposed to
+	if (self.size_z < 48)
+		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 48]);
 
 	precache_sound ("misc/bounce1.wav");
 	precache_sound ("misc/bounce2.wav");
