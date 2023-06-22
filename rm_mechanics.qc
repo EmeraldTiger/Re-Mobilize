@@ -73,67 +73,42 @@ void() bouncecontroller_think = {
 	entity oself;
 	float ostate, fired;
 	
-	dprint6(bouncee.classname, " (", ftos(time), "s): Bounce think, jump flag: ", ftos(bouncee.jump_flag), "\n");
+	dprint6(bouncee.classname, " (", ftos(framecount), "): Bounce think, jump flag: ", ftos(bouncee.jump_flag), "\n");
 
-	if (bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX)) {
+	if ((bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX))
+		) {
 		bouncee.flags &~= FL_ONGROUND;
-		dprint6(bouncee.classname, " (", ftos(time), "s): Bounce velocity ", vtos(self.movedir), "\n");
+		dprint6(bouncee.classname, " (", ftos(framecount), "): Bounced. Velocity ", vtos(self.movedir), "\n");
 		bouncee.velocity = self.movedir;
 
-		if (trp.noise != "")
-			sound (trp, CHAN_AUTO, trp.noise, 1, ATTN_NORM);
-		else if (trp.sounds == 1)
-			sound (trp, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
-		else if (trp.sounds == 2)
-			sound (trp, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
-		else if (trp.sounds == 3)
-			sound (trp, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
-		else if (trp.sounds == 4)
-			sound (trp, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
-		else if (trp.sounds == 5)
-			sound (trp, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
-		else
-			sound (trp, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
+		if (trp.noise != "") sound(trp, CHAN_AUTO, trp.noise, 1, ATTN_NORM);
+		else if (trp.sounds == 1) sound(trp, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 2) sound(trp, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 3) sound(trp, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 4) sound(trp, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 5) sound(trp, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
+		else sound (trp, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
 					
 		bouncee.maxbounce++;
 
 		fired = TRUE;
 	}
-	else if (bouncee.flags & FL_CLIENT && /*(bouncee.jump_flag < -100) &&*/ (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
-		dprint4(bouncee.classname, " (", ftos(time), "s): Cushioned\n");
-		if (bouncee.cushionnoise!="") {
-			sound (self, CHAN_AUTO, bouncee.cushionnoise, 1, ATTN_NORM);
-		}
-		else if (bouncee.cushionsounds==1)
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
-		}
-		else if (bouncee.cushionsounds==2)
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
-		}
-		else if (bouncee.cushionsounds==3)
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
-		}
-		else if (bouncee.cushionsounds==4)
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
-		}
-		else if (bouncee.cushionsounds==5)
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
-		}
-		else
-		{
-			sound (bouncee, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
-		}
-
+	// this will always fire through the PlayerPostThink call
+	else if (bouncee.flags & FL_CLIENT /*&& (bouncee.jump_flag < -100)*/ && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
+		dprint4(bouncee.classname, " (", ftos(framecount), "): Cushioned\n");
+		if (trp.noise2 != "") sound(bouncee, CHAN_AUTO, trp.noise2, 1, ATTN_NORM);
+		else if (trp.sounds == 1) sound(bouncee, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 2) sound(bouncee, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 3) sound(bouncee, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 4) sound(bouncee, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 5) sound(bouncee, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
+		else sound(bouncee, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
+		
 		fired = TRUE;
 	}
 
 	if (fired) {
-		//Fire trampoline targets on cushion landing
+		//Fire trampoline targets if bounced or cushioned
 		ostate = bouncee.state;
 		bouncee.state = ostate | STATE_RM_CUSHIONED;
 		
@@ -148,8 +123,7 @@ void() bouncecontroller_think = {
 	self.nextthink = 0;
 }
 
-void() trampoline_touch =
-{
+void() trampoline_touch = {
 		
 	// from Copper -- dumptruck_ds
 	if (!(CheckValidTouch() || (other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) ))
