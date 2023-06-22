@@ -1424,53 +1424,21 @@ void() PlayerPostThink =
 	
 // Re:Mobilize: Cushion sounds for trampolines (landing on them without pressing jump)
 
-if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0)) 
-{
-		if (self.cushion) 
+	if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0)) 
+	{
+		//dprint6(self.classname, " (", ftos(framecount), "): jump flag: ", ftos(self.jump_flag), "\n");
+		//dprint6(self.classname, " (", ftos(framecount), "): cushion entity: ", self.cushion.classname, "\n");
+
+		//dprint5(self.classname, " (", ftos(framecount), "): nextthink: ", ftos(self.bouncecontroller.nextthink));
+		//dprint3(", time: ", ftos(time), "\n");
+		if (self.cushion)
 		{
-			if (self.cushionnoise!="") {
-				sound (self, CHAN_AUTO, self.cushionnoise, 1, ATTN_NORM);
-			}
-			else if (self.cushionsounds==1)
-			{
-				sound (self, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
-			}
-			else if (self.cushionsounds==2)
-			{
-				sound (self, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
-			}
-			else if (self.cushionsounds==3)
-			{
-				sound (self, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
-			}
-			else if (self.cushionsounds==4)
-			{
-				sound (self, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
-			}
-			else if (self.cushionsounds==5)
-			{
-				sound (self, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
-			}
-			else
-			{
-				sound (self, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
-			}
-			
-			self.jump_flag = 0;
-			
-			//Fire trampoline targets on cushion landing
-			float ostate = self.state;
-			self.state = ostate | STATE_RM_CUSHIONED;
-			entity oactivator = activator;
-			activator = self;
-			entity oself = self;
-			self = self.cushion;
-			SUB_UseTargets();
-			self = oself;
-			activator = oactivator;
-			self.state = ostate;
-		}
-}
+			// checks if the player hit the ground before any scheduled trampoline push happened
+			// if there's one, forces it to happen now
+			dprint4(self.classname, " (", ftos(framecount), "): Hit the ground, running think\n");
+
+			SUB_CallAsSelf(bouncecontroller_think, self.bouncecontroller);
+	}
 
 // check to see if player landed and play landing sound
 	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) && (self.health > 0))

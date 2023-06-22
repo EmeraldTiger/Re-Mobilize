@@ -19,71 +19,189 @@ speed indefinitely. Default of 0 means no limit.
 
 float TRACE_TO_SURFACE = 1;
 
-void() trampoline_touch =
-{
-	// Enforce a minimum velocity the player must fall so they won't just bounce endlessly
-	float minSpeed = -fabs(self.speed);
+void() bouncecontroller_think = {
 
-	// from Copper -- dumptruck_ds
-	if (!((other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX))	
-	|| (CheckValidTouch()))) return;
-	
-	vector up = '0 0 1';
-	
-	if (self.spawnflags & TRACE_TO_SURFACE) {
-		vector offset = other.origin;
-		offset[2] -= 300;
-		traceline(other.origin, offset, FALSE, other);
-		up = trace_plane_normal;
+	if (self != self.owner.bouncecontroller) { // lost link
+		remove(self);
+		return;
 	}
+
+	entity bouncee = self.owner;
+	entity trp = self.enemy;
+	entity oself;
+	float ostate, fired;
+	
+	dprint6(bouncee.classname, " (", ftos(framecount), "): Bounce think, jump flag: ", ftos(bouncee.jump_flag), "\n");
+
+	if ((bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX))
+		) {
+		bouncee.flags &~= FL_ONGROUND;
+		dprint6(bouncee.classname, " (", ftos(framecount), "): Bounced. Velocity ", vtos(self.movedir), "\n");
+		bouncee.velocity = self.movedir;
+
+		if (trp.noise != "") sound(trp, CHAN_AUTO, trp.noise, 1, ATTN_NORM);
+		else if (trp.sounds == 1) sound(trp, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 2) sound(trp, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 3) sound(trp, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 4) sound(trp, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 5) sound(trp, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
+		else sound (trp, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
+					
+		bouncee.maxbounce++;
+
+		fired = TRUE;
+	}
+	// this will always fire through the PlayerPostThink call
+	else if (bouncee.flags & FL_CLIENT /*&& (bouncee.jump_flag < -100)*/ && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
+		dprint4(bouncee.classname, " (", ftos(framecount), "): Cushioned\n");
+		if (trp.noise2 != "") sound(bouncee, CHAN_AUTO, trp.noise2, 1, ATTN_NORM);
+		else if (trp.sounds == 1) sound(bouncee, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 2) sound(bouncee, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 3) sound(bouncee, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 4) sound(bouncee, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
+		else if (trp.sounds == 5) sound(bouncee, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
+		else sound(bouncee, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
+		
+		fired = TRUE;
+	}
+
+	if (fired) {
+		//Fire trampoline targets if bounced or cushioned
+		ostate = bouncee.state;
+		bouncee.state = ostate | STATE_RM_CUSHIONED;
+		
+		activator = bouncee;
+		oself = self;
+		self = trp;
+		SUB_UseTargets();
+		self = oself;
+
+		bouncee.state = ostate;
+	}
+	self.nextthink = 0;
+}
+
+void() trampoline_touch = {
+		
+	// from Copper -- dumptruck_ds
+	if (!(CheckValidTouch() || (other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) ))
+		return;
+	
+	vector up;
+	vector normal;
+	float fraction;
+
+	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+		dprint("Trace 1 out of bounds.\n");
+		return;
+	}
+	fraction = trace_fraction;
+	normal = trace_plane_normal;
+
+	traceline(other.origin + [other.mins_x, other.mins_y, other.mins_z] , other.origin + [other.mins_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 2 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+			dprint("Trace 2 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.maxs_x, other.mins_y, other.mins_z] , other.origin + [other.maxs_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 3: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 3 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+			dprint("Trace 3 out of bounds.\n");
+			return;
+		}
+
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.mins_x, other.maxs_y, other.mins_z] , other.origin + [other.mins_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 4: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 4 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+			dprint("Trace 4 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	traceline(other.origin + [other.maxs_x, other.maxs_y, other.mins_z] , other.origin + [other.maxs_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
+	dprint7("Trace 5: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction < fraction) {
+		dprint("Trace 5 shorter. Replacing\n");
+		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+			dprint("Trace 5 out of bounds.\n");
+			return;
+		}
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+	}
+
+	//if (self.spawnflags & TRACE_TO_SURFACE)
+	up = normal;
+	//else
+	//	up = '0 0 1';
 	
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
-	
-	other.cushionnoise = self.noise2;
-	
-	other.cushionsounds = self.sounds;
-	
-	if(self.speed == -1) return; //Cushion only (no bounce)
-	
-	if (other.button2 || other.flags & FL_MONSTER || (other.movetype == MOVETYPE_BOUNCE && other.solid == SOLID_BBOX)) {
-	
-		if (other.velocity[2] < minSpeed) {
-			vector playervel = other.velocity;
-			// reflection equation
-			playervel = playervel - 2 * playervel * up * up * (self.elasticity);
-			
-			// if maxbounce is set, cap vertical movement speed at maxbounce
-			if (self.maxbounce > 0 && playervel[2] > self.maxbounce)
-				playervel[2] = self.maxbounce;
-			
-			other.velocity = playervel;
-			if (self.noise != "")
-				sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-			else if (self.sounds == 1)
-				sound (self, CHAN_AUTO, "misc/bounce2.wav", 1, ATTN_NORM);
-			else if (self.sounds == 2)
-				sound (self, CHAN_AUTO, "misc/bounce3.wav", 1, ATTN_NORM);
-			else if (self.sounds == 3)
-				sound (self, CHAN_AUTO, "misc/bounce4.wav", 1, ATTN_NORM);
-			else if (self.sounds == 4)
-				sound (self, CHAN_AUTO, "misc/bounce5.wav", 1, ATTN_NORM);
-			else if (self.sounds == 5)
-				sound (self, CHAN_AUTO, "misc/bounce6.wav", 1, ATTN_NORM);
-			else
-				sound (self, CHAN_AUTO, "misc/bounce1.wav", 1, ATTN_NORM);
-				
-			//Fire trampoline targets on bounce
-			entity bouncee = other;
-			float ostate = bouncee.state;
-			bouncee.maxbounce++;
-			bouncee.state = ostate | STATE_RM_BOUNCING;
-			activator = other;
-			SUB_UseTargets();
-			bouncee.state = ostate;
-		}
+		
+	entity ctrl;
+
+	// setup bounce controller if not created yet
+	if (other.bouncecontroller.classname != "bouncecontroller") {
+		ctrl = spawn();
+		other.bouncecontroller = ctrl;
+		ctrl.classname = "bouncecontroller";
+		ctrl.owner = other;
 	}
+	// otherwise, just fetch a reference to the existing one
+	else
+		ctrl = other.bouncecontroller;
+
+	ctrl.enemy = self;
+
+	if (
+		other.velocity_z > -fabs(self.speed) // Enforce a minimum velocity the player must fall so they won't just bounce endlessly
+		|| self.speed == -1 // Cushion only (no bounce)
+	) {
+		ctrl.movedir = '0 0 0';
+		return;
+	}
+
+	vector playervel = other.velocity;
 	
+	// calculates at which time the bounce will happen.
+	// currently it's set to be at the surface and it works fine
+	float timetobounce = fabs(fraction*512/other.velocity_z);
+
+	// calculates the downwards velocity the player will have at the bounce point, accounting for gravity
+	float grav = cvar("sv_gravity");
+	if (other.gravity) grav *= other.gravity;
+	playervel_z -= timetobounce * grav;
+
+	// reflection equation
+	// small correction factor for bounce velocity to be more or less consistent between jumps
+	playervel = playervel - 2*playervel * up * up * self.elasticity + [0, 0, (frametime*480) - 0.5];
+	
+	// if maxbounce is set, cap vertical movement speed at maxbounce
+	if (self.maxbounce > 0 && playervel_z > self.maxbounce)
+		playervel_z = self.maxbounce;
+
+	ctrl.movedir = playervel;
+	ctrl.think = bouncecontroller_think;
+	ctrl.nextthink = time + timetobounce;
 }
 
 void() trigger_trampoline =
@@ -92,6 +210,13 @@ void() trigger_trampoline =
 		return;
 
 	InitTrigger ();
+
+	// stretches the trigger upwards so it's at least 48u tall
+	// 48 is enough to catch an entity falling 1500ups downwards at 30fps
+	// taller than that risks making the trigger to fire when it's not supposed to
+	if (self.size_z < 48)
+		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 48]);
+
 	precache_sound ("misc/bounce1.wav");
 	precache_sound ("misc/bounce2.wav");
 	precache_sound ("misc/bounce3.wav");
