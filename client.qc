@@ -1438,6 +1438,8 @@ void() PlayerPostThink =
 			dprint4(self.classname, " (", ftos(framecount), "): Hit the ground, running think\n");
 
 			SUB_CallAsSelf(bouncecontroller_think, self.bouncecontroller);
+			self.jump_flag = 0;
+		}
 	}
 
 // check to see if player landed and play landing sound

@@ -204,13 +204,12 @@ void() trampoline_touch = {
 	ctrl.nextthink = time + timetobounce;
 }
 
-void() trigger_trampoline =
-{
+
+void() trigger_trampoline = {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
 	InitTrigger ();
-
 	// stretches the trigger upwards so it's at least 48u tall
 	// 48 is enough to catch an entity falling 1500ups downwards at 30fps
 	// taller than that risks making the trigger to fire when it's not supposed to
@@ -229,7 +228,7 @@ void() trigger_trampoline =
 		
 	if (self.noise2 != "")
 		precache_sound(self.noise2);
-		
+	
 	self.touch = trampoline_touch;
 	if (!self.speed)
 		self.speed = 200;
@@ -240,6 +239,7 @@ void() trigger_trampoline =
 	if (!self.maxbounce)
 		self.maxbounce = 0;
 };
+
 
 /*
 ===============================================================================
