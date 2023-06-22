@@ -169,7 +169,8 @@ void() trampoline_touch = {
 	// otherwise, just fetch a reference to the existing one
 	else
 		ctrl = other.bouncecontroller;
-
+	
+	ctrl.think = bouncecontroller_think;
 	ctrl.enemy = self;
 
 	if (
@@ -200,7 +201,7 @@ void() trampoline_touch = {
 		playervel_z = self.maxbounce;
 
 	ctrl.movedir = playervel;
-	ctrl.think = bouncecontroller_think;
+	
 	ctrl.nextthink = time + timetobounce;
 }
 
