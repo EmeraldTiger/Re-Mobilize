@@ -19,48 +19,6 @@ speed indefinitely. Default of 0 means no limit.
 
 float TRACE_TO_SURFACE = 1;
 
-void() cushionself = {
-	if (self.cushionnoise!="") {
-		sound (self, CHAN_AUTO, self.cushionnoise, 1, ATTN_NORM);
-	}
-	else if (self.cushionsounds==1)
-	{
-		sound (self, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
-	}
-	else if (self.cushionsounds==2)
-	{
-		sound (self, CHAN_AUTO, "misc/cushion3.wav", 1, ATTN_NORM);
-	}
-	else if (self.cushionsounds==3)
-	{
-		sound (self, CHAN_AUTO, "misc/cushion4.wav", 1, ATTN_NORM);
-	}
-	else if (self.cushionsounds==4)
-	{
-		sound (self, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
-	}
-	else if (self.cushionsounds==5)
-	{
-		sound (self, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
-	}
-	else
-	{
-		sound (self, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
-	}
-				
-	//Fire trampoline targets on cushion landing
-	float ostate = self.state;
-	self.state = ostate | STATE_RM_CUSHIONED;
-	entity oactivator = activator;
-	activator = self;
-	entity oself = self;
-	self = self.cushion;
-	SUB_UseTargets();
-	self = oself;
-	activator = oactivator;
-	self.state = ostate;
-}
-
 void() bouncecontroller_think = {
 
 	if (self != self.owner.bouncecontroller) { // lost link
