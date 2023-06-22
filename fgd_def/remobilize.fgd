@@ -302,10 +302,17 @@ count(integer) : "How many monsters to spawn (default 5)"
 @PointClass base(PlayerClass) = info_player_start2 : "Player episode return point" []
 @PointClass base(PlayerClass) = info_player_deathmatch : "Deathmatch start" []
 @PointClass base(PlayerClass) = testplayerstart : "Testing player start" []
-@PointClass size(-32 -32 0, 32 32 64) base(PlayerClass, Targetname) = info_teleport_destination : "Teleporter destination" []
+@PointClass size(-32 -32 0, 32 32 64) base(PlayerClass, Targetname) = info_teleport_destination : "Teleporter destination"
+[
+	speed(integer) : "Push speed" : 300
+]
 @PointClass size(-32 -32 0, 32 32 64) base(PlayerClassAlt, Targetname) = info_teleport_random : "Random Teleporter destination
 
-Only for use with trigger_teleport entities set to RANDOM" []
+Only for use with trigger_teleport entities set to RANDOM"
+[
+	speed(integer) : "Push speed" : 300
+]
+
 @PointClass color(200 150 150) = info_null : "info_null (spotlight target)"
 [
 	targetname(target_source) : "Name"

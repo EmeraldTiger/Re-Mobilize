@@ -554,6 +554,9 @@ local vector	org;
 
 		if (!t)
 			objerror ("couldn't find target");
+			
+		float dest_speed = t.speed;
+		if(!dest_speed) dest_speed = 300; //Default push speed at destination
 
 // // put a tfog where the player was
 // 	spawn_tfog (other.origin);
@@ -590,7 +593,7 @@ if (!(self.spawnflags & TELE_STEALTH))
 		other.teleport_time = time + 0.7;
 		if (other.flags & FL_ONGROUND)
 			other.flags = other.flags - FL_ONGROUND;
-		other.velocity = v_forward * 300;
+		other.velocity = v_forward * dest_speed;
 	}
 	other.flags = other.flags - other.flags & FL_ONGROUND;
 
@@ -600,7 +603,7 @@ if (!(self.spawnflags & TELE_STEALTH))
 		other.teleport_time = time + 0.7;
 		if (other.flags & FL_ONGROUND)
 			other.flags = other.flags - FL_ONGROUND;
-		other.velocity = v_forward * 300;
+		other.velocity = v_forward * dest_speed;
 	}
 	other.flags = other.flags - other.flags & FL_ONGROUND;
 };
