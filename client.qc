@@ -1471,6 +1471,8 @@ void() PlayerPostThink =
 
 	if (!(self.flags & FL_ONGROUND))
 		self.jump_flag = self.velocity_z;
+	else
+		self.jump_flag = 0;
 
 	if (self.health > self.max_health) //dumptruck_ds --  this replaces item_megahealth_rot in items.qc
 
