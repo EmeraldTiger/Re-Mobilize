@@ -197,9 +197,8 @@ void() trampoline_touch =
 	vector playervel = other.velocity;
 	
 	// calculates at which time the bounce will happen.
-	// 16u off the surface, so it's equivalent to the bounce point of the original code,
-	// but could theoretically set to 0
-	float timetobounce = fabs((trace_fraction*512 - 16)/other.velocity_z);
+	// currently it's set to be at the surface and it works fine
+	float timetobounce = fabs(fraction*512/other.velocity_z);
 
 	// calculates the downwards velocity the player will have at the bounce point, accounting for gravity
 	float grav = cvar("sv_gravity");
@@ -208,7 +207,7 @@ void() trampoline_touch =
 
 	// reflection equation
 	// small correction factor for bounce velocity to be more or less consistent between jumps
-	playervel = playervel - 2 * playervel * up * up * self.elasticity + [0, 0, 6];
+	playervel = playervel - 2*playervel * up * up * self.elasticity + [0, 0, (frametime*480) - 0.5];
 	
 	// if maxbounce is set, cap vertical movement speed at maxbounce
 	if (self.maxbounce > 0 && playervel_z > self.maxbounce)
