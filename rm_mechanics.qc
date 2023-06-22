@@ -92,20 +92,20 @@ void() trampoline_touch = {
 	float fraction;
 
 	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
-	dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	//dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
 	if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
-		dprint("Trace 1 out of bounds.\n");
+		//dprint("Trace 1 out of bounds.\n");
 		return;
 	}
 	fraction = trace_fraction;
 	normal = trace_plane_normal;
 
 	traceline(other.origin + [other.mins_x, other.mins_y, other.mins_z] , other.origin + [other.mins_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
-	dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	//dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
 	if (trace_fraction < fraction) {
-		dprint("Trace 2 shorter. Replacing\n");
+		//dprint("Trace 2 shorter. Replacing\n");
 		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
-			dprint("Trace 2 out of bounds.\n");
+			//dprint("Trace 2 out of bounds.\n");
 			return;
 		}
 		fraction = trace_fraction;
@@ -113,11 +113,11 @@ void() trampoline_touch = {
 	}
 
 	traceline(other.origin + [other.maxs_x, other.mins_y, other.mins_z] , other.origin + [other.maxs_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
-	dprint7("Trace 3: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	//dprint7("Trace 3: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
 	if (trace_fraction < fraction) {
-		dprint("Trace 3 shorter. Replacing\n");
+		//dprint("Trace 3 shorter. Replacing\n");
 		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
-			dprint("Trace 3 out of bounds.\n");
+			//dprint("Trace 3 out of bounds.\n");
 			return;
 		}
 
@@ -126,11 +126,11 @@ void() trampoline_touch = {
 	}
 
 	traceline(other.origin + [other.mins_x, other.maxs_y, other.mins_z] , other.origin + [other.mins_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
-	dprint7("Trace 4: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	//dprint7("Trace 4: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
 	if (trace_fraction < fraction) {
-		dprint("Trace 4 shorter. Replacing\n");
+		//dprint("Trace 4 shorter. Replacing\n");
 		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
-			dprint("Trace 4 out of bounds.\n");
+			//dprint("Trace 4 out of bounds.\n");
 			return;
 		}
 		fraction = trace_fraction;
@@ -138,11 +138,11 @@ void() trampoline_touch = {
 	}
 
 	traceline(other.origin + [other.maxs_x, other.maxs_y, other.mins_z] , other.origin + [other.maxs_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
-	dprint7("Trace 5: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	//dprint7("Trace 5: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
 	if (trace_fraction < fraction) {
-		dprint("Trace 5 shorter. Replacing\n");
+		//dprint("Trace 5 shorter. Replacing\n");
 		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
-			dprint("Trace 5 out of bounds.\n");
+			//dprint("Trace 5 out of bounds.\n");
 			return;
 		}
 		fraction = trace_fraction;
