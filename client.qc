@@ -1422,11 +1422,11 @@ void() PlayerPostThink =
 
 	W_WeaponFrame ();
 	
-// Re:Mobilize: Cushion sounds for trampolines (landing on them without pressing jump)
-
+	// Re:Mobilize: Cushion sounds for trampolines (landing on them without pressing jump)
+	//dprint6(self.classname, " (", ftos(framecount), "): jump flag: ", ftos(self.jump_flag), "\n");
 	if ((self.jump_flag < -100) && (self.flags & FL_ONGROUND) && (self.health > 0)) 
 	{
-		//dprint6(self.classname, " (", ftos(framecount), "): jump flag: ", ftos(self.jump_flag), "\n");
+		
 		//dprint6(self.classname, " (", ftos(framecount), "): cushion entity: ", self.cushion.classname, "\n");
 
 		//dprint5(self.classname, " (", ftos(framecount), "): nextthink: ", ftos(self.bouncecontroller.nextthink));

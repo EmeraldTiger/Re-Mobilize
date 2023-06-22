@@ -52,7 +52,7 @@ void() bouncecontroller_think = {
 		fired = TRUE;
 	}
 	// this will always fire through the PlayerPostThink call
-	else if (bouncee.flags & FL_CLIENT /*&& (bouncee.jump_flag < -100)*/ && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
+	else if (bouncee.flags & FL_CLIENT && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
 		dprint4(bouncee.classname, " (", ftos(framecount), "): Cushioned\n");
 		if (trp.noise2 != "") sound(bouncee, CHAN_AUTO, trp.noise2, 1, ATTN_NORM);
 		else if (trp.sounds == 1) sound(bouncee, CHAN_AUTO, "misc/cushion2.wav", 1, ATTN_NORM);
@@ -177,6 +177,7 @@ void() trampoline_touch = {
 		other.velocity_z > -fabs(self.speed) // Enforce a minimum velocity the player must fall so they won't just bounce endlessly
 		|| self.speed == -1 // Cushion only (no bounce)
 	) {
+		//dprint4(other.classname, " (", ftos(framecount), "): low vertical speed, early out\n");
 		ctrl.movedir = '0 0 0';
 		return;
 	}
@@ -202,6 +203,7 @@ void() trampoline_touch = {
 
 	ctrl.movedir = playervel;
 	
+	dprint4(other.classname, " (", ftos(framecount), "): setting think\n");
 	ctrl.nextthink = time + timetobounce;
 }
 
