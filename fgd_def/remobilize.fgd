@@ -1646,21 +1646,28 @@ When player is touching this entity, she can climb by pushing jump."
 
 Player will bounce off of this like a trampoline, reflecting velocity.
 
+The actual bounce will happen when the player hits any horizontal face that's inside the trigger, regardless of trigger height, and automatically in the direction of the face - if the surface is at an angled surface, the bouncee will be shot back in that direction.
+
 'elasticity' sets how much velocity is boosted after a bounce (ignoring gravity); default of 1 is perfectly elastic, values less than 1 will result in lower bounces, and values higher than 1 will provide a higher boost. Small changes in elasticity greatly effect velocity. Elasticity values greater than 1 work well with angled trampolines (see below).
 
 'maxbounce' sets the maximum vertical velocity that a player can achieve using the trampoline.
+
+'punchangle' Defines a custom bounce angle. If unset, entities bounce in the direction of the face they hit, or straight upwards if the 'bounce on touch' flag is set. It's recommended to keep the yaw angle close to 90 for a more effective bouncing.
 
 NOTE: A player can continue to bounce indefinitely and gain height on an elasticity > 1 trampoline, which can compromise progression; to prevent this, always set a maxbounce value if using an elasticity > 1 trampoline.
 
 'speed' sets the minimum vertical velocity that a player must have to bounce on the trampoline. If set to -1, the trampoline cannot bounce players, and will only act as a cushion.
 
 Spawnflags:
-- 'Angled' overrides the default upwards orientation and instead performs a trace from the entity using the trampoline to the surface below it, and returns the surface normal. This can be used to make angled trampolines. Be aware that the Quake engine does not support non-axial trigger brushes, so a diagonally-rotated trampoline must be simulated by constructing a series of trigger_trampolines in a staircase pattern approximating the angle."
+- 'Bounce on touch' makes entities bounce when they hit the top of the trigger instead of the face below, and always in a straight upwards angle. Useful when the surface underneath is bumpy and irregular. If you need to bounce at an angle, set it the 'punchangle' field in conjunction of this flag.
+"
 [
 	elasticity(string) : "How much velocity is boosted after a bounce, ignoring gravity." : "1"
 	
 	maxbounce(string) : "The maximum vertical velocity that a player can achieve using the trampoline." : "0"
 	
+	punchangle(string) : "Custom bounce angle, in 'yaw pitch roll' notation."
+
 	sounds(choices) : "Sound" : 0 =
 	[
 		0: "Default (Metal)"
@@ -1673,7 +1680,7 @@ Spawnflags:
 	
 	spawnflags(Flags) =
 	[
-	1 : "Angled" : 0
+	2 : "Bounce on touch" : 0
 	]
 	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"

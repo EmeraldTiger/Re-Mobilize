@@ -15,9 +15,12 @@ a higher boost that is not physically possible. Small changes in elasticity grea
 "maxbounce" The maximum vertical velocity that a player can achieve using the trampoline. Use of this is highly recommended if elasticity > 1, as otherwise the player will continue to gain upwards 
 speed indefinitely. Default of 0 means no limit.
 
+"punchangle" Defines a custom bounce angle. If unset, entities bounce in the direction of the face they hit.
+
 */
 
-float TRACE_TO_SURFACE = 1;
+//float TRACE_TO_SURFACE = 1; // deprecated
+float BOUNCE_ON_TOUCH = 2;
 
 void() bouncecontroller_think = {
 
@@ -33,8 +36,7 @@ void() bouncecontroller_think = {
 	
 	dprint6(bouncee.classname, " (", ftos(framecount), "): Bounce think, jump flag: ", ftos(bouncee.jump_flag), "\n");
 
-	if ((bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX))
-		) {
+	if (bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX)) {
 		bouncee.flags &~= FL_ONGROUND;
 		dprint6(bouncee.classname, " (", ftos(framecount), "): Bounced. Velocity ", vtos(self.movedir), "\n");
 		bouncee.velocity = self.movedir;
@@ -77,6 +79,7 @@ void() bouncecontroller_think = {
 		self = oself;
 
 		bouncee.state = ostate;
+		self.movedir = '0 0 0';
 	}
 	self.nextthink = 0;
 }
@@ -149,11 +152,15 @@ void() trampoline_touch = {
 		normal = trace_plane_normal;
 	}
 
-	//if (self.spawnflags & TRACE_TO_SURFACE)
-	up = normal;
-	//else
-	//	up = '0 0 1';
-	
+	if (self.punchangle != '0 0 0'){
+		makevectors([-self.punchangle_x, self.punchangle_y, self.punchangle_z]);
+		up = v_forward;
+	}
+	else if (self.spawnflags & BOUNCE_ON_TOUCH)
+		up = '0 0 1';
+	else
+		up = normal;
+		
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
 		
@@ -178,15 +185,23 @@ void() trampoline_touch = {
 		|| self.speed == -1 // Cushion only (no bounce)
 	) {
 		//dprint4(other.classname, " (", ftos(framecount), "): low vertical speed, early out\n");
-		ctrl.movedir = '0 0 0';
+		//ctrl.movedir = '0 0 0';
 		return;
 	}
 
 	vector playervel = other.velocity;
-	
+
+	float timetobounce;
+	float disttoplane = fraction*512;
+
 	// calculates at which time the bounce will happen.
 	// currently it's set to be at the surface and it works fine
-	float timetobounce = fabs(fraction*512/other.velocity_z);
+	if (self.spawnflags & BOUNCE_ON_TOUCH)
+		timetobounce = fabs((self.absmin_z + self.height - other.absmin_z)/other.velocity_z);
+	else
+		timetobounce = fabs(disttoplane/other.velocity_z);
+
+	
 
 	// calculates the downwards velocity the player will have at the bounce point, accounting for gravity
 	float grav = cvar("sv_gravity");
@@ -203,7 +218,7 @@ void() trampoline_touch = {
 
 	ctrl.movedir = playervel;
 	
-	dprint4(other.classname, " (", ftos(framecount), "): setting think\n");
+	dprint8(other.classname, " (", ftos(framecount), "): setting think ", ftos(timetobounce*1000), "ms ahead. Velocity to set: ", vtos(playervel), "\n");
 	ctrl.nextthink = time + timetobounce;
 }
 
@@ -216,6 +231,7 @@ void() trigger_trampoline = {
 	// stretches the trigger upwards so it's at least 48u tall
 	// 48 is enough to catch an entity falling 1500ups downwards at 30fps
 	// taller than that risks making the trigger to fire when it's not supposed to
+	self.height = self.size_z;
 	if (self.size_z < 48)
 		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 48]);
 
