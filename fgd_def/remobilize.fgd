@@ -2769,7 +2769,12 @@ If needed, the ammo values are cut off to always stay in the legal [0..100] rang
 	height(integer) : "Jump Height" : 200
 	spawnflags(flags) = [ 8: "Start Off (toggles)" : 0 ] //dumptruck_ds
 ]
-@PointClass base(Appearflags, Target, Targetname) = trigger_counter : "Trigger: Counter"
+@PointClass base(Appearflags, Target, Targetname) = trigger_counter : "Trigger: Counter
+
+To make it ordered, give the entities firing it an order index (starting from 1) in their .aflag property
+An ordered counter is always reset for a new try when the sequence is completed in the wrong order. In that situation, if the entities targeting it are func_buttons, they're returned to their initial state for a new attempt.
+Don't forget that buttons targeting a counter should always be wait|-1 anyway, no matter the counter is ordered or not.
+"
 [
 	spawnflags(flags) = [
 		1: "No Message" : 0
@@ -2777,7 +2782,9 @@ If needed, the ammo values are cut off to always stay in the legal [0..100] rang
 	]
 	count(integer) : "Count before trigger" : 2
 	delay (integer) : "Delay"
-	message(string) : "Message"
+	message(string) : "Message when sequence completed"
+	message2(string) : "Message when sequence completed in the wrong order"
+	pain_target(string) : "Fire this target when sequence completed in the wrong order"
 ]
 @SolidClass base(Angle, Appearflags, Targetname, TriggerWait) = trigger_push : "Trigger: Push"
 [

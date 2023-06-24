@@ -262,7 +262,17 @@ void() trigger_secret =
 };
 
 //=============================================================================
-
+void counter_return_buttons (.string targetfield, string targetname)
+{
+	for (entity e = world; (e = find(e, targetfield, targetname)); )
+	{
+		if (e.classname == "func_button")
+		{
+			e.think = button_return;
+			e.nextthink = e.ltime + 1;
+		}
+	}
+}
 
 void() counter_use =
 {
@@ -272,6 +282,10 @@ void() counter_use =
 	if (self.count < 0)
 		return;
 
+	self.cnt += 1;
+	if (other.aflag > 0 && other.aflag != self.cnt) 
+	  self.items = 1; //Wrong order
+	
 	/**/
 	entity msgEnt = world;
 	if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
@@ -297,9 +311,46 @@ void() counter_use =
 	}
 
 	if (msgEnt)
-		centerprint(msgEnt, "Sequence completed!");
+	{
+		if(self.items == 0 && self.message != "")
+			centerprint(msgEnt, self.message);
+		else if(self.items == 0)
+			centerprint(msgEnt, "Sequence completed!");
+		else if(self.message2 != "")
+			centerprint(msgEnt, self.message2);
+		else
+			centerprint(msgEnt, "Wrong sequence");
+	}
 	self.enemy = activator;
-	multi_trigger ();
+	if(self.items == 0)
+		multi_trigger ();
+	else
+	{
+		SUB_UsePain2();
+		
+		//Get ready for the next try
+		self.cnt = 0;
+		self.count = self.frags;
+		self.items = 0;
+		
+		//Return buttons to initial state
+		counter_return_buttons(target,self.targetname);
+		counter_return_buttons(target,self.targetname2);
+		counter_return_buttons(target,self.targetname3);
+		counter_return_buttons(target,self.targetname4);
+		counter_return_buttons(target2,self.targetname);
+		counter_return_buttons(target2,self.targetname2);
+		counter_return_buttons(target2,self.targetname3);
+		counter_return_buttons(target2,self.targetname4);
+		counter_return_buttons(target3,self.targetname);
+		counter_return_buttons(target3,self.targetname2);
+		counter_return_buttons(target3,self.targetname3);
+		counter_return_buttons(target3,self.targetname4);
+		counter_return_buttons(target4,self.targetname);
+		counter_return_buttons(target4,self.targetname2);
+		counter_return_buttons(target4,self.targetname3);
+		counter_return_buttons(target4,self.targetname4);
+	}
 };
 
 /*QUAKED trigger_counter (.5 .5 .5) ? nomessage X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
@@ -319,6 +370,11 @@ void() trigger_counter =
 	if (!self.count)
 		self.count = 2;
 
+	//Used when caring for the order
+	self.items = 0;
+	self.cnt = 0;
+	self.frags = self.count;
+	
 	self.use = counter_use;
 };
 
