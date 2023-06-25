@@ -294,6 +294,39 @@ void() trampoline_touch = {
 	ctrl.nextthink = time + timetobounce;
 }
 
+/*
+Tests if trigger_trampoline is sitting on top of a clip brush, by doing 16 tracelines downwards
+spread across the trigger's horizontal area. If no more than 1/4 of the traces hit something,
+it assumes it's on top of a clip brush and enables the No Bounds Check flag if it wasn't before.
+*/
+void() trigger_trampoline_checkclip = {
+
+	float xstep = rint((self.size_x - 32)/4);
+	float ystep = rint((self.size_y - 32)/4);
+	vector trace_xy;
+	float x, y, hits;
+
+	for (y = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			trace_xy = [self.absmin_x + 16 + x*xstep, self.absmin_y + 16 + y*ystep, 0];
+			traceline(trace_xy + [0, 0, self.absmin_z + self.height], trace_xy + [0, 0, self.absmin_z - 1], FALSE, self);
+
+			if (trace_fraction < 1)
+				hits++;
+
+			if (hits > 4)
+				break;
+		}
+
+		if (hits > 4)
+			break;
+	}
+
+	if (hits < 4) {
+		dprint3("WARNING: trigger_trampoline at ", vtos((self.absmin + self.absmax)/2), " probably over clip brush, disabling bounds check\n");
+		self.spawnflags |= BOUNCE_NO_BOUNDS_CHECK;
+	}
+}
 
 void() trigger_trampoline = {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
@@ -329,6 +362,11 @@ void() trigger_trampoline = {
 		self.sounds = 0;
 	if (!self.maxbounce)
 		self.maxbounce = 0;
+
+	if (!(self.spawnflags & BOUNCE_NO_BOUNDS_CHECK)) {
+		self.think = trigger_trampoline_checkclip;
+		self.nextthink = time + 0.3;
+	}
 };
 
 
