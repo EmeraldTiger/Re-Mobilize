@@ -51,7 +51,7 @@ void() bouncecontroller_think = {
 					
 		bouncee.maxbounce++;
 
-		fired = TRUE;
+		fired = STATE_RM_BOUNCING;
 	}
 	// this will always fire through the PlayerPostThink call
 	else if (bouncee.flags & FL_CLIENT && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
@@ -63,14 +63,14 @@ void() bouncecontroller_think = {
 		else if (trp.sounds == 4) sound(bouncee, CHAN_AUTO, "misc/cushion5.wav", 1, ATTN_NORM);
 		else if (trp.sounds == 5) sound(bouncee, CHAN_AUTO, "misc/cushion6.wav", 1, ATTN_NORM);
 		else sound(bouncee, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
-		
-		fired = TRUE;
+
+		fired = STATE_RM_CUSHIONED;
 	}
 
 	if (fired) {
 		//Fire trampoline targets if bounced or cushioned
 		ostate = bouncee.state;
-		bouncee.state = ostate | STATE_RM_CUSHIONED;
+		bouncee.state = ostate | fired;
 		
 		activator = bouncee;
 		oself = self;
