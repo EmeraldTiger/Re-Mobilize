@@ -97,6 +97,15 @@ void() trampoline_touch = {
 	vector traceorigin;
 	float fraction, disttoplane, bouncehit;
 
+	/*
+	Does a lot of traces downwards to see where the entity will land.
+	The "touch point" to be considered is the one closest to the bottom of the entity.
+	From that, we basically take the distance to the bounce, and the surface normal
+	for the entity be pushed towards.
+
+	This is also used for the bounds check. If one of the traces hit a point
+	outside of the trigger's area it gets marked as "not hit"
+	*/
 
 	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
@@ -225,10 +234,12 @@ void() trampoline_touch = {
 	}
 	
 
+	// optional bounce angle override
 	if (self.punchangle != '0 0 0'){
 		makevectors([-self.punchangle_x, self.punchangle_y, self.punchangle_z]);
 		up = v_forward;
 	}
+	// "bounce on touch" triggers will have the bounce angle upwards by default
 	else if (self.spawnflags & BOUNCE_ON_TOUCH)
 		up = '0 0 1';
 	
@@ -266,14 +277,16 @@ void() trampoline_touch = {
 	float timetobounce;
 	
 
-	// calculates at which time the bounce will happen.
-	// currently it's set to be at the surface and it works fine
+	// Calculates at which time the bounce will happen.
+	// Currently it's set to be at the surface and it works fine.
+
+	// When the "bounce on touch" flag is on, the bounce will
+	// happen when the entity hits the top of the original trigger size.
+	
 	if (self.spawnflags & BOUNCE_ON_TOUCH)
 		timetobounce = fabs((self.absmin_z + self.height - other.absmin_z)/other.velocity_z);
 	else
 		timetobounce = fabs(disttoplane/other.velocity_z);
-
-	
 
 	// calculates the downwards velocity the player will have at the bounce point, accounting for gravity
 	float grav = cvar("sv_gravity");
@@ -337,8 +350,9 @@ void() trigger_trampoline = {
 	// 48 is enough to catch an entity falling 1500ups downwards at 30fps
 	// taller than that risks making the trigger to fire when it's not supposed to
 	self.height = self.size_z;
-	if (self.size_z < 48)
+	if (self.size_z < 48){
 		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 48]);
+	}
 
 	if (mapname == "rm_heretics") {
 		dprint("rm_heretics found. Turning on the Bounce on Touch and No Bounds Check flags for all trampolines\n");
