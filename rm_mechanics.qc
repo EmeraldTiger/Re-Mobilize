@@ -340,6 +340,11 @@ void() trigger_trampoline = {
 	if (self.size_z < 48)
 		setsize(self, self.mins, [self.maxs_x, self.maxs_y, self.mins_z + 48]);
 
+	if (mapname == "rm_heretics") {
+		dprint("rm_heretics found. Turning on the Bounce on Touch and No Bounds Check flags for all trampolines\n");
+		self.spawnflags |= BOUNCE_ON_TOUCH + BOUNCE_NO_BOUNDS_CHECK;
+	}
+
 	precache_sound ("misc/bounce1.wav");
 	precache_sound ("misc/bounce2.wav");
 	precache_sound ("misc/bounce3.wav");
