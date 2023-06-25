@@ -1659,14 +1659,15 @@ NOTE: A player can continue to bounce indefinitely and gain height on an elastic
 'speed' sets the minimum vertical velocity that a player must have to bounce on the trampoline. If set to -1, the trampoline cannot bounce players, and will only act as a cushion.
 
 Spawnflags:
-- 'Bounce on touch' makes entities bounce when they hit the top of the trigger instead of the face below, and always in a straight upwards angle. Useful when the surface underneath is bumpy and irregular. If you need to bounce at an angle, set it the 'punchangle' field in conjunction of this flag.
+- 'Bounce on touch' makes entities bounce when they hit the top of the trigger instead of the face below, and always in a straight upwards angle. Useful when the surface underneath is bumpy or irregular. If you need to bounce at an angle, set the 'punchangle' field in conjunction with this flag.
+- 'Disable bounds check' disables precise bounding box calculations. Only really needed when the trampoline trigger is sitting atop a clip brush instead of a regular solid (either worldspawn or brush entity). The code is able to detect those kind of situations automatically, but to be sure you can enforce it with this option.
 "
 [
 	elasticity(string) : "How much velocity is boosted after a bounce, ignoring gravity." : "1"
 	
 	maxbounce(string) : "The maximum vertical velocity that a player can achieve using the trampoline." : "0"
 	
-	punchangle(string) : "Custom bounce angle, in 'yaw pitch roll' notation."
+	punchangle(string) : "Custom bounce angle, in 'pitch yaw roll' notation. Positive pitch points upwards like in 'angles'."
 
 	sounds(choices) : "Sound" : 0 =
 	[
@@ -1681,6 +1682,7 @@ Spawnflags:
 	spawnflags(Flags) =
 	[
 	2 : "Bounce on touch" : 0
+	4 : "Disable bounds check" : 0
 	]
 	
 	noise(string) : "Sound file for the 'bounce' sound (if set, overrides 'sounds')"
