@@ -21,6 +21,7 @@ speed indefinitely. Default of 0 means no limit.
 
 //float TRACE_TO_SURFACE = 1; // deprecated
 float BOUNCE_ON_TOUCH = 2;
+float BOUNCE_NO_BOUNDS_CHECK = 4;
 
 void() bouncecontroller_think = {
 
@@ -92,65 +93,137 @@ void() trampoline_touch = {
 	
 	vector up;
 	vector normal;
-	float fraction;
+	vector touchpoint;
+	vector traceorigin;
+	float fraction, disttoplane, bouncehit;
+
 
 	traceline(other.origin + [0, 0, other.mins_z] , other.origin + [0, 0, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 1: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
-	if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+	if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
 		//dprint("Trace 1 out of bounds.\n");
-		return;
+		bouncehit = TRUE;
 	}
+
+	traceorigin	= other.origin + [0, 0, other.mins_z];
 	fraction = trace_fraction;
 	normal = trace_plane_normal;
+	touchpoint = trace_endpos;
 
 	traceline(other.origin + [other.mins_x, other.mins_y, other.mins_z] , other.origin + [other.mins_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
-	if (trace_fraction < fraction) {
+	if (trace_fraction <= fraction) {
 		//dprint("Trace 2 shorter. Replacing\n");
-		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
 			//dprint("Trace 2 out of bounds.\n");
-			return;
+			bouncehit = TRUE;
 		}
+	
+		traceorigin	= other.origin + [other.mins_x, other.mins_y, other.mins_z];
 		fraction = trace_fraction;
 		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
 	}
 
 	traceline(other.origin + [other.maxs_x, other.mins_y, other.mins_z] , other.origin + [other.maxs_x, other.mins_y, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 3: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
-	if (trace_fraction < fraction) {
+	if (trace_fraction <= fraction) {
 		//dprint("Trace 3 shorter. Replacing\n");
-		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
 			//dprint("Trace 3 out of bounds.\n");
-			return;
+			bouncehit = TRUE;
 		}
-
+	
+		traceorigin = other.origin + [other.maxs_x, other.mins_y, other.mins_z];
 		fraction = trace_fraction;
 		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
 	}
 
 	traceline(other.origin + [other.mins_x, other.maxs_y, other.mins_z] , other.origin + [other.mins_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 4: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
-	if (trace_fraction < fraction) {
+	if (trace_fraction <= fraction) {
 		//dprint("Trace 4 shorter. Replacing\n");
-		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
 			//dprint("Trace 4 out of bounds.\n");
-			return;
+			bouncehit = TRUE;
 		}
+	
+		traceorigin = other.origin + [other.mins_x, other.maxs_y, other.mins_z];
 		fraction = trace_fraction;
 		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
 	}
 
 	traceline(other.origin + [other.maxs_x, other.maxs_y, other.mins_z] , other.origin + [other.maxs_x, other.maxs_y, other.mins_z] - '0 0 512', FALSE, other);
 	//dprint7("Trace 5: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
-	if (trace_fraction < fraction) {
+	if (trace_fraction <= fraction) {
 		//dprint("Trace 5 shorter. Replacing\n");
-		if (!checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
 			//dprint("Trace 5 out of bounds.\n");
-			return;
+			bouncehit = TRUE;
 		}
+	
+		traceorigin = other.origin + [other.maxs_x, other.maxs_y, other.mins_z];
 		fraction = trace_fraction;
 		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
 	}
+
+	traceline(other.origin + [other.maxs_x*0.75, other.maxs_y*0.75, other.mins_z] , other.origin + [other.maxs_x*0.75, other.maxs_y*0.75, other.mins_z] - '0 0 512', FALSE, other);
+	//dprint7("Trace 6: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction <= fraction) {
+		//dprint("Trace 6 shorter. Replacing\n");
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')){
+			//dprint("Trace 6 out of bounds.\n");
+			bouncehit = TRUE;
+		}
+	
+		traceorigin = other.origin + [other.maxs_x*0.75, other.maxs_y*0.75, other.mins_z];
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
+	}
+
+	traceline(other.origin + [other.mins_x*0.75, other.mins_y*0.75, other.mins_z] , other.origin + [other.mins_x*0.75, other.mins_y*0.75, other.mins_z] - '0 0 512', FALSE, other);
+	//dprint7("Trace 2: ", vtos(trace_endpos), ", absmin: ", vtos(self.absmin), ", absmax: ", vtos(self.absmax), "\n");
+	if (trace_fraction <= fraction) {
+		//dprint("Trace 2 shorter. Replacing\n");
+		if (checkbounds(trace_endpos + '0 0 8', self.absmin + '1 1 1', self.absmax - '1 1 1')) {
+			//dprint("Trace 2 out of bounds.\n");
+			bouncehit = TRUE;
+		}
+	
+		traceorigin	= other.origin + [other.mins_x*0.75, other.mins_y*0.75, other.mins_z];
+		fraction = trace_fraction;
+		normal = trace_plane_normal;
+		touchpoint = trace_endpos;
+	}
+
+	if (!bouncehit && !(self.spawnflags & BOUNCE_NO_BOUNDS_CHECK))
+		return;
+
+	up = normal;
+
+	disttoplane = fabs(traceorigin_z - touchpoint_z);
+	
+	// Checks if there's something between the entity and the bounce point that's outside
+	// the trigger's original bounds - for when you have something covering the
+	// trampoline to "disable" it.
+	// This must be done in a separate check, not in the bounds check,
+	// because it must happen even when the "no bounds check" flag is on.
+	if (touchpoint_z > self.absmin_z + self.height)
+		return;
+
+	// If the highest trace still fell below the trigger's lower bound,
+	// set that as the bounce point, and set the default bounce angle as upwards.
+	// This evaluation will only ever be true if the "no bounds check" flag is on,
+	// otherwise the function would early out at the bouncehit check.
+	if (touchpoint_z < self.absmin_z) {
+		disttoplane = fabs(traceorigin_z - self.absmin_z);
+		up = '0 0 1';
+	}
+	
 
 	if (self.punchangle != '0 0 0'){
 		makevectors([-self.punchangle_x, self.punchangle_y, self.punchangle_z]);
@@ -158,8 +231,7 @@ void() trampoline_touch = {
 	}
 	else if (self.spawnflags & BOUNCE_ON_TOUCH)
 		up = '0 0 1';
-	else
-		up = normal;
+	
 		
 	// Player doesn't take any fall damage when landing on a trampoline
 	other.cushion = self;
@@ -192,7 +264,7 @@ void() trampoline_touch = {
 	vector playervel = other.velocity;
 
 	float timetobounce;
-	float disttoplane = fraction*512;
+	
 
 	// calculates at which time the bounce will happen.
 	// currently it's set to be at the surface and it works fine
