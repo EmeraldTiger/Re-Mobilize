@@ -216,3 +216,16 @@ void stuffcmd_float( entity client, float f) =
 	decpart = decpart * 10000;
 	stuffcmd_int( client, decpart, 10000);
 }
+
+
+
+float(vector point, vector minbox, vector maxbox) checkbounds = {
+	if (!(point_x >= minbox_x && point_x <= maxbox_x))
+		return FALSE;
+	if (!(point_y >= minbox_y && point_y <= maxbox_y))
+		return FALSE;
+	if (!(point_z >= minbox_z && point_z <= maxbox_z))
+		return FALSE;
+	
+	return TRUE;
+};
