@@ -525,7 +525,7 @@ void() GrappleService =
 	float dot2 = (normalize(v_forward) * normalize(facing));
 	dot2 = fabs(dot2);
 
-	if (trace_fraction < 0.2 && dot < 0.4 && dot2 > 0.7)
+	if (trace_fraction < 0.2 && dot < 0.2 && dot2 > 0.7)
 	{
 		dprint("Player stuck; correcting...\n");
 		self.origin += self.hook.paneldir * 32;
