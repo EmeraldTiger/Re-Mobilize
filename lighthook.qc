@@ -402,6 +402,7 @@ void () W_FireGrapple =
 		hooktarget_angle = v_forward;		
 	}
 	newmis.velocity = trace_plane_normal * -5;
+	newmis.paneldir = trace_plane_normal;
 	setorigin (newmis, ray_origin);
 	newmis.angles = vectoangles(hooktarget_angle);
 
@@ -509,8 +510,30 @@ void() GrappleService =
 		vel = normalize(vel) * self.pullspeed;
 		//vel = normalize(vel) * 1000;
 	}
+	
+	// If player tries to hook onto a lightpanel roughly perpendicular to the player's view, there's a good chance of getting caught on geometry parallel to the panel.
+	// So check to see if we're intersecting anything on our way, and give the player a push in the panel's direction, which will move them past the barrier.
+	// We only want to do this when the panel is roughly perpendicular to the player's view, not facing it, as otherwise we get some very silly results.
+	// Also if it is perpendicular, don't do it if the panel's location (not angle) isn't in front of the player, (dot2) so you don't get the funky results when turning while hooked.
+	// Also this is the only case we really care about, because if the panel is facing the player it's visible enough to latch onto another part anyway.
+	float dot = (normalize(v_forward) * normalize(self.hook.paneldir));
+	dot = fabs(dot);
+	
+	vector facing = self.origin - self.hook.origin;
+	//flatten facing vector so floor/ceiling panels work properly
+	facing[2] = 0;
+	float dot2 = (normalize(v_forward) * normalize(facing));
+	dot2 = fabs(dot2);
 
-	self.velocity = vel;
+	if (trace_fraction < 0.2 && dot < 0.2 && dot2 > 0.7)
+	{
+		dprint("Player stuck; correcting...\n");
+		self.origin += self.hook.paneldir * 32;
+	}
+	else {
+		self.velocity = vel;
+	}
+
 
 	if ( vlen(dist) <= 50) {
 		if (self.lefty) { // cancel chain sound
