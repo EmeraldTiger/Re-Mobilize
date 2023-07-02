@@ -482,7 +482,7 @@ void() worldspawn =
 	precache_model ("progs/h_mdls/pd_vial.mdl"); // DropVial -- dumptruck_ds
 	precache_sound ("items/r_item1.wav");
 	precache_sound ("dump/armsh1.wav"); // DropShard -- dumptruck_ds
-	precache_model ("progs/armshr.mdl");
+	precache_model ("progs/armshr.mdl");	
 	
 	
 // Re:Mobilize precaches
@@ -520,6 +520,9 @@ void() worldspawn =
 	precache_sound ("grapple/grdetach1.wav");
 	precache_sound ("grapple/grhit2.wav");
 	precache_sound ("pendulum/hit.wav");
+	
+	precache_model ("progs/bolt1.mdl");
+	precache_model ("progs/beam.mdl");
 
 
 //
