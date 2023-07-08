@@ -408,6 +408,13 @@ void() wiremesh_touch =
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
 	
+	// Avoid situations where the player gets caught on wiremeshes they can't see during fights
+	if (other.flags & FL_ONGROUND)
+	{
+		dprint("Touching ground \n");
+		return;
+	}
+	
 	other.onWiremesh = 1;
 	other.wiremesh = self;
 	
