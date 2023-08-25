@@ -2436,6 +2436,11 @@ void() DropStuff =
 				DropVial();
 			}
 	}
+	else if (self.drop_item == 7)
+	{
+		entity k = find(world,targetname,self.target);
+		if(k) k.origin = self.origin + '0 0 24';
+	}
 	return;
 };
 
