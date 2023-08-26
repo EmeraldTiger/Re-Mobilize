@@ -286,8 +286,8 @@ void() monster_demon1 =
 	precache_sound_sight ("demon/sight2.wav");
 
   precache_gib1 ("progs/gib1.mdl");
-  // precache_gib2 ("progs/gib2.mdl");
-  // precache_gib3 ("progs/gib3.mdl");
+  precache_gib2 ("progs/gib2.mdl");
+  precache_gib3 ("progs/gib3.mdl");
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
