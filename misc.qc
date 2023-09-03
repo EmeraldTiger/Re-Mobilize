@@ -1684,8 +1684,9 @@ void() target_autosave =
 		return;
 	}
 
-
-	if (self.message == string_null)
+	if(self.spawnflags & /*Map's name*/1)
+		self.message = world.message;
+	else if (self.message == string_null)
 		self.message = "auto";
 	// precache_sound2("misc/sav.wav");
 	self.use = target_autosave_use;

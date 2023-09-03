@@ -131,9 +131,9 @@ void() DecodeLevelParms =
 void(entity client, string savename) autosave =
 {
 	//autosavename = savename;
-	stuffcmd(client, "echo Autosaving...; wait; save ");
+	stuffcmd(client, "echo Autosaving...; wait; save \"");
 	stuffcmd(client, savename);
-	stuffcmd(client, "\n");
+	stuffcmd(client, "\"\n");
 }
 
 /*
