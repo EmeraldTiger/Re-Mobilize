@@ -390,7 +390,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname, self.killtarget);
 		}
@@ -399,7 +403,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname2, self.killtarget);
 		}
@@ -408,7 +416,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname3, self.killtarget);
 		}
@@ -417,7 +429,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname4, self.killtarget);
 		}
@@ -433,7 +449,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname, self.killtarget2);
 		}
@@ -442,7 +462,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname2, self.killtarget2);
 		}
@@ -451,7 +475,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname3, self.killtarget2);
 		}
@@ -460,7 +488,11 @@ void() SUB_UseTargets =
 		{
 			if(t.switchshadstyle) lightstyle(t.switchshadstyle, "m");
 			if(t.enemy != world && t.enemy.suppressCenterPrint == TRUE) t.enemy.suppressCenterPrint = FALSE;
-			if(t.flags & FL_MONSTER) monster_update_total (-1);
+			if(t.flags & FL_MONSTER && t.health > 0)
+			{
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 			remove(t);
 			t = find(t, targetname4, self.killtarget2);
 		}
