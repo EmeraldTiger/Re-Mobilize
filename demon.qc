@@ -77,12 +77,21 @@ void()	demon1_jump4	=[	$leap4,		demon1_jump5	]
 {
 	ai_face();
   self.worldtype = 0; //fix for instakill bug -- dumptruck_ds
+	if (!(self.on_hook))
+	{
 	self.touch = Demon_JumpTouch;
 	makevectors (self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 600 + '0 0 250';
 	if (self.flags & FL_ONGROUND)
 		self.flags = self.flags - FL_ONGROUND;
+	}
+	else {
+		self.on_hook = 0;
+		self.movetype = MOVETYPE_STEP;
+		self.think = demon1_run1;
+		self.nextthink = time + 0.1;
+	}
 };
 void()	demon1_jump5	=[	$leap5,		demon1_jump6	] {};
 void()	demon1_jump6	=[	$leap6,		demon1_jump7	] {};
@@ -90,7 +99,14 @@ void()	demon1_jump7	=[	$leap7,		demon1_jump8	] {};
 void()	demon1_jump8	=[ 	$leap8,		demon1_jump9	] {};
 void()	demon1_jump9	=[ 	$leap9,		demon1_jump10	] {};
 void()	demon1_jump10	=[ 	$leap10,	demon1_jump1	] {
-self.nextthink = time + 3;
+if (self.on_hook || self.autohooked)
+{
+	self.nextthink = time + 0.1;
+}
+else
+{
+	self.nextthink = time + 3;
+}
 // if three seconds pass, assume demon is stuck and jump again
 };
 
