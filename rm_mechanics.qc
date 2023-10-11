@@ -53,6 +53,8 @@ void() bouncecontroller_think = {
 		bouncee.maxbounce++;
 
 		fired = STATE_RM_BOUNCING;
+		
+		bouncee.bouncedFromTrampoline = 1;
 	}
 	// this will always fire through the PlayerPostThink call
 	else if (bouncee.flags & FL_CLIENT && (bouncee.flags & FL_ONGROUND) && (bouncee.health > 0)) {
@@ -66,6 +68,8 @@ void() bouncecontroller_think = {
 		else sound(bouncee, CHAN_AUTO, "misc/cushion1.wav", 1, ATTN_NORM);
 
 		fired = STATE_RM_CUSHIONED;
+		
+		bouncee.bouncedFromTrampoline = 0;
 	}
 
 	if (fired) {
@@ -416,6 +420,7 @@ void() wiremesh_touch =
 	}
 	
 	other.onWiremesh = 1;
+	other.bouncedFromTrampoline = 0;
 	other.wiremesh = self;
 	
 	//Fire wiremesh targets on climbing mode change

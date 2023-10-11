@@ -1081,6 +1081,8 @@ void(entity client, float density, vector color) csf_set;
 
 .entity bouncecontroller;
 
+.float bouncedFromTrampoline;
+
 // wiremesh-related
 
 .float onWiremesh;

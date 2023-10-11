@@ -1440,6 +1440,7 @@ void() PlayerPostThink =
 			SUB_CallAsSelf(bouncecontroller_think, self.bouncecontroller);
 			self.jump_flag = 0;
 		}
+		self.bouncedFromTrampoline = 0;
 	}
 
 // check to see if player landed and play landing sound
@@ -1467,6 +1468,7 @@ void() PlayerPostThink =
 		}
 
 		self.jump_flag = 0;
+		self.bouncedFromTrampoline = 0;
 	}
 
 	if (!(self.flags & FL_ONGROUND))

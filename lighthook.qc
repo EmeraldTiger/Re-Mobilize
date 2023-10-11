@@ -303,6 +303,7 @@ void (entity hooked, entity targ) W_FireGrappleAuto =
 	setsize(newmis, '0 0 0' , '0 0 0 ');
 
 	hooked.hook_out = TRUE;
+	hooked.bouncedFromTrampoline = 0;
 	
 }
 
@@ -417,6 +418,7 @@ void () W_FireGrapple =
 	setsize(newmis, '0 0 0' , '0 0 0 ');
 
 	self.hook_out = TRUE;
+	self.bouncedFromTrampoline = 0;
 };
 
 // called each frame by CLIENT.QC if client has hook_out
