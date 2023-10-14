@@ -10,14 +10,12 @@ void() magnet_touch =
 		return;
 		
 	local vector disp;
-	local vector center;
 	local float dist, inv_dist_squared, force;
 	
-	center = (self.mins + self.maxs) * 0.5;
+	disp = other.origin - self.singularity;
 	
-	disp = other.origin - center;
-	if (self.owner.mangle && self.owner.spawnflags & PLANAR) {
-		makevectors(self.owner.mangle);
+	if (self.mangle && self.spawnflags & PLANAR) {
+		makevectors(self.mangle);
 		// Create an invisible plane that the mangle is normal to.
 		// Instead of using distance from the point entity in 3D space, use distance from the plane.
 		disp[0] *= v_forward[0];
@@ -27,28 +25,28 @@ void() magnet_touch =
 	dist = vlen(disp);
 	// Can add a constant (with the wait key) to remove singularities.
 	// Should be used for attractors, as well as planar magnets since the force is at full strength across the plane.
-	if (self.owner.spawnflags & LINEAR)
+	if (self.spawnflags & LINEAR)
 	{
-		inv_dist_squared = 1 / ((dist) + (self.owner.wait * self.owner.wait));
+		inv_dist_squared = 1 / ((dist) + (self.wait * self.wait));
 	}
 	else
 	{
-		inv_dist_squared = 1 / ((dist * dist) + (self.owner.wait * self.owner.wait));
+		inv_dist_squared = 1 / ((dist * dist) + (self.wait * self.wait));
 	}
-	force = self.owner.impulse * self.owner.impulse;
+	force = self.impulse * self.impulse;
 	
 	force *= inv_dist_squared;
 	
 	// squaring removes the negative, so give it back if we gave a negative impulse
-	if (self.owner.impulse < 0) 
+	if (self.impulse < 0) 
 	{
 		force *= -1;
 	}
 	
 
-	if (self.owner.mangle) 
+	if (self.mangle) 
 	{
-		makevectors(self.owner.mangle);
+		makevectors(self.mangle);
 		other.velocity += normalize(v_forward) * force;
 	}
 	else
@@ -62,32 +60,22 @@ void() magnet_touch =
 	}
 }
 
-entity(vector fmins, vector fmaxs) magnet_field =
+void() magnet_think =
 {
-	local entity	trigger;
-
-	trigger = spawn();
-	trigger.movetype = MOVETYPE_NONE;
-	trigger.solid = SOLID_TRIGGER;
-	trigger.owner = self;
-	trigger.touch = magnet_touch;
-
-	setsize (trigger, fmins, fmaxs);
+	local entity m;
 	
-	return (trigger);
-};
+	m = find(world, targetname, self.target);
+	
+	self.singularity = m.origin;
+}
 
-void() misc_magnet =
+void() trigger_magnet =
 {
+	
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
-	
-	if (!self.volume)
-	{
-		self.volume = 128;
-	}
-	
-	self.volume /= 2;
+		
+	InitTrigger();
 	
 	if (!self.impulse)
 	{
@@ -99,18 +87,9 @@ void() misc_magnet =
 		self.wait = 50;
 	}
 	
-	self.mins += self.origin;
-	self.maxs += self.origin;
+	self.touch = magnet_touch;
 	
-	self.mins[0] -= self.volume;
-	self.mins[1] -= self.volume;
-	self.mins[2] -= self.volume;
-	
-	self.maxs[0] += self.volume;
-	self.maxs[1] += self.volume;
-	self.maxs[2] += self.volume;
-	
-	self.origin = ((self.absmin + self.absmax) * 0.5);
-	
-	self.trigger_field = magnet_field(self.mins, self.maxs);
+	self.nextthink = time + 0.01;
+	self.think = magnet_think;
+
 }
