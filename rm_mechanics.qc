@@ -419,20 +419,52 @@ void() wiremesh_touch =
 		return;
 	}
 	
+	local vector start, end;
+	
 	other.onWiremesh = 1;
 	other.bouncedFromTrampoline = 0;
 	other.wiremesh = self;
 	
 	//Fire wiremesh targets on climbing mode change
+	//When touching a new wiremesh, get trace info
 	if(!(other.state & STATE_RM_CLIMBING) && !(other.flags & FL_ONGROUND))
 	{
 		other.state |= STATE_RM_CLIMBING;
 		activator = other;
 		SUB_UseTargets();
+		
+		start = other.origin;
+		normalize(v_forward);
+		end = start + v_forward*300;
+		traceline (start, end, TRUE, self);
+		self.meshNormal = trace_plane_normal;
+		other.meshNormal = trace_plane_normal;
+		//dprint2(vtos(trace_plane_normal), "\n");
 	}
 	
 	other.meshspeed = self.speed;
 	other.meshsounds = self.sounds;
+	
+	/*
+	if(!(other.state & STATE_RM_CLIMBING))
+	{
+		start = other.origin;
+		normalize(v_forward);
+		end = start + v_forward*300;
+		traceline (start, end, TRUE, self);
+		other.meshNormal = trace_plane_normal;
+		dprint2(vtos(trace_plane_normal), "\n");
+	}*/
+	
+	// Transitioning to another wiremesh, that is not on the same plane.
+	if ((other.meshNormal != self.meshNormal) && (other.state & STATE_RM_CLIMBING)) {
+		start = other.origin;
+		normalize(v_forward);
+		end = start + v_forward*300;
+		traceline (start, end, TRUE, self);
+		self.meshNormal = trace_plane_normal;
+		other.meshNormal = trace_plane_normal;
+	}
 	
 	if (self.noise != "") {
 		other.meshnoise = self.noise;
@@ -465,6 +497,8 @@ void() wiremesh_touch =
 
 void() trigger_wiremesh =
 {
+	static float id;
+	
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
@@ -485,6 +519,9 @@ void() trigger_wiremesh =
 	if (self.noise4 != "") {
 		precache_sound(self.noise4);
 	}
+	
+	self.meshId = id;
+	id = id + 1;
 	
 	self.touch = wiremesh_touch;
 	if (!self.speed)

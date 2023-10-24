@@ -1096,6 +1096,10 @@ void(entity client, float density, vector color) csf_set;
 .string meshnoise3;
 .string meshnoise4;
 
+.vector meshNormal;
+
+.float meshId;
+
 .float ladder_step_finished;
 
 // lighthook-related

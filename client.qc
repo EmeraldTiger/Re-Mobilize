@@ -309,6 +309,7 @@ void() PutClientInServer =
 	self.onWiremesh = 0;
 	self.wiremesh = world;
 	self.customkeys = 0;  // support for item_key_custom -- iw
+	self.meshId = -1;
 
 	// Setup cutscene stuff.  Legacy code from Zerstorer. --dumptruck_ds
 	    self.script_count = 2;
@@ -665,17 +666,43 @@ PlayerMesh
 */
 void() PlayerMesh =
 {
-   local vector start, end;
 
    makevectors (self.v_angle);
    
    self.velocity = v_forward * self.meshspeed;
    
-   makevectors (self.angles);
-	start = self.origin;
-	normalize(v_forward);
-	end = start + v_forward*100;
-	traceline (start, end, TRUE, self);
+   local vector start, end;
+   
+   float dot = self.meshNormal * v_forward;
+   
+   //dprint2(ftos(dot), "\n");
+   /*
+   if (dot > 0.5)
+   {
+   	if (self.meshNormal == '0 0 -1' || self.meshNormal == '0 0 1')
+   	{
+		dprint("Detaching Z...\n");
+	}
+	if (self.meshNormal == '0 -1 0' || self.meshNormal == '0 1 0')
+   	{
+		dprint("Detaching Y...\n");
+	}
+	if (self.meshNormal == '-1 0 0' || self.meshNormal == '1 0 0')
+   	{
+		dprint("Detaching X...\n");
+	}
+   }
+   */
+   
+   //dprint2(vtos(trace_plane_normal), "\n");
+   
+   if (0.8 > dot > 0.5)
+   {
+   	self.velocity[0] = v_forward[0] - self.meshNormal[0];
+   	self.velocity[1] = v_forward[1] - self.meshNormal[1];
+   	self.velocity[2] = v_forward[2] - self.meshNormal[2];
+   	self.velocity *= self.meshspeed;
+   }
 }
 
 
