@@ -2373,3 +2373,27 @@ void() trigger_random_time =
 	else
 		self.nextthink = time + 0.2;
 };
+
+/*QUAKED trigger_startup
+Activates on map start. For Quake 2 mappers, this functions like "trigger_always".
+"delay" minimum time before firing targets (default 0)
+*/
+
+void() startup_think =
+{
+ 	if (self.estate != STATE_ACTIVE)
+		return;
+	
+	SUB_UseTargets();
+};
+
+void() trigger_startup =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	self.think = startup_think;
+	// No need for a use function, as this entity does not need to be targeted due to being automatically activated
+	self.estate = STATE_ACTIVE;
+	self.nextthink = time + self.delay;
+};
