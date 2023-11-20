@@ -3950,3 +3950,10 @@ Toggles ON/OFF when used
 		1: "Once" : 0 : "Acts like a trigger_relay with a random delay and fires its targets just once; no subsequent random calls afterwards unless retriggered"
 	]
 ]
+
+@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_startup : "Activates on map start.
+For Quake 2 mappers, this functions like trigger_always.
+"
+[
+	delay(integer) : "Time from map start until firing" : 0
+]
