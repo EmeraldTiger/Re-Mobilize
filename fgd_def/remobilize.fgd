@@ -1989,6 +1989,12 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	noise2(string) : "Sound file for the 'move' sound (if set, overrides 'sounds')"
 	noise3(string) : "Sound file for the 'key required' sound (default is per worldtype)"
 	noise4(string) : "Sound file for the 'key used' sound (default is per worldtype)"
+	dmg_take(choices): "Determines by what means the door applies damage." : 0 =
+	[
+		0 : "Damage only when blocked"
+		1 : "Damage if touched"
+		2 : "Damage if touched while door is moving"
+	]
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0

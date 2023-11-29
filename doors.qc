@@ -5,6 +5,9 @@ float DOOR_GOLD_KEY = 8;
 float DOOR_SILVER_KEY = 16;
 float DOOR_TOGGLE = 32;
 float DOOR_DOOM_STYLE_UNLOCK = 64;
+
+float DOOR_DMG_TOUCH = 1;
+float DOOR_DMG_TOUCH_MOVING = 2;
 /*
 
 Doors are similar to buttons, but can spawn a fat trigger field around them
@@ -280,6 +283,21 @@ void() door_touch =
 	// 	return;
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
+	
+	// Deliver damage if player touches the door at all
+	if (self.dmg_take == DOOR_DMG_TOUCH)
+	{
+		T_Damage (other, self, self, self.dmg);
+	}
+	
+	// Deliver damage only if the player touches the door as it's moving
+	if (self.dmg_take == DOOR_DMG_TOUCH_MOVING)
+	{
+		if (self.velocity != '0 0 0')
+		{
+			T_Damage (other, self, self, self.dmg);
+		}
+	}
 
 	if (self.owner.attack_finished > time)
 		return;
