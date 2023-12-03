@@ -3963,3 +3963,8 @@ For Quake 2 mappers, this functions like trigger_always.
 [
 	delay(integer) : "Time from map start until firing" : 0
 ]
+
+@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_loop : "Continuously fires its targets on a regular basis. Can be toggled on/off."
+[
+	wait(integer) : "time between firing targets" : 1
+]
