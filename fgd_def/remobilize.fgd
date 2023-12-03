@@ -3025,6 +3025,7 @@ noise(float) : "Path to custom sound"
 
 Causes damage."
 [
+keep_ammo(integer): "If 1, explosion entity remains even after finishing animation, allowing it to be called multiple times." : 0
 ]
 
 // @PointClass base(Targetname, Appearflags) size(16 16 24) color(150 0 150) = play_tbabyexplode : "When triggered, plays the Spawn death explosion. Causes damage."
