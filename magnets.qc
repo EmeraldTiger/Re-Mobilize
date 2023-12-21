@@ -6,7 +6,7 @@ float PLANAR = 2;
 
 void() magnet_touch =
 {
-	if (!(CheckValidTouch() || (other.flags & FL_MONSTER) || (other.movetype == MOVETYPE_BOUNCE) || (other.movetype == MOVETYPE_FLYMISSILE) ))
+	if (!(CheckValidTouch() || !(other.flags & FL_MONSTER) || !(other.movetype == MOVETYPE_BOUNCE) || !(other.movetype == MOVETYPE_FLYMISSILE) || !(other.movetype == MOVETYPE_FLY) ))
 		return;
 		
 	local vector disp;
@@ -53,8 +53,13 @@ void() magnet_touch =
 	{
 		other.velocity += normalize(disp) * force;
 	}
+	
+	if (other.flags & FL_MONSTER)
+	{
+		other.velocity += normalize(disp) * force * 500;
+	}
 
-	if (other.movetype == MOVETYPE_FLYMISSILE)
+	if (other.movetype == MOVETYPE_FLYMISSILE || other.movetype == MOVETYPE_FLY || other.movetype == MOVETYPE_TOSS)
 	{
 		other.angles = vectoangles(other.velocity);
 	}
@@ -84,7 +89,7 @@ void() trigger_magnet =
 	
 	if (!self.wait)
 	{
-		self.wait = 50;
+		self.wait = 0;
 	}
 	
 	self.touch = magnet_touch;
