@@ -3968,6 +3968,5 @@ Finally, you can set the force of the magnet to be applied at a constant rate ra
 	spawnflags(Flags) =
 	[
 		1 : "Linear" : 0 : "Don't square the force; force is applied at a constant rate."
-		2 : "Planar" : 0 : "Force is applied across a 2D plane instead of from a point source. Target does not need to be defined if this is set."
 	]
 ]
