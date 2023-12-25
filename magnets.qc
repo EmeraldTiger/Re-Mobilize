@@ -2,7 +2,6 @@
 // EXPERIMENTAL
 
 float LINEAR = 1;
-float PLANAR = 2;
 
 void() magnet_touch =
 {
@@ -14,7 +13,7 @@ void() magnet_touch =
 	
 	disp = other.origin - self.singularity;
 	
-	if (self.mangle && self.spawnflags & PLANAR) {
+	if (self.mangle) {
 		makevectors(self.mangle);
 		// Create an invisible plane that the mangle is normal to.
 		// Instead of using distance from the point entity in 3D space, use distance from the plane.
@@ -90,6 +89,12 @@ void() trigger_magnet =
 	if (!self.wait)
 	{
 		self.wait = 0;
+	}
+	
+	// If there's no target or angle, then there's no reference point for the magnet's force
+	if (!self.target && !self.mangle)
+	{
+		objerror("trigger_magnet has neither a target nor mangle");
 	}
 	
 	self.touch = magnet_touch;
