@@ -3960,18 +3960,18 @@ Toggles ON/OFF when used
 
 @SolidClass base(Appearflags, Target, FilterTouch) = trigger_magnet : "EXPERIMENTAL
 
-Invisible volume in which objects can have a constant magnetic force applied to them. By default, the force is point-based (operating in all directions from a point source). 'target' defines the point source from which the force originates.
+Invisible volume in which objects can have a constant magnetic force applied to them. By default, the force is point-based (operating in all directions from a point source). 'target' defines the point from which the force originates.
 
-'impulse' sets the amount of force to apply. Positive values repulse, negative values attract.
+'impulse' sets the amount of force to apply. For point magnets, positive values repulse, negative values attract.
 
-Attractors should be used with caution as they can softlock the player if they have no way to escape. Visible, activated lighthook panels are good for escaping attractors as hooking completely overrides the magnet's pull. Alternatively, you can remove the mathematical singularity by adding a constant ''dampening'' value via the 'wait' key, and set it high enough so that the player can reasonably escape the pull with just standard walking speed.
+Attractors should be used with caution as they can softlock the player if they have no way to escape. Visible, activated lighthook panels are good for escaping attractors as hooking completely overrides the magnet's pull. Alternatively, you can remove the mathematical singularity by adding a constant ''dampening'' value via the 'wait' key, and set it high enough so that the player can reasonably escape the pull with just standard walking speed. Or just kill them once they reach the center.
 
-A magnet can also be planar, meaning the force is applied based on distance from an infinitely large invisible plane, in which case a target does not need to be defined. Instead, use the mangle key to define the direction in which the force is applied.
+A magnet can also be planar, meaning the force is applied based on distance from an infinitely large invisible plane. Use the mangle key to define the rotation of the plane, and target to define the location of the plane. Planar magnets always use a positive impulse, as whether it attracts/repulses depends on the direction relative to the player.
 
 Finally, you can set the force of the magnet to be applied at a constant rate rather than increasing as the player approaches. Put another way, apply a linear force instead of a quadratic one."
 [
-	impulse(integer): "Amount of force to apply. Positive values repulse, negative values attract." : 500
-	wait(integer): "Constant ''dampening'' value intended to remove singularities in attractive magnets." : 0
+	impulse(integer): "Amount of force to apply. For point magnets, positive values repulse, negative values attract. Should always be positive if planar." : 500
+	wait(integer): "Constant ''dampening'' value intended to remove singularities in attractive magnets and planar magnets." : 0
 	spawnflags(Flags) =
 	[
 		1 : "Linear" : 0 : "Don't square the force; force is applied at a constant rate."
