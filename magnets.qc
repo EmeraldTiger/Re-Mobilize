@@ -91,10 +91,11 @@ void() trigger_magnet =
 		self.wait = 0;
 	}
 	
-	// If there's no target or angle, then there's no reference point for the magnet's force
-	if (!self.target && !self.mangle)
+	// If there's no target, then there's no reference point for the magnet's force
+	// Even planar magnets need a target to define the location of the plane
+	if (!self.target)
 	{
-		objerror("trigger_magnet has neither a target nor mangle");
+		objerror("trigger_magnet has no target");
 	}
 	
 	self.touch = magnet_touch;
