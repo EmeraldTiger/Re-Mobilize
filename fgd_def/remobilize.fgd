@@ -1989,6 +1989,12 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 	noise2(string) : "Sound file for the 'move' sound (if set, overrides 'sounds')"
 	noise3(string) : "Sound file for the 'key required' sound (default is per worldtype)"
 	noise4(string) : "Sound file for the 'key used' sound (default is per worldtype)"
+	dmg_take(choices): "Determines by what means the door applies damage." : 0 =
+	[
+		0 : "Damage only when blocked"
+		1 : "Damage if touched"
+		2 : "Damage if touched while door is moving"
+	]
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0
@@ -3019,6 +3025,7 @@ noise(float) : "Path to custom sound"
 
 Causes damage."
 [
+keep_ammo(integer): "If 1, explosion entity remains even after finishing animation, allowing it to be called multiple times." : 0
 ]
 
 // @PointClass base(Targetname, Appearflags) size(16 16 24) color(150 0 150) = play_tbabyexplode : "When triggered, plays the Spawn death explosion. Causes damage."
@@ -3969,4 +3976,15 @@ Finally, you can set the force of the magnet to be applied at a constant rate ra
 	[
 		1 : "Linear" : 0 : "Don't square the force; force is applied at a constant rate."
 	]
+
+@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_startup : "Activates on map start.
+For Quake 2 mappers, this functions like trigger_always.
+"
+[
+	delay(integer) : "Time from map start until firing" : 0
+]
+
+@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_loop : "Continuously fires its targets on a regular basis. Can be toggled on/off."
+[
+	wait(integer) : "time between firing targets" : 1
 ]

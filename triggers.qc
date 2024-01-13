@@ -2373,3 +2373,75 @@ void() trigger_random_time =
 	else
 		self.nextthink = time + 0.2;
 };
+
+/*QUAKED trigger_loop
+Continuously fires its targets on a regular basis. Can be toggled on/off.
+"wait" time between firing targets (default 1)
+*/
+
+void() loop_think =
+{
+	if (self.estate != STATE_ACTIVE)
+		return;
+		
+	SUB_UseTargets();
+	
+	self.think = loop_think;
+	self.nextthink = time + self.wait;
+}
+
+void() loop_use =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.estate = STATE_ACTIVE;
+		self.think = loop_think;
+		self.nextthink = time + 0.2;
+	}
+	else
+	{
+		self.estate = STATE_INACTIVE;
+		self.think = SUB_Null;
+	}
+}
+
+void() trigger_loop =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+		
+	self.think = loop_think;
+	self.use = loop_use;
+	
+	if(self.wait == 0)
+		self.wait = 1;
+	
+	if(self.targetname)
+		self.estate = STATE_INACTIVE;
+	else
+		self.nextthink = time + 0.2;
+}
+
+/*QUAKED trigger_startup
+Activates on map start. For Quake 2 mappers, this functions like "trigger_always".
+"delay" minimum time before firing targets (default 0)
+*/
+
+void() startup_think =
+{
+ 	if (self.estate != STATE_ACTIVE)
+		return;
+	
+	SUB_UseTargets();
+};
+
+void() trigger_startup =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	self.think = startup_think;
+	// No need for a use function, as this entity does not need to be targeted due to being automatically activated
+	self.estate = STATE_ACTIVE;
+	self.nextthink = time;
+};

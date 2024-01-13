@@ -481,7 +481,18 @@ void()	s_explode2	=	[1,		s_explode3] {};
 void()	s_explode3	=	[2,		s_explode4] {};
 void()	s_explode4	=	[3,		s_explode5] {};
 void()	s_explode5	=	[4,		s_explode6] {};
-void()	s_explode6	=	[5,		SUB_Remove] {};
+void()	s_explode6	=	[5,		s_explode7] {};
+
+void() s_explode7
+{
+	// Can be set on play_explosion to prevent it from self-deleting
+	// Useful for repeated explosions that have a delay longer than 6 frames
+	if (!self.keep_ammo) 
+	{
+		remove(self);
+	}
+	setmodel (self, "progs/s_null.spr");
+};
 
 void() BecomeExplosion =
 {

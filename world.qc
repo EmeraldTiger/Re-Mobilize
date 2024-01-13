@@ -523,6 +523,8 @@ void() worldspawn =
 	
 	precache_model ("progs/bolt1.mdl");
 	precache_model ("progs/beam.mdl");
+	
+	precache_model ("progs/s_null.spr");
 
 
 //
