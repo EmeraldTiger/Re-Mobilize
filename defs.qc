@@ -1130,3 +1130,5 @@ entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, in
 .float cheater;
 
 .vector paneldir;
+
+.vector singularity;
