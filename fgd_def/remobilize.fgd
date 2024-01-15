@@ -2616,6 +2616,7 @@ Check each field's description for more details.
 		0 : "Default"
 		1 : "Wait for Trigger"
 	]
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
 
@@ -2678,6 +2679,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 		0 : "Default"
 		1 : "Wait for Trigger"
 	]
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 ]
 @SolidClass base(OneTarget, OneTargetname, TriggerWait, FilterTouch) = trigger_onlyregistered : "only Triggers only if game is registered (registered == 1)"
 [
@@ -2690,6 +2692,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 		1 : "Secret sound"
 		2 : "Beep beep"
 	]
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
 

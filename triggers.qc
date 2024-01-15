@@ -140,20 +140,26 @@ void() trigger_multiple =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	if (self.sounds == 1)
-	{
-		precache_sound ("misc/secret.wav");
-		self.noise = "misc/secret.wav";
+	if (!self.noise) {
+		if (self.sounds == 1)
+		{
+			precache_sound ("misc/secret.wav");
+			self.noise = "misc/secret.wav";
+		}
+		else if (self.sounds == 2)
+		{
+			precache_sound ("misc/talk.wav");
+			self.noise = "misc/talk.wav";
+		}
+		else if (self.sounds == 3)
+		{
+			precache_sound ("misc/trigger1.wav");
+			self.noise = "misc/trigger1.wav";
+		}
 	}
-	else if (self.sounds == 2)
+	else
 	{
-		precache_sound ("misc/talk.wav");
-		self.noise = "misc/talk.wav";
-	}
-	else if (self.sounds == 3)
-	{
-		precache_sound ("misc/trigger1.wav");
-		self.noise = "misc/trigger1.wav";
+		precache_sound (self.noise);
 	}
 
 	if (!self.wait)
@@ -246,16 +252,18 @@ void() trigger_secret =
 		self.message = "You found a secret area!";
 	if (!self.sounds)
 		self.sounds = 1;
-
+	
+	if (!self.noise) {
 	if (self.sounds == 1)
-	{
-		precache_sound ("misc/secret.wav");
-		self.noise = "misc/secret.wav";
-	}
-	else if (self.sounds == 2)
-	{
-		precache_sound ("misc/talk.wav");
-		self.noise = "misc/talk.wav";
+		{
+			precache_sound ("misc/secret.wav");
+			self.noise = "misc/secret.wav";
+		}
+		else if (self.sounds == 2)
+		{
+			precache_sound ("misc/talk.wav");
+			self.noise = "misc/talk.wav";
+		}
 	}
 
 	trigger_multiple ();
