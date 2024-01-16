@@ -896,6 +896,7 @@ void() misc_sparks =
 misc_particles a.k.a. misc_splash
 ===============================================================================
 */
+
 void() splash_use =
 {
 	if (self.spawnflags & START_OFF)
@@ -983,7 +984,6 @@ Shoots particles either when triggered, or contiuously when not triggered by any
 
 "duration" is the amount of time that the it will continue to release particles so that it can release a long stream of particles with only one triggering.
 */
-
 .float	endtime;
 .float	duration;
 
@@ -1022,9 +1022,140 @@ void() misc_particlespray =
 	if (self.noise != "")
   precache_sound(self.noise);
 	precache_sound ("misc/null.wav");
+	
 	self.think = partspray_think;
 	if(!self.targetname)
 		self.nextthink = time + 0.1 + self.delay;
 	else
 		self.use = partspray_use;
 };
+
+/*QUAKED misc_gas (0 .5 .8) (-8 -8 -8) (8 8 8) START_OFF SPARKS_BLUE SPARKS_PALE X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
+
+Inspired by the fire/gas traps from Arcane Dimensions. 
+*/
+
+void() gas_particle_think =
+{	
+	if (self.frame >= 7)
+	{
+		SUB_Remove();
+	}
+	self.frame += 1;
+	
+	self.nextthink = time + 0.1;
+}
+
+void() gas_start_think =
+{
+	if (self.targetname && !(self.spawnflags & START_OFF))
+	{
+		sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+	}
+	self.think = gas_think;
+	self.nextthink = time;
+}
+
+void() gas_think =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.nextthink = time + 0.05;
+		self.think = SUB_Null;
+	}
+	else
+	{
+		entity new;
+		new = spawn();
+		setmodel (new, "progs/s_flame2.spr"); //dumptruck_ds
+		setsize (new, '0 0 0', '0 0 0');
+		setorigin (new, self.origin);
+		makevectors(self.mangle);
+		new.owner = self;
+		new.velocity = v_forward * self.speed;
+		new.velocity_x += crandom() * self.spread;
+		new.velocity_y += crandom() * self.spread;
+		new.velocity_z += crandom() * self.spread;
+		new.avelocity_x = random()*600;
+		new.avelocity_y = random()*600;
+		new.avelocity_z = random()*600;
+		new.movetype = MOVETYPE_NOCLIP;
+		new.classname = "gas";
+		new.frame = 0;
+		new.think = gas_particle_think;
+		new.nextthink = time + 0.1;
+		
+		
+		self.nextthink = time + 0.05;
+		self.think = gas_think;
+	}
+
+};
+
+void() gas_use =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.estate = STATE_ACTIVE;
+		self.think = gas_start_think;
+		self.nextthink = time + 0.3;
+		sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+	}
+	else
+	{	
+		self.estate = STATE_INACTIVE; 
+		self.think = SUB_Null;
+		self.nextthink = time;
+		sound(self, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
+	}
+};
+
+void() misc_gas =
+{
+	
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw /
+		return;
+
+	self.classname = "gas";
+	if (self.noise != "")
+	{
+		precache_sound(self.noise);
+	}
+	
+	precache_sound("traps/flame_loop.wav");
+	precache_sound ("misc/null.wav");
+	
+	precache_model ("progs/s_flame2.spr");
+	
+	if (!self.speed)
+	{
+		self.speed = 500;
+	}
+	
+	if (!self.spread)
+	{
+		self.spread = 50;
+	}
+	
+	if (self.targetname) {
+		if (self.spawnflags & START_OFF)
+		{
+			self.estate = STATE_INACTIVE;
+		}
+		else
+		{
+			self.estate = STATE_ACTIVE;
+		}
+	}
+	else 
+	{
+		self.estate = STATE_ACTIVE;
+		ambientsound (self.origin, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+	}
+	
+	self.think = gas_start_think;
+	self.nextthink = time + 0.5;
+	self.use = gas_use;
+	
+};
+

@@ -207,3 +207,22 @@ vector(vector ang) normalizeAngles180 = {
     */
     return ang;
 };
+
+//======================================================================
+// Vector randomizer, used mostly for avelocity setups
+//----------------------------------------------------------------------
+vector(float base, float rndmix, float plusminus) vecrand =
+{
+	local vector vecmix;
+	if (plusminus) {
+		vecmix_x = base + crandom() * rndmix; 
+		vecmix_y = base + crandom() * rndmix; 
+		vecmix_z = base + crandom() * rndmix; 
+	}
+	else {
+		vecmix_x = base + random() * rndmix; 
+		vecmix_y = base + random() * rndmix; 
+		vecmix_z = base + random() * rndmix; 
+	}
+	return vecmix;
+};
