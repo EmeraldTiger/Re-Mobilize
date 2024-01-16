@@ -1056,6 +1056,14 @@ void() gas_start_think =
 	self.nextthink = time;
 }
 
+void() gas_touch =
+{
+	if (!CheckValidTouch()) return;
+	
+	dprint("gogogog");
+	T_Damage(other, self, self, 2);
+}
+
 void() gas_think =
 {
 	if (self.estate != STATE_ACTIVE)
@@ -1068,7 +1076,7 @@ void() gas_think =
 		entity new;
 		new = spawn();
 		setmodel (new, "progs/s_flame2.spr"); //dumptruck_ds
-		setsize (new, '0 0 0', '0 0 0');
+		setsize (new, '-16 -16 -16', '16 16 16');
 		setorigin (new, self.origin);
 		makevectors(self.mangle);
 		new.owner = self;
@@ -1082,6 +1090,8 @@ void() gas_think =
 		new.movetype = MOVETYPE_NOCLIP;
 		new.classname = "gas";
 		new.frame = 0;
+		new.solid = SOLID_TRIGGER;
+		new.touch = gas_touch;
 		new.think = gas_particle_think;
 		new.nextthink = time + 0.1;
 		
@@ -1110,7 +1120,7 @@ void() gas_use =
 	}
 };
 
-void() misc_gas =
+void() trap_gas =
 {
 	
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw /
