@@ -1065,9 +1065,18 @@ void() gas_start_think =
 
 void() gas_touch =
 {
+	float rand;
+	
 	if (!CheckValidTouch()) return;
 	
-	T_Damage(other, self, self, 2);
+	rand = random();
+	
+	// Just 1 damage is extremely fast given how quickly particles are emitted, and float damage values won't work
+	// So use a random value compared to a threshold to simulate damage lower than 1
+	if (rand > 0.9)
+	{
+		T_Damage(other, self, self, self.owner.dmg);
+	}
 }
 
 void() gas_think =
@@ -1172,6 +1181,11 @@ void() trap_gas =
 	if (!self.style)
 	{
 		self.style = 1;
+	}
+	
+	if (!self.dmg)
+	{
+		self.dmg = 1;
 	}
 	
 	if (self.targetname) {
