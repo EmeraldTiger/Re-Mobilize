@@ -3961,7 +3961,7 @@ Toggles ON/OFF when used
 	]
 ]
 
-@SolidClass base(Appearflags, Target, FilterTouch) = trigger_magnet : "EXPERIMENTAL
+@SolidClass base(Appearflags, Target, Targetname, FilterTouch) = trigger_magnet : "EXPERIMENTAL
 
 Invisible volume in which objects can have a constant magnetic force applied to them. By default, the force is point-based (operating in all directions from a point source). 'target' defines the point from which the force originates.
 
@@ -3981,14 +3981,26 @@ Finally, you can set the force of the magnet to be applied at a constant rate ra
 	]
 ]
 
-@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_startup : "Activates on map start.
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trigger_startup : "Activates on map start.
 For Quake 2 mappers, this functions like trigger_always.
 "
 [
 	delay(integer) : "Time from map start until firing" : 0
 ]
 
-@PointClass base(Appearflags, Target) size (16 16 16) color(80 80 80) = trigger_loop : "Continuously fires its targets on a regular basis. Can be toggled on/off."
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trigger_loop : "Continuously fires its targets on a regular basis. Can be toggled on/off."
 [
 	wait(integer) : "time between firing targets" : 1
+]
+
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trap_gas : "Continuously flames or steam that damages players and monsters. Can be toggled on/off."
+[
+	speed(integer) : "Speed of the particles" : 500
+	spread(integer): "How much the particles are spread out while traveling" : 50
+	dmg(integer) : "Multiplier for damage" : 1
+	style(integer) : "Type of gas emitter. 1 = fire; 2 = hot steam." : 1
+	spawnflags(Flags) =
+	[
+		1 : "Start Off" : 0
+	]
 ]
