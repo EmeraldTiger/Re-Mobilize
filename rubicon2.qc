@@ -1050,7 +1050,14 @@ void() gas_start_think =
 {
 	if (self.targetname && !(self.spawnflags & START_OFF))
 	{
-		sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		if (self.style==2)
+		{
+			sound(self, CHAN_WEAPON, "traps/steam_loop.wav", 0.5, ATTN_NORM);
+		}
+		else
+		{
+			sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		}
 	}
 	self.think = gas_think;
 	self.nextthink = time;
@@ -1060,7 +1067,6 @@ void() gas_touch =
 {
 	if (!CheckValidTouch()) return;
 	
-	dprint("gogogog");
 	T_Damage(other, self, self, 2);
 }
 
@@ -1075,7 +1081,14 @@ void() gas_think =
 	{
 		entity new;
 		new = spawn();
-		setmodel (new, "progs/s_flame2.spr"); //dumptruck_ds
+		if (self.style==2)
+		{
+			setmodel (new, "progs/s_steam.spr"); //dumptruck_ds
+		}
+		else
+		{
+			setmodel (new, "progs/s_flame2.spr"); //dumptruck_ds
+		}
 		setsize (new, '-16 -16 -16', '16 16 16');
 		setorigin (new, self.origin);
 		makevectors(self.mangle);
@@ -1109,7 +1122,14 @@ void() gas_use =
 		self.estate = STATE_ACTIVE;
 		self.think = gas_start_think;
 		self.nextthink = time + 0.3;
-		sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		if (self.style==2)
+		{
+			sound(self, CHAN_WEAPON, "traps/steam_loop.wav", 0.5, ATTN_NORM);
+		}
+		else
+		{
+			sound(self, CHAN_WEAPON, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		}
 	}
 	else
 	{	
@@ -1133,9 +1153,11 @@ void() trap_gas =
 	}
 	
 	precache_sound("traps/flame_loop.wav");
+	precache_sound("traps/steam_loop.wav");
 	precache_sound ("misc/null.wav");
 	
 	precache_model ("progs/s_flame2.spr");
+	precache_model ("progs/s_steam.spr");
 	
 	if (!self.speed)
 	{
@@ -1145,6 +1167,11 @@ void() trap_gas =
 	if (!self.spread)
 	{
 		self.spread = 50;
+	}
+	
+	if (!self.style)
+	{
+		self.style = 1;
 	}
 	
 	if (self.targetname) {
@@ -1160,7 +1187,14 @@ void() trap_gas =
 	else 
 	{
 		self.estate = STATE_ACTIVE;
-		ambientsound (self.origin, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		if (self.style==2)
+		{
+			ambientsound (self.origin, "traps/steam_loop.wav", 0.5, ATTN_NORM);
+		}
+		else
+		{
+			ambientsound (self.origin, "traps/flame_loop.wav", 0.5, ATTN_NORM);
+		}
 	}
 	
 	self.think = gas_start_think;
