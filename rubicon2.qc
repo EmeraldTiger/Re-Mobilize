@@ -1067,7 +1067,7 @@ void() gas_touch =
 {
 	float rand;
 	
-	if (!CheckValidTouch()) return;
+	if (!(CheckValidTouch() || (other.flags & FL_MONSTER))) return;
 	
 	rand = random();
 	
