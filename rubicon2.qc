@@ -1252,7 +1252,7 @@ void() buzzsaw_fly =
 	
 	// needed since movetype was changed to noclip
 	// change goalentity as soon as a distance threshold is reached
-	if (vlen(dir) < 8)
+	if (vlen(dir) < 64)
 	{
 		self.goalentity = find(world, targetname, self.goalentity.target);
 	}
