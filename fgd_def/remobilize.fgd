@@ -4004,3 +4004,14 @@ For Quake 2 mappers, this functions like trigger_always.
 		1 : "Start Off" : 0
 	]
 ]
+
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trap_buzzsaw : "Spinning sawblade based on Dissolution of Eternity's buzzsaws. Must be placed
+at orthogonal angles (multiples of 90 degrees)"
+[
+	speed(integer) : "Speed of the buzzsaw as it moves" : 10
+	dmg(integer) : "Damage buzzsaw inflicts when touched" : 10
+	spawnflags(Flags) =
+	[
+		1 : "Start Off" : 0
+	]
+]

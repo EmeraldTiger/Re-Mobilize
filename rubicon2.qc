@@ -1316,6 +1316,7 @@ void() buzzsaw_use =
 		{
 			self.nextthink = time + 0.1;
 			self.think = buzzsaw_stand1;
+			self.touch = buzzsaw_touch;
 		}
 	}
 	else
