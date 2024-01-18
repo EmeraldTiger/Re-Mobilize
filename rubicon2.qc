@@ -1252,7 +1252,7 @@ void() buzzsaw_fly =
 	
 	// needed since movetype was changed to noclip
 	// change goalentity as soon as a distance threshold is reached
-	if (vlen(dir) < 5)
+	if (vlen(dir) < 8)
 	{
 		self.goalentity = find(world, targetname, self.goalentity.target);
 	}
@@ -1299,23 +1299,37 @@ void() buzzsaw_touch =
 
 void() buzzsaw_use =
 {
-	self.touch = buzzsaw_touch;
-	if (self.target)
-	{		
-		self.movetarget = find(world, targetname, self.target);
-		self.goalentity = self.movetarget;
-		self.th_stand =  buzzsaw_fly1;
-		self.th_walk = buzzsaw_fly1;
-		self.th_run = buzzsaw_fly1;
-		self.think = buzzsaw_fly1;
-		self.nextthink = time + 0.1;
+	if (self.estate != STATE_ACTIVE) {
+		self.estate = STATE_ACTIVE;
+		if (self.target)
+		{		
+			self.movetarget = find(world, targetname, self.target);
+			self.goalentity = self.movetarget;
+			self.th_stand =  buzzsaw_fly1;
+			self.th_walk = buzzsaw_fly1;
+			self.th_run = buzzsaw_fly1;
+			self.think = buzzsaw_fly1;
+			self.touch = buzzsaw_touch;
+			self.nextthink = time + 0.1;
+		}
+		else
+		{
+			self.nextthink = time + 0.1;
+			self.think = buzzsaw_stand1;
+		}
 	}
 	else
 	{
+		self.touch = SUB_Null;
+		self.estate = STATE_INACTIVE;
+		self.think = SUB_Null;
+		self.velocity = '0 0 0';
+		self.avelocity = '0 0 0';
 		self.nextthink = time + 0.1;
-		self.think = buzzsaw_stand1;
+		sound(self, CHAN_VOICE, "misc/null.wav", 0.5, ATTN_NORM);
 	}
-	self.use = SUB_Null;
+	
+	//self.use = SUB_Null;
 };
 
 /*QUAKED buzzsaw (0 .5 .8) (-18 -18 -18) (18 18 18) Vertical
@@ -1339,6 +1353,7 @@ void() trap_buzzsaw =
 
 	precache_sound ("traps/saw_loop2.wav");
 	precache_sound ("traps/sawstrike1.wav");
+	precache_sound ("misc/null.wav");
 	
 	setmodel (self, "progs/trap_sawblade.mdl");
 
@@ -1365,11 +1380,24 @@ void() trap_buzzsaw =
 	
 	if (!self.targetname)
 	{
+		self.estate = STATE_INACTIVE;
 		self.think = buzzsaw_use;
 		self.nextthink = time + 0.2;		
 	}
 	else
 	{
+		if (self.spawnflags & START_OFF)
+		{
+			self.estate = STATE_ACTIVE;
+			self.think = buzzsaw_use;
+			self.nextthink = time + 0.2;
+		}
+		else
+		{
+			self.estate = STATE_INACTIVE;
+			self.think = buzzsaw_use;
+			self.nextthink = time + 0.2;	
+		}
 		self.use = buzzsaw_use;
 	}
 };
