@@ -304,6 +304,34 @@ in all entities that match (string)self.target, self.target2, self.target3,
 or self.target4 and use their .use function.
 ==============================
 */
+void(string matchstring, entity current, .string matchfield) SUB_UseSpecificTargetOnSpecificEntity =
+{
+	local entity t, stemp, otemp, act;
+
+	act = activator;
+	t = find (world, matchfield, matchstring);
+	while ( t != world )
+	{
+		stemp = self;
+		otemp = other;
+		self = t;
+		other = stemp;
+		if (self.use != SUB_Null)
+		{
+			if (self.use && self == current)
+			{
+				lastnameused = matchstring;
+				self.use ();
+			}
+		}
+		self = stemp;
+		other = otemp;
+		activator = act;
+		t = find (t, matchfield, matchstring);
+	}
+};
+
+
 void(string matchstring, .string matchfield) SUB_UseSpecificTarget =
 {
 	local entity t, stemp, otemp, act;

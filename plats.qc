@@ -458,6 +458,33 @@ void() func_train_find = {
 	}
 };
 
+void() synchronizer_think = {
+	vector location;
+	
+	location = self.owner.origin + self.owner.mins;
+	
+	traceline(location, location - '0 0 128', FALSE, self);
+	
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_LIGHTNING2); // Re:Mobilize: TE beam models were re-arranged
+	WriteEntity (MSG_BROADCAST, self.owner);
+	WriteCoord (MSG_BROADCAST, location_x);
+	WriteCoord (MSG_BROADCAST, location_y);
+	WriteCoord (MSG_BROADCAST, location_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	
+	if (trace_ent.targetname == self.owner.synctarget && trace_ent != self.prev_entity)
+	{
+		SUB_UseSpecificTargetOnSpecificEntity(self.owner.synctarget, trace_ent, targetname);
+		self.prev_entity = trace_ent;
+	}
+	
+	self.think = synchronizer_think;
+	self.nextthink = time + 0.01;
+}
+
 /*QUAKED func_train (0 .5 .8) ? RETRIGGER
 Trains are moving platforms that players can ride.
 The targets origin specifies the min point of the train at each corner.
@@ -527,6 +554,15 @@ void() func_train =
 	setmodel (self, self.model);
 	setsize (self, self.mins , self.maxs);
 	setorigin (self, self.origin);
+	
+	if (self.synctarget)
+	{
+		entity synchronizer = spawn();
+		setorigin(synchronizer, self.origin);
+		synchronizer.owner = self;
+		synchronizer.think = synchronizer_think;
+		synchronizer.nextthink = time + 0.2;
+	}
 
 	// start trains on the second frame, to make sure their targets have had
 	// a chance to spawn

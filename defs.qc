@@ -1134,3 +1134,6 @@ entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, in
 .vector singularity;
 
 .float spread;
+
+.string synctarget;
+.entity prev_entity;
