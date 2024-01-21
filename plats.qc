@@ -463,10 +463,15 @@ void() synchronizer_think = {
 	
 	location = self.owner.origin + self.owner.mins;
 	
-	traceline(location, location - '0 0 128', FALSE, self);
+	makevectors(self.owner.mangle);
 	
+	vector dir = v_forward * 256;
+	
+	traceline(location, location + dir, FALSE, self);
+	
+	/* for debugging
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING2); // Re:Mobilize: TE beam models were re-arranged
+	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
 	WriteEntity (MSG_BROADCAST, self.owner);
 	WriteCoord (MSG_BROADCAST, location_x);
 	WriteCoord (MSG_BROADCAST, location_y);
@@ -474,6 +479,7 @@ void() synchronizer_think = {
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	*/
 	
 	if (trace_ent.targetname == self.owner.synctarget && trace_ent != self.prev_entity)
 	{
@@ -500,6 +506,9 @@ sounds
 2) base
 
 */
+
+float INVISIBLE = 16;
+
 void() func_train =
 {	
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
@@ -562,6 +571,11 @@ void() func_train =
 		synchronizer.owner = self;
 		synchronizer.think = synchronizer_think;
 		synchronizer.nextthink = time + 0.2;
+	}
+	
+	if ( self.spawnflags & INVISIBLE )
+	{
+		self.model = string_null;
 	}
 
 	// start trains on the second frame, to make sure their targets have had
