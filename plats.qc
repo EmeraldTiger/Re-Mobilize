@@ -466,10 +466,9 @@ void() synchronizer_think = {
 	makevectors(self.owner.mangle);
 	
 	vector dir = v_forward * 256;
-	
+
 	traceline(location, location + dir, FALSE, self);
 	
-	/* for debugging
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
 	WriteEntity (MSG_BROADCAST, self.owner);
@@ -479,7 +478,6 @@ void() synchronizer_think = {
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	*/
 	
 	if (trace_ent.targetname == self.owner.synctarget && trace_ent != self.prev_entity)
 	{
@@ -576,6 +574,11 @@ void() func_train =
 	if ( self.spawnflags & INVISIBLE )
 	{
 		self.model = string_null;
+	}
+	
+	if (self.mangle)
+	{
+		self.mangle[1] += 90;
 	}
 
 	// start trains on the second frame, to make sure their targets have had

@@ -2299,6 +2299,8 @@ The flags above are mutually exclusive and will cause an objerror when selected 
 	speed(integer) : "Speed (units per second)" : 100
 	pausetime(integer) : "Default wait time" : : "Wait time used when not defined in path_corner."
 	target(target_source) : "Train starting point"
+	synctarget(string): "If specified, train will perform a 256-unit trace in the direction specified by its mangle key, and any entity hit whose targetname equals this entity's synctarget will be activated."
+	mangle(string) : "Angle of trace (Pitch Yaw Roll) if synctarget is specified."
 	dmg(integer) : "Damage on crush" : 2
 	noise1(string) : "Custom moving loop sound (if set, overrides 'sounds')"
 	noise(string) : "Custom stopping sound (if set, overrides 'sounds')"
@@ -2308,6 +2310,7 @@ The flags above are mutually exclusive and will cause an objerror when selected 
 		2: "Move on trigger" : 0
 		4: "Stop on trigger" : 0
 		8: "Non-solid" : 0
+		16: "Invisible" : 0
 		64: "Custom alignment" : 0
 		128: "Breakable" : 0
 	]
