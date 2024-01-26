@@ -525,6 +525,8 @@ void() worldspawn =
 	precache_model ("progs/beam.mdl");
 	
 	precache_model ("progs/s_null.spr");
+	
+	precache_model ("models/monsters/big_spike.mdl"); // for Civic Ascent
 
 
 //
