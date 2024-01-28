@@ -55,7 +55,8 @@ void() magnet_touch =
 	
 	if (other.flags & FL_MONSTER)
 	{
-		other.velocity += normalize(disp) * force * 500;
+		other.flags &~= FL_ONGROUND;
+		other.velocity += normalize(disp) * force;
 	}
 
 	if (other.movetype == MOVETYPE_FLYMISSILE || other.movetype == MOVETYPE_FLY || other.movetype == MOVETYPE_TOSS)
