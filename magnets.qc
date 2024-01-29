@@ -45,6 +45,12 @@ void() magnet_touch =
 		force *= -1;
 	}
 	
+	if (other.movetype == MOVETYPE_FLYMISSILE || other.movetype == MOVETYPE_FLY)
+	{
+		vector oldvel = other.velocity;
+		other.angles = vectoangles(other.velocity);
+	}
+	
 
 	if (self.mangle) 
 	{
@@ -62,9 +68,10 @@ void() magnet_touch =
 		other.velocity += normalize(disp) * force;
 	}
 
-	if (other.movetype == MOVETYPE_FLYMISSILE)
+	if (other.movetype == MOVETYPE_FLYMISSILE || other.movetype == MOVETYPE_FLY)
 	{
-		other.angles = vectoangles(other.velocity);
+		other.velocity = normalize(other.velocity);
+		other.velocity *= vlen(oldvel);
 	}
 }
 
