@@ -1,10 +1,13 @@
 // How do they work?
 // EXPERIMENTAL
 
-float LINEAR = 1;
+float LINEAR = 2;
 
 void() magnet_touch =
 {
+	if (self.estate != STATE_ACTIVE)
+		return;
+	
 	if (!(CheckValidTouch() || !(other.flags & FL_MONSTER) || !(other.movetype == MOVETYPE_BOUNCE) || !(other.movetype == MOVETYPE_FLYMISSILE) || !(other.movetype == MOVETYPE_FLY) ))
 		return;
 		
@@ -65,6 +68,14 @@ void() magnet_touch =
 	}
 }
 
+void() magnet_use =
+{
+	if (self.estate == STATE_INACTIVE)
+		self.estate = STATE_ACTIVE;
+	else
+		self.estate = STATE_INACTIVE;
+}
+
 void() magnet_think =
 {
 	local entity m;
@@ -101,6 +112,12 @@ void() trigger_magnet =
 	
 	self.touch = magnet_touch;
 	
+	if (self.spawnflags & START_OFF)
+		self.estate = STATE_INACTIVE;
+	else
+		self.estate = STATE_ACTIVE;
+	
+	self.use = magnet_use;
 	self.nextthink = time + 0.01;
 	self.think = magnet_think;
 
