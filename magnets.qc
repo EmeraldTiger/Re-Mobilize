@@ -62,7 +62,7 @@ void() magnet_touch =
 		other.velocity += normalize(disp) * force;
 	}
 
-	if (other.movetype == MOVETYPE_FLYMISSILE || other.movetype == MOVETYPE_FLY || other.movetype == MOVETYPE_TOSS)
+	if (other.movetype == MOVETYPE_FLYMISSILE)
 	{
 		other.angles = vectoangles(other.velocity);
 	}
