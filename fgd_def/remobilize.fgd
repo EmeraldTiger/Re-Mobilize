@@ -2357,6 +2357,12 @@ The flags above are mutually exclusive and will cause an objerror when selected 
 		30 : "Blue Bricks -- city2_5"
 		31 : "Metal Rivets -- wizmet1_2"
 	]
+	dmg_take(choices): "Determines by what means the train applies damage." : 0 =
+	[
+		0 : "Damage only when blocked"
+		1 : "Damage if touched"
+		2 : "Damage if touched while train is moving"
+	]
 ]
 
 
