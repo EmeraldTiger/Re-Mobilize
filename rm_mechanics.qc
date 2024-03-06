@@ -23,6 +23,9 @@ speed indefinitely. Default of 0 means no limit.
 float BOUNCE_ON_TOUCH = 2;
 float BOUNCE_NO_BOUNDS_CHECK = 4;
 
+// for monsters
+float NO_BOUNCING = 4194304;
+
 void() bouncecontroller_think = {
 
 	if (self != self.owner.bouncecontroller) { // lost link
@@ -38,6 +41,12 @@ void() bouncecontroller_think = {
 	dprint6(bouncee.classname, " (", ftos(framecount), "): Bounce think, jump flag: ", ftos(bouncee.jump_flag), "\n");
 
 	if (bouncee.button2 || bouncee.flags & FL_MONSTER || (bouncee.movetype == MOVETYPE_BOUNCE && bouncee.solid == SOLID_BBOX)) {
+		
+		if (bouncee.spawnflags & NO_BOUNCING)
+		{
+			return;
+		}
+		
 		bouncee.flags &~= FL_ONGROUND;
 		dprint6(bouncee.classname, " (", ftos(framecount), "): Bounced. Velocity ", vtos(self.movedir), "\n");
 		bouncee.velocity = self.movedir;

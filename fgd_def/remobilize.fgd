@@ -671,6 +671,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		64 : "Passive until attacked" : 0
 		128 : "Passive always" : 0
 		2097152 : "Spawn Silently" : 0
+		4194304 : "No bouncing" : 0
 	]
 	delay(choices) : "Trigger spawn delay time" : : "Delay spawn in for this amount of time" =
 	[
