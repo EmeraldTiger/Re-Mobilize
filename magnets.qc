@@ -2,6 +2,7 @@
 // EXPERIMENTAL
 
 float LINEAR = 2;
+float NO_MONSTERS = 4;
 
 void() magnet_touch =
 {
@@ -10,6 +11,11 @@ void() magnet_touch =
 	
 	if (!(CheckValidTouch() || !(other.flags & FL_MONSTER) || !(other.movetype == MOVETYPE_BOUNCE) || !(other.movetype == MOVETYPE_FLYMISSILE) || !(other.movetype == MOVETYPE_FLY) ))
 		return;
+		
+	if (other.flags & FL_MONSTER && self.spawnflags & NO_MONSTERS)
+	{
+		return;
+	}
 		
 	local vector disp;
 	local float dist, inv_dist_squared, force;
