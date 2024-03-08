@@ -510,6 +510,27 @@ void() synchronizer_think = {
 void() hurtbox_think = {
 	self.origin = self.owner.origin;
 	
+	vector dmins;
+	vector dmaxs;
+	
+	dmins = self.owner.velocity / 100;
+	dmaxs = self.owner.velocity / 100;
+	
+	if (vlen(self.owner.velocity) < 100)
+	{
+		dmins = '1 1 1';
+		dmaxs = '1 1 1';
+	}
+	
+	if (vlen(self.owner.velocity) == 0)
+	{
+		dmins = '0 0 0';
+		dmaxs = '0 0 0';
+	}
+	
+	self.mins = self.owner.mins + dmins;
+	self.maxs = self.owner.maxs + dmaxs;
+	
 	self.think = hurtbox_think;
 	self.nextthink = time + 0.01;
 }
@@ -610,8 +631,8 @@ void() func_train =
 	{
 		entity hurtbox = spawn();
 		setorigin(hurtbox, self.origin);
-		hurtbox.mins = self.mins - '1 1 1';
-		hurtbox.maxs = self.maxs + '1 1 1';
+		hurtbox.mins = self.mins - '3 3 3';
+		hurtbox.maxs = self.maxs + '3 3 3';
 		hurtbox.owner = self;
 		hurtbox.think = hurtbox_think;
 		hurtbox.nextthink = time;
