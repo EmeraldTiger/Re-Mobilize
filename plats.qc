@@ -239,20 +239,29 @@ void() train_blocked = {
 	T_Damage (other, self, self, self.dmg);
 };
 
-void() train_touch = {
+// We have to use a separate trigger entity that surrounds doors and trains because
+// touch functions on solid objects don't get called if a player is stationary, even 
+// if they're being actively pushed by the door/train.
+void() hurtbox_touch = {
+	entity train = self.owner;
+	
+	if (!CheckValidTouch())
+	{
+		return;
+	}
 
 	// Deliver damage if player touches the train at all
-	if (self.dmg_take == DOOR_DMG_TOUCH)
+	if (train.dmg_take == DOOR_DMG_TOUCH)
 	{
-		T_Damage (other, self, self, self.dmg);
+		T_Damage (other, train, train, train.dmg);
 	}
 	
 	// Deliver damage only if the player touches the train as it's moving
-	if (self.dmg_take == DOOR_DMG_TOUCH_MOVING)
+	if (train.dmg_take == DOOR_DMG_TOUCH_MOVING)
 	{
-		if (self.velocity != '0 0 0')
+		if (train.velocity != '0 0 0')
 		{
-			T_Damage (other, self, self, self.dmg);
+			T_Damage (other, train, train, train.dmg);
 		}
 	}
 
@@ -498,6 +507,13 @@ void() synchronizer_think = {
 	self.nextthink = time + 0.01;
 }
 
+void() hurtbox_think = {
+	self.origin = self.owner.origin;
+	
+	self.think = hurtbox_think;
+	self.nextthink = time + 0.01;
+}
+
 /*QUAKED func_train (0 .5 .8) ? RETRIGGER
 Trains are moving platforms that players can ride.
 The targets origin specifies the min point of the train at each corner.
@@ -565,7 +581,6 @@ void() func_train =
 
 	self.blocked = train_blocked;
 	self.use = train_use;
-	self.touch = train_touch;
 	//self.classname = "train";
 
 	setmodel (self, self.model);
@@ -589,6 +604,20 @@ void() func_train =
 	if (self.mangle)
 	{
 		self.mangle[1] += 90;
+	}
+	
+	if (self.dmg_take == DOOR_DMG_TOUCH || self.dmg_take == DOOR_DMG_TOUCH_MOVING )
+	{
+		entity hurtbox = spawn();
+		setorigin(hurtbox, self.origin);
+		hurtbox.mins = self.mins - '1 1 1';
+		hurtbox.maxs = self.maxs + '1 1 1';
+		hurtbox.owner = self;
+		hurtbox.think = hurtbox_think;
+		hurtbox.nextthink = time;
+		hurtbox.solid = SOLID_TRIGGER;
+		hurtbox.movetype = MOVETYPE_NOCLIP;
+		hurtbox.touch = hurtbox_touch;
 	}
 
 	// start trains on the second frame, to make sure their targets have had
