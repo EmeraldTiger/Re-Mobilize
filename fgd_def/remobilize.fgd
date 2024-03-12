@@ -3971,9 +3971,7 @@ Toggles ON/OFF when used
 	]
 ]
 
-@SolidClass base(Appearflags, Target, Targetname, FilterTouch) = trigger_magnet : "EXPERIMENTAL
-
-Invisible volume in which objects can have a constant magnetic force applied to them. By default, the force is point-based (operating in all directions from a point source). 'target' defines the point from which the force originates.
+@SolidClass base(Appearflags, Target, Targetname, FilterTouch) = trigger_magnet : "Invisible volume in which objects can have a constant magnetic force applied to them. By default, the force is point-based (operating in all directions from a point source). 'target' defines the point from which the force originates.
 
 'impulse' sets the amount of force to apply. For point magnets, positive values repulse, negative values attract.
 
