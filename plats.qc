@@ -239,25 +239,6 @@ void() train_blocked = {
 	T_Damage (other, self, self, self.dmg);
 };
 
-void() train_touch = {
-
-	// Deliver damage if player touches the train at all
-	if (self.dmg_take == DOOR_DMG_TOUCH)
-	{
-		T_Damage (other, self, self, self.dmg);
-	}
-	
-	// Deliver damage only if the player touches the train as it's moving
-	if (self.dmg_take == DOOR_DMG_TOUCH_MOVING)
-	{
-		if (self.velocity != '0 0 0')
-		{
-			T_Damage (other, self, self, self.dmg);
-		}
-	}
-
-};
-
 
 // Use function for when the train is stopped.
 // Makes the train continue on path_corners with wait -1,
@@ -488,6 +469,16 @@ void() synchronizer_think = {
 
 	traceline(location, location + dir, FALSE, self);
 	
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
+	WriteEntity (MSG_BROADCAST, self.owner);
+	WriteCoord (MSG_BROADCAST, location_x);
+	WriteCoord (MSG_BROADCAST, location_y);
+	WriteCoord (MSG_BROADCAST, location_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	
 	if (trace_ent.targetname == self.owner.synctarget && trace_ent != self.prev_entity)
 	{
 		SUB_UseSpecificTargetOnSpecificEntity(self.owner.synctarget, trace_ent, targetname);
@@ -565,7 +556,6 @@ void() func_train =
 
 	self.blocked = train_blocked;
 	self.use = train_use;
-	self.touch = train_touch;
 	//self.classname = "train";
 
 	setmodel (self, self.model);
