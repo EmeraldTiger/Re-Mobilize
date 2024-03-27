@@ -1,5 +1,4 @@
 // How do they work?
-// EXPERIMENTAL
 
 float LINEAR = 2;
 float NO_MONSTERS = 4;
