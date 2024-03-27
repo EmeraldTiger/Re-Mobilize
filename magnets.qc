@@ -79,6 +79,20 @@ void() magnet_touch =
 		other.velocity = normalize(other.velocity);
 		other.velocity *= vlen(oldvel);
 	}
+	
+	// Black holes, for example
+	if ((self.killradius > 0) && !self.mangle && (vlen(other.origin - self.singularity) < self.killradius))
+	{
+		if (CanDamage(other, self))
+		{
+			T_Damage(other, self, self, 1000);
+		}
+		
+		if (other.classname != "player")
+		{
+			remove(other);
+		}
+	}
 }
 
 void() magnet_use =
