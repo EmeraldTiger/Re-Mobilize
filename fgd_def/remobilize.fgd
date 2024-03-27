@@ -3983,7 +3983,6 @@ Finally, you can set the force of the magnet to be applied at a constant rate ra
 [
 	impulse(integer): "Amount of force to apply. For point magnets, positive values repulse, negative values attract. Should always be positive if planar." : 500
 	wait(integer): "Constant ''dampening'' value intended to remove singularities in attractive magnets and planar magnets." : 0
-	killradius(integer): "Specifies a radius around this entity in which any other entities that are less than (killradius) units away are killed/deleted." : 0
 	spawnflags(Flags) =
 	[
 		1 : "Start Off" : 0
