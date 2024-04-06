@@ -283,6 +283,21 @@ void() door_touch =
 	// 	return;
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
+	
+	// Deliver damage if player touches the door at all
+	if (self.dmg_take == DOOR_DMG_TOUCH)
+	{
+		T_Damage (other, self, self, self.dmg);
+	}
+
+	// Deliver damage only if the player touches the door as it's moving
+	if (self.dmg_take == DOOR_DMG_TOUCH_MOVING)
+	{
+		if (self.velocity != '0 0 0')
+		{
+			T_Damage (other, self, self, self.dmg);
+		}
+	}
 
 	if (self.owner.attack_finished > time)
 		return;
@@ -606,20 +621,6 @@ void() func_door =
 
 	self.blocked = door_blocked;
 	self.use = door_use;
-	
-	if (self.dmg_take == DOOR_DMG_TOUCH || self.dmg_take == DOOR_DMG_TOUCH_MOVING )
-	{
-		entity hurtbox = spawn();
-		setorigin(hurtbox, self.origin);
-		hurtbox.mins = self.mins - '1 1 1';
-		hurtbox.maxs = self.maxs + '1 1 1';
-		hurtbox.owner = self;
-		hurtbox.think = hurtbox_think;
-		hurtbox.nextthink = time;
-		hurtbox.solid = SOLID_TRIGGER;
-		hurtbox.movetype = MOVETYPE_NOCLIP;
-		hurtbox.touch = hurtbox_touch;
-	}
 
 	if (self.spawnflags & DOOR_SILVER_KEY){
 		keylock_set_silver_key ();

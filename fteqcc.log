@@ -1,4 +1,4 @@
-Args: C:\Users\Patrick\Documents\GitHub\Re-Mobilize\win64-fteqcc.exe
+Args: C:\Users\Patri\Documents\GitHub\Re-Mobilize\win64-fteqcc.exe
 FTEQCC: Mar 30 2019
 Source file: progs.src
 outputfile: ../progs.dat
@@ -61,6 +61,9 @@ prototyping rotate.qc
 prototyping func_bob.qc
 prototyping func_fall2.qc
 prototyping mobot.qc
+prototyping rm_mechanics.qc
+prototyping lighthook.qc
+prototyping magnets.qc
 compiling defs.qc
 compiling newflags.qc
 compiling math.qc
@@ -120,5 +123,8 @@ compiling rotate.qc
 compiling func_bob.qc
 compiling func_fall2.qc
 compiling mobot.qc
+compiling rm_mechanics.qc
+compiling lighthook.qc
+compiling magnets.qc
 Compile finished: ../progs.dat (id format)
 Done. 0 warnings
