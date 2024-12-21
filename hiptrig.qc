@@ -114,6 +114,13 @@ void() trigger_usekey =
 	self.use = keytrigger_use;
 	self.touch = keytrigger_touch;
 
+    if(self.actionable != 0)
+        if(self.touch)
+        {
+            self.actiontouch = self.touch;
+            self.touch = SUB_Null;
+        }
+
 	InitTrigger ();
 	SUB_CheckWaiting();
 };

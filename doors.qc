@@ -260,11 +260,15 @@ door_touch function.  -- iw
 */
 void() door_unlock =
 {
-	if (!(self.spawnflags & DOOR_DOOM_STYLE_UNLOCK))
+	if (keylock_has_key_set () && !(self.spawnflags & DOOR_DOOM_STYLE_UNLOCK))
 	{
 		self.touch = SUB_Null;
+		self.actiontouch = SUB_Null;
 		if (self.enemy)
+		{
 			self.enemy.touch = SUB_Null;	// get paired door
+			self.enemy.actiontouch = SUB_Null;
+		}
 	}
 	door_use ();
 };
@@ -310,11 +314,16 @@ void() door_touch =
 		sound (other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
 
-// key door stuff
-	if (!keylock_has_key_set ())
+	// actionable/key door stuff
+	if ((!keylock_has_key_set ()) && self.actionable == 0)
 		return;
 
-	keylock_try_to_unlock (other, "", self.owner.message2, door_unlock, SUB_UsePain2);
+	if(keylock_has_key_set ())
+		//Key door
+		keylock_try_to_unlock (other, "", self.owner.message2, door_unlock, SUB_UsePain2);
+	else
+		//Keyless actionable door
+		door_unlock();
 };
 
 
@@ -489,7 +498,7 @@ void() LinkDoors =
 		{
 			self.enemy = starte;		// make the chain a loop
 
-		// shootable, fired, or key doors just needed the owner/enemy links,
+		// shootable, fired, key or actionable doors just needed the owner/enemy links,
 		// they don't spawn a field
 
 			self = self.owner;
@@ -499,6 +508,8 @@ void() LinkDoors =
 			if (self.targetname != "")
 				return;
 			if (keylock_has_key_set ())
+				return;
+			if (self.actionable != 0)
 				return;
 
 			self.owner.trigger_field = spawn_field(cmins, cmaxs);
@@ -686,9 +697,16 @@ void() func_door =
 		}
 	}
 	self.touch = door_touch;
+	
+    if(self.actionable != 0)
+        if(self.touch)
+        {
+            self.actiontouch = self.touch;
+            self.touch = SUB_Null;
+        }
 
-// LinkDoors can't be done until all of the doors have been spawned, so
-// the sizes can be detected properly.
+	// LinkDoors can't be done until all of the doors have been spawned, so
+	// the sizes can be detected properly.
 	self.think = LinkDoors;
 	self.nextthink = self.ltime + 0.1;
 	

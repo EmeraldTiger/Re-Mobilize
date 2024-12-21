@@ -96,6 +96,8 @@
 // base marker definitions
 //
 
+@baseclass = Actionable [ actionable(integer) : "Set to 1 to require the player to press the ACTION key on their keyboard to operate this entity." ]
+
 @baseclass = Angle [ angle(integer) : "Direction" ]
 
 @baseclass = Appearflags [
@@ -1424,7 +1426,11 @@ spawnflags(Flags) =
 
 @SolidClass color(128 128 230)base(ModelLight) = func_detail_fence : "Similar to func_detail_wall except it's suitable for fence textures, never clips away world faces. Useful for fences, grates, etc., that are solid and block gunfire" []
 
-@SolidClass base(ModelLight) = func_group : "Brush group. Is treated by qbsp as world brushes but allows you to add light shading settings. _dirt and _shadow currently only accept -1 as a valid setting for func_group" []
+@SolidClass base(ModelLight) = func_group : "Brush group. Is treated by qbsp as world brushes but allows you to add light shading settings. _dirt and _shadow currently only accept -1 as a valid setting for func_group"
+[
+	_lightignore(integer) : "Ignore lighting" : 1 : "If 1, the model receives minlight only, ignoring all lights / sunlight."
+	_minlight(integer) : "Min light" : 1000 : "Set the minimum light level for any surface of the brush model. Default 0"
+]
 
 //											//
 //											//
@@ -1962,7 +1968,7 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 //
 
 
-@SolidClass base(Angle, Appearflags, Targetname, Target, FilterTouch) = func_door : "Basic door"
+@SolidClass base(Angle, Appearflags, Targetname, Target, FilterTouch, Actionable) = func_door : "Basic door"
 [
 	speed(integer) : "Speed" : 100
 	sounds(choices) : "Sound" : 0 =
@@ -2229,7 +2235,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 	noise(string) : "Path of sound when triggered"
 ]
 
-@SolidClass base(Angle, Appearflags, Targetname, Target, Message) = func_button : "Button" //modified by dumptruck_ds to add Target
+@SolidClass base(Angle, Appearflags, Targetname, Target, Message, Actionable) = func_button : "Button" //modified by dumptruck_ds to add Target
 [
 	speed(integer) : "Speed" : 40
 	lip(integer) : "Lip" : 4
@@ -2247,7 +2253,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 	message(string) : "Message"
 	_shadow(integer) : "Shadows"
 ]
-@SolidClass base(Angle, Appearflags, Targetname, Target) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
+@SolidClass base(Angle, Appearflags, Targetname, Target, Actionable) = func_elvtr_button : "Button for use with func_new_plat" //modified by dumptruck_ds to add Target
 [
 	spawnflags(Flags) =
 	[
@@ -2618,7 +2624,7 @@ Check each field's description for more details.
 	target(string) : "Specific intermission camera to use (works only if matching an info_intermission's targetname), otherwise a regular target to fire"
 ]
 
-@SolidClass base(Trigger) = trigger_once : "Trigger: Activate once"
+@SolidClass base(Trigger, Actionable) = trigger_once : "Trigger: Activate once"
 [
 	health(integer) : "Health (shootable)"
 	is_waiting(choices) : "Trigger" : 0 =
@@ -2652,7 +2658,7 @@ If using multiple triggers, do not have them touching. Leave a 'buffer' between 
 ]
 
 //dumptruck_ds added from Hipnotic Mission Pack
-@SolidClass base(Appearflags, Target, Targetname, TriggerWait, FilterTouch) = trigger_usekey :
+@SolidClass base(Appearflags, Target, Targetname, TriggerWait, FilterTouch, Actionable) = trigger_usekey :
 "Trigger: Requires a Key
 
 NOTE: You must specify either the silver or gold key by setting the relevant spawnflag, or specify an item_key_custom by setting the 'keyname' value so that it matches the 'keyname' value of the item_key_custom."
@@ -2676,7 +2682,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	pain_target(string) : "Target to fire when not having key"
 ]
 
-@SolidClass base(Trigger) = trigger_multiple : "Trigger: Activate multiple"
+@SolidClass base(Trigger, Actionable) = trigger_multiple : "Trigger: Activate multiple"
 [
 	wait(string) : "Wait before reset" : "0.2"
 	health(integer) : "Health (shootable)"

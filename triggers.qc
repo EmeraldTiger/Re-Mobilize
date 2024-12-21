@@ -192,6 +192,13 @@ void() trigger_multiple =
 		}
 	}
 
+    if(self.actionable != 0)
+        if(self.touch)
+        {
+            self.actiontouch = self.touch;
+            self.touch = SUB_Null;
+        }
+		
 	SUB_CheckWaiting();
 };
 
