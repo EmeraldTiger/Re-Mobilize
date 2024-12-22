@@ -219,6 +219,9 @@ void() door_trigger_touch =
 	if (other.health <= 0)
 		return;
 
+	if (self.owner.actionable != 0 && other.classname == "player" )
+		return;
+
 	if (other.movetype == MOVETYPE_NOCLIP) // from copper -- dumptruck_ds
 		return;
 
@@ -498,7 +501,7 @@ void() LinkDoors =
 		{
 			self.enemy = starte;		// make the chain a loop
 
-		// shootable, fired, key or actionable doors just needed the owner/enemy links,
+		// shootable, fired, or key doors just needed the owner/enemy links,
 		// they don't spawn a field
 
 			self = self.owner;
@@ -508,8 +511,6 @@ void() LinkDoors =
 			if (self.targetname != "")
 				return;
 			if (keylock_has_key_set ())
-				return;
-			if (self.actionable != 0)
 				return;
 
 			self.owner.trigger_field = spawn_field(cmins, cmaxs);
