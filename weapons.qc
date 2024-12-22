@@ -1730,9 +1730,12 @@ void() ImpulseCommands =
 	
     if (self.impulse == 14)
     {
+		float radius = 260;
+		if(world.actionable) radius = world.actionable;
+		
         // Find all entities within 56 map units off the caller's origin
         // Loop through them and figure whether they can be actioned
-        for (entity it = findradius(self.origin, 56); it; it = it.chain)
+        for (entity it = findradius(self.origin, radius); it; it = it.chain)
         {
             if (it.actiontouch)
                 if (EntitiesAreTouching(self,it))
@@ -1751,7 +1754,7 @@ void() ImpulseCommands =
 		vector org = self.origin + '0 0 16';
 		traceline (org, org + v_forward*5000, FALSE, self);
 		
-		if (trace_ent.flags & FL_MONSTER || trace_ent.health > 0) //Instantly kill monster under the crosshair
+		if (trace_ent.flags & FL_MONSTER || trace_ent.health > 0) //Instantly kill from distance monster under the crosshair
 		{
 			T_Damage (trace_ent, self, self, trace_ent.health);
 		}
@@ -1759,13 +1762,19 @@ void() ImpulseCommands =
 		//{
 		//	remove(trace_ent);
 		//}
-		else if (trace_ent.touch) //Instantly trigger the .touch function of the entity under the crosshair
+		else if (trace_ent.actiontouch) //Instantly trigger from distance the .actiontouch function of the entity under the crosshair
+		{
+			other = activator = self;
+			self = trace_ent;
+			trace_ent.actiontouch();
+		}
+		else if (trace_ent.touch) //Instantly trigger from distance the .touch function of the entity under the crosshair
 		{
 			other = activator = self;
 			self = trace_ent;
 			trace_ent.touch();
 		}
-		else if (trace_ent.use) //Instantly trigger the .use function of the entity under the crosshair
+		else if (trace_ent.use) //Instantly trigger from distance the .use function of the entity under the crosshair
 		{
 			other = activator = self;
 			self = trace_ent;
