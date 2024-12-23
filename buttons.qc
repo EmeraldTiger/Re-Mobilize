@@ -191,6 +191,13 @@ void() func_button =
 	else
 		self.touch = button_touch;
 
+    if(self.actionable != 0)
+        if(self.touch)
+        {
+            self.actiontouch = self.touch;
+            self.touch = SUB_Null;
+        }
+		
 	if (!self.speed)
 		self.speed = 40;
 	if (!self.wait)

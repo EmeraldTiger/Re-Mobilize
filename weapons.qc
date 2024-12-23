@@ -1687,8 +1687,33 @@ ImpulseCommands
 
 ============
 */
+float (entity e1, entity e2) EntitiesAreTouching =
+{
+    float delta = 0;
+    
+    //If player is not touching a solid entity strictly speaking but is still in a "delta" range from it, that's ok.
+	//Required because the game deals with float values which are not always perfect integers (like 159.96579 instead of 160) which, without a delta tolerance, could break the tests below.
+    if(e2.solid == SOLID_BSP) delta = 8;
+    
+    if (e1.origin_x + e1.mins_x > e2.origin_x + e2.maxs_x + delta)
+        return FALSE;
+    if (e1.origin_y + e1.mins_y > e2.origin_y + e2.maxs_y + delta)
+        return FALSE;
+    if (e1.origin_z + e1.mins_z > e2.origin_z + e2.maxs_z + delta)
+        return FALSE;
+    if (e1.origin_x + e1.maxs_x + delta < e2.origin_x + e2.mins_x)
+        return FALSE;
+    if (e1.origin_y + e1.maxs_y + delta < e2.origin_y + e2.mins_y)
+        return FALSE;
+    if (e1.origin_z + e1.maxs_z + delta < e2.origin_z + e2.mins_z)
+        return FALSE;
+    return TRUE;
+};
+
 void() ImpulseCommands =
 {
+	entity oself;
+	
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
 
@@ -1702,6 +1727,60 @@ void() ImpulseCommands =
 		CycleWeaponReverseCommand ();
 	if (self.impulse == 13)
 		GiveAllKeys (self);
+	
+    if (self.impulse == 14)
+    {
+		float radius = 260;
+		if(world.actionable) radius = world.actionable;
+		
+        // Find all entities within 56 map units off the caller's origin
+        // Loop through them and figure whether they can be actioned
+        for (entity it = findradius(self.origin, radius); it; it = it.chain)
+        {
+            if (it.actiontouch)
+                if (EntitiesAreTouching(self,it))
+                {
+                    other = self;
+                    oself = self;
+                    self = it;
+                    it.actiontouch();
+                    self = oself;
+                }
+        }
+    }
+	
+	if (self.impulse == 34) //Inky 20210111 universal cheat code for helping wip map debugging & testing
+	{
+		vector org = self.origin + '0 0 16';
+		traceline (org, org + v_forward*5000, FALSE, self);
+		
+		if (trace_ent.flags & FL_MONSTER || trace_ent.health > 0) //Instantly kill from distance monster under the crosshair
+		{
+			T_Damage (trace_ent, self, self, trace_ent.health);
+		}
+		//else if (trace_ent.classname == "func_wall")
+		//{
+		//	remove(trace_ent);
+		//}
+		else if (trace_ent.actiontouch) //Instantly trigger from distance the .actiontouch function of the entity under the crosshair
+		{
+			other = activator = self;
+			self = trace_ent;
+			trace_ent.actiontouch();
+		}
+		else if (trace_ent.touch) //Instantly trigger from distance the .touch function of the entity under the crosshair
+		{
+			other = activator = self;
+			self = trace_ent;
+			trace_ent.touch();
+		}
+		else if (trace_ent.use) //Instantly trigger from distance the .use function of the entity under the crosshair
+		{
+			other = activator = self;
+			self = trace_ent;
+			trace_ent.use();
+		}
+	}
 
 	if (self.impulse == 255)
 		QuadCheat ();
