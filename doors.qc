@@ -219,7 +219,8 @@ void() door_trigger_touch =
 	if (other.health <= 0)
 		return;
 
-	if (self.owner.actionable != 0 && other.classname == "player" )
+	//If a door is actionable, the player can interact with its trigger only to keep the door from closing while they stay in the door frame
+	if (self.owner.actionable != 0 && other.classname == "player" && self.owner.state != STATE_UP && self.owner.state != STATE_TOP)
 		return;
 
 	if (other.movetype == MOVETYPE_NOCLIP) // from copper -- dumptruck_ds
