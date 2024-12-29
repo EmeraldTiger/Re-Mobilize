@@ -1725,7 +1725,7 @@ float (entity p, entity e, float radius) PlayingIsFacing =
 		}
 		else
 		{
-			//Case 1: The trigger is oriented, then the player facing direction must be relevant
+			//Case 2: The trigger is oriented, then the player facing direction must be relevant
 			//The required accuracy is higher than the usual accuracy for non actionable triggers: for them the accuracy is 0, which means the player can look up to 90° away from the ideal direction.
 			//Here the accuracy used is more precise and aligned on what is required for solid entities.
 			makevectors (p.angles);
