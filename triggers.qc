@@ -1749,6 +1749,7 @@ void() trigger_filter_use = {
 	if (self.include != "") {
 		targ = find(world, targetname, self.include);
 		if (!targ) targ = find(world, targetname2, self.include);
+		if (!targ) if(self.include == "player") targ = find(world, classname, "player");
 		if (!targ) return;
 	}
 	else
