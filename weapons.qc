@@ -1710,6 +1710,75 @@ float (entity e1, entity e2) EntitiesAreTouching =
     return TRUE;
 };
 
+float (entity p, entity e, float radius) PlayingIsFacing =
+{
+	float success = FALSE;
+	float debug = FALSE; //Set to TRUE if you want an audio hint in-game to better figure out the facing algorithm accuracy
+	float facing_accuracy = 0.6;
+	
+	if (e.solid == SOLID_TRIGGER) //The actionable entity is a trigger
+	{
+		if (e.movedir == '0 0 0')
+		{
+			//Case 1: The trigger is not oriented, then any player facing direction is ok
+			success = TRUE;
+		}
+		else
+		{
+			//Case 2: The trigger is oriented, then the player facing direction must be relevant
+			//The required accuracy is higher than the usual accuracy for non actionable triggers: for them the accuracy is 0, which means the player can look up to 90° away from the ideal direction.
+			//Here the accuracy used is more precise and aligned on what is required for solid entities.
+			makevectors (p.angles);
+			if (v_forward * e.movedir >= facing_accuracy)
+				success = TRUE;
+		}
+	}
+	else //The actionable entity is solid (button, door…)
+	{
+		vector ecenter = (e.mins + e.maxs) * 0.5;
+		
+		//Case 1: The player is standing on the thing. that is therefore a floor plate, then never mind the facing direction.
+		if (ecenter_z < p.origin_z)
+			success = TRUE;
+		
+		//Case 2: The player has the entity under their crosshair
+		//This case is useful with a wide door: the player may be right in front of it although its center of gravity is not in view (see case 3)
+		if(!success)
+		{
+			local vector player_offset = p.origin + p.view_ofs;
+			makevectors(p.v_angle);
+			traceline(player_offset, (player_offset + (v_forward * radius)), FALSE, p);
+			if (trace_ent == e)
+				success = TRUE;
+		}
+		
+		//Case 3: The player is roughly facing the entity center of gravity's (x z) coordinates
+		//This case is useful with a button: due to its relatively small size, the player may be right in front of its although their crosshair is missing it (see case 2)
+		if(!success)
+		{
+			vector ideal = normalize (ecenter - p.origin);
+			ideal_z = 0;
+			
+			makevectors (p.angles);
+			v_forward_z = 0;
+			
+			if (v_forward * ideal >= facing_accuracy)
+				success = TRUE;
+		}
+	}
+	
+	if(success)
+	{
+		if(debug) sound (p, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM); //Success sound (used to debug)
+		return TRUE;	
+	}
+	else
+	{
+		if(debug) sound (p, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);  //Failure sound (used to debug)
+		return FALSE;		// not facing the right way
+	}
+};
+
 void() ImpulseCommands =
 {
 	entity oself;
@@ -1733,19 +1802,20 @@ void() ImpulseCommands =
 		float radius = 260;
 		if(world.actionable) radius = world.actionable;
 		
-        // Find all entities within 56 map units off the caller's origin
+        // Find all entities within 'radius' map units off the caller's origin
         // Loop through them and figure whether they can be actioned
         for (entity it = findradius(self.origin, radius); it; it = it.chain)
         {
-            if (it.actiontouch)
-                if (EntitiesAreTouching(self,it))
-                {
-                    other = self;
-                    oself = self;
-                    self = it;
-                    it.actiontouch();
-                    self = oself;
-                }
+            if (it.actiontouch)                      //The entity must be actionable
+                if (EntitiesAreTouching(self,it))    //The player must be touching it
+					if (PlayingIsFacing(self,it,radius))    //The player must roughly face it
+					{
+						other = self;
+						oself = self;
+						self = it;
+						it.actiontouch();
+						self = oself;
+					}
         }
     }
 	
