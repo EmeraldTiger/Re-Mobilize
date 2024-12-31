@@ -940,6 +940,50 @@ void(float makeSolid) MakePlayerClipSolid =
 	self = oself;
 };
 
+void() ResetBar = {
+	self.currentbar = 0;
+	dprint("reset bar");
+}
+
+void() BarCooldown = {
+	self.jumpdelay = 0;
+}
+
+void(vector vel) FlingPlayer = {
+	self.think = ResetBar;
+	self.nextthink = time + 1.0;
+	self.movetype = MOVETYPE_WALK;
+	self.velocity = vel * 200;
+};
+
+void() SwingPlayer = {
+	
+    self.oldorigin = self.origin;
+    
+    vector currentpos = self.origin;
+    
+    float disp1 = sin(time * 7 * rad_to_deg);
+    float disp2 = cos(time * 7 * rad_to_deg);
+    makevectors(self.bar_angles);
+    
+    v_forward *= -35 * disp1;
+    v_up *= 35 * disp2;
+    
+    currentpos = self.bar_origin + v_forward + v_up;
+    
+    self.origin = currentpos;
+    
+    vector dv;
+    dv = (self.origin - self.oldorigin);
+    
+    if (self.button2 && !self.jumpdelay)
+    {
+    	self.swinging = 0;
+    	FlingPlayer(dv);
+    }
+};
+
+
 /*
 ================
 PlayerPreThink
@@ -956,6 +1000,12 @@ void() PlayerPreThink =
 	
 	// Re:Mobilize: Need to reset cushion state, otherwise cushion sounds will continue on normal surfaces
 	self.cushion = world;
+	
+	if (self.swinging)
+	{
+		self.movetype = MOVETYPE_NONE;
+		SwingPlayer();
+	}
 
 	if (intermission_running)
 	{
@@ -1467,6 +1517,7 @@ void() PlayerPostThink =
 		}
 
 		self.jump_flag = 0;
+		ResetBar();
 	}
 
 	if (!(self.flags & FL_ONGROUND))

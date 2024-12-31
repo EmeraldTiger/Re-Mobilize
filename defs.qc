@@ -1142,3 +1142,11 @@ entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, in
 //Inky 20241221 Actionable entities (by means of a special ACTION keyboard key)
 .float  actionable;   // for ACTION key
 .void() actiontouch;  // for ACTION key
+
+.float swinging;
+.float swing_angle;
+.vector bar_origin;
+.vector bar_angles;
+.float flung;
+.entity currentbar;
+.float jumpdelay;

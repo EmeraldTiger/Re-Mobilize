@@ -226,3 +226,51 @@ vector(float base, float rndmix, float plusminus) vecrand =
 	}
 	return vecmix;
 };
+
+//======================================================================
+// Lunaran's trig functions from Copper
+//----------------------------------------------------------------------
+
+float rad_to_deg = 57.2958;
+
+vector(float x, float y, float z) Vector =
+{
+	local vector swiz;
+	swiz_x = x;
+	swiz_y = y;
+	swiz_z = z;
+	return swiz;
+}
+
+vector(float num) SinCos =
+{
+	local vector angle, vf, vu, vr, result;
+	
+	vf = v_forward;
+	vu = v_up;
+	vr = v_right;
+	
+	angle = '0 1 0' * num;
+	makevectors(angle);
+	result = Vector(v_forward_y, v_forward_x, 0);
+	
+	v_forward = vf;
+	v_up = vu;
+	v_right = vr;
+	
+	return result;
+}
+
+float(float num) sin =
+{
+	vector temp;
+	temp = SinCos(num);
+	return temp_x;
+}
+
+float(float num) cos =
+{
+	vector temp;
+	temp = SinCos(num);
+	return temp_y;
+}

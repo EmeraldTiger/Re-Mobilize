@@ -1,0 +1,45 @@
+void() swingbar_touch =
+{
+	
+	if (!CheckValidTouch()) return;
+	
+	if (other.flags & FL_ONGROUND) return;
+	
+	if (other.swinging) return;
+	
+	if (other.currentbar == self.owner) return;
+	
+	other.swinging = 1;
+	other.think = BarCooldown;
+	other.nextthink = time + 0.5;
+	other.jumpdelay = 1;
+	other.currentbar = self.owner;
+	local vector bar_bounds = 0.5*(self.maxs - self.mins);
+	other.bar_origin = self.mins + bar_bounds;
+	other.bar_angles = self.owner.mangle;
+};
+
+void() func_swingbar =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	self.angles = '0 0 0';
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_NOT;
+	setorigin (self, self.origin);
+	setmodel (self, self.model);
+	local entity trigger;
+	local vector t1, t2;
+	
+	trigger = spawn();
+	trigger.movetype = MOVETYPE_NONE;
+	trigger.solid = SOLID_TRIGGER;
+	trigger.owner = self;
+	trigger.touch = swingbar_touch;
+	
+	t1 = self.mins;
+	t2 = self.maxs;
+	
+	setsize(trigger, self.mins - '10 10 10', self.maxs + '10 10 10');
+};
