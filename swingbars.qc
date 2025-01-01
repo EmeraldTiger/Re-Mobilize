@@ -10,6 +10,9 @@ void() swingbar_touch =
 	if (other.currentbar == self.owner) return;
 	
 	other.swinging = 1;
+	other.alignment = 0;
+	other.primed = 0;
+	other.flags &~= FL_ONGROUND;
 	other.think = BarCooldown;
 	other.nextthink = time + 0.5;
 	other.jumpdelay = 1;
@@ -41,5 +44,5 @@ void() func_swingbar =
 	t1 = self.mins;
 	t2 = self.maxs;
 	
-	setsize(trigger, self.mins - '10 10 10', self.maxs + '10 10 10');
+	setsize(trigger, self.mins - '30 30 30', self.maxs + '30 30 30');
 };

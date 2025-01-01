@@ -942,7 +942,6 @@ void(float makeSolid) MakePlayerClipSolid =
 
 void() ResetBar = {
 	self.currentbar = 0;
-	dprint("reset bar");
 }
 
 void() BarCooldown = {
@@ -950,10 +949,11 @@ void() BarCooldown = {
 }
 
 void(vector vel) FlingPlayer = {
+	vel[2] += 2;
 	self.think = ResetBar;
 	self.nextthink = time + 1.0;
 	self.movetype = MOVETYPE_WALK;
-	self.velocity = vel * 200;
+	self.velocity = vel * 150;
 };
 
 void() SwingPlayer = {
@@ -962,12 +962,14 @@ void() SwingPlayer = {
     
     vector currentpos = self.origin;
     
-    float disp1 = sin(time * 7 * rad_to_deg);
-    float disp2 = cos(time * 7 * rad_to_deg);
+    float rate = 5;
+    
+    float disp1 = sin(time * rate * rad_to_deg);
+    float disp2 = cos(time * rate * rad_to_deg);
     makevectors(self.bar_angles);
     
-    v_forward *= -35 * disp1;
-    v_up *= 35 * disp2;
+    v_forward *= -55 * disp1;
+    v_up *= 55 * disp2;
     
     currentpos = self.bar_origin + v_forward + v_up;
     
@@ -978,9 +980,24 @@ void() SwingPlayer = {
     
     if (self.button2 && !self.jumpdelay)
     {
-    	self.swinging = 0;
-    	FlingPlayer(dv);
+    	if (!self.primed)
+    	{
+		makevectors(self.v_angle);
+		self.releasedir = v_forward;
+	}
+    	self.primed = 1;	
     }
+    
+    self.alignment = normalize(dv) * self.releasedir;
+    
+    if (self.primed && self.alignment > 0.99)
+	{
+		self.swinging = 0;
+		FlingPlayer(dv);
+	}	
+    
+    dprint2(ftos(self.alignment), "\n");
+    
 };
 
 
