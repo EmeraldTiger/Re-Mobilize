@@ -940,6 +940,12 @@ void(float makeSolid) MakePlayerClipSolid =
 	self = oself;
 };
 
+void() ResetPrime = {
+	dprint("Bad angle, resetting...");
+	self.primed = 0;
+	self.alignment = 0;
+}
+
 void() ResetBar = {
 	self.currentbar = 0;
 }
@@ -954,6 +960,8 @@ void(vector vel) FlingPlayer = {
 	self.nextthink = time + 1.0;
 	self.movetype = MOVETYPE_WALK;
 	self.velocity = vel * 150;
+	self.primed = 0;
+	self.alignment = 0;
 };
 
 void() SwingPlayer = {
@@ -978,25 +986,33 @@ void() SwingPlayer = {
     vector dv;
     dv = (self.origin - self.oldorigin);
     
+    // don't immediately let the player release, so their velocity prior to entering the bar doesn't carry over
     if (self.button2 && !self.jumpdelay)
     {
     	if (!self.primed)
     	{
 		makevectors(self.v_angle);
+		// store the player forward angle at time the player hit the jump button
 		self.releasedir = v_forward;
+		// If the player looks to the sides which face away from the rotation ring, player can get stuck since
+		// the dot will never line up, so reset priming and alignment values after some time
+		self.think = ResetPrime;
+		self.nextthink = time + (55/(5*10)) + 1; // TEMP constants, should be (radius/rate*10) + 1 when customizable
 	}
     	self.primed = 1;	
     }
     
+    // get the dot product of the stored player forward angle and the current delta velocity/tangent vector
     self.alignment = normalize(dv) * self.releasedir;
     
+    // release automatically when the stored angle and the delta angle are parallel, so the player doesn't need to 
+    // precisely time their jump off the bars themselves
+    // in essence a "latched" jump
     if (self.primed && self.alignment > 0.99)
 	{
 		self.swinging = 0;
 		FlingPlayer(dv);
 	}	
-    
-    dprint2(ftos(self.alignment), "\n");
     
 };
 
