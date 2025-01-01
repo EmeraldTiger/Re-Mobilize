@@ -26,6 +26,32 @@ void() func_swingbar =
 {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
+		
+	if (!self.speed)
+	{
+		self.speed = 5;
+	}
+	
+	if (!self.spread)
+	{
+		self.spread = 55;
+	}
+	
+	if (!self.height)
+	{
+		self.height = 2;
+	}
+	
+	if (!self.impulse)
+	{
+		self.impulse = 150;
+	}
+	
+	if (!self.style)
+	{	
+		self.style = 0;
+	}
+
 
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;

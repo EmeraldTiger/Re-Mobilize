@@ -955,11 +955,12 @@ void() BarCooldown = {
 }
 
 void(vector vel) FlingPlayer = {
-	vel[2] += 2;
+	// little bit of an upwards compensative boost 
+	vel[2] += self.currentbar.height;
 	self.think = ResetBar;
 	self.nextthink = time + 1.0;
 	self.movetype = MOVETYPE_WALK;
-	self.velocity = vel * 150;
+	self.velocity = vel * self.currentbar.impulse;
 	self.primed = 0;
 	self.alignment = 0;
 };
@@ -970,14 +971,24 @@ void() SwingPlayer = {
     
     vector currentpos = self.origin;
     
-    float rate = 5;
+    float rate = self.currentbar.speed;
+    float radius = self.currentbar.spread;
     
     float disp1 = sin(time * rate * rad_to_deg);
-    float disp2 = cos(time * rate * rad_to_deg);
+    float disp2;
+    if (self.currentbar.style == 1)
+    {
+    	// squared negative cosine gives a back-and-forth arced swing
+	disp2 = cos(time * rate * rad_to_deg) * cos(time * rate * rad_to_deg) * -1;
+    }
+    else
+    {
+	disp2 = cos(time * rate * rad_to_deg);
+    }
     makevectors(self.bar_angles);
     
-    v_forward *= -55 * disp1;
-    v_up *= 55 * disp2;
+    v_forward *= -radius * disp1;
+    v_up *= radius * disp2;
     
     currentpos = self.bar_origin + v_forward + v_up;
     
@@ -997,7 +1008,7 @@ void() SwingPlayer = {
 		// If the player looks to the sides which face away from the rotation ring, player can get stuck since
 		// the dot will never line up, so reset priming and alignment values after some time
 		self.think = ResetPrime;
-		self.nextthink = time + (55/(5*10)) + 1; // TEMP constants, should be (radius/rate*10) + 1 when customizable
+		self.nextthink = time + (radius/(rate*10)) + 0.5;
 	}
     	self.primed = 1;	
     }
