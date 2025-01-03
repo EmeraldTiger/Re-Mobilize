@@ -2614,6 +2614,7 @@ Check each field's description for more details.
 	map(string) : "Next map"
 	//target(target_destination) : "Target"
 	message(string) : "Message to show on intermission screen."
+	sounds(integer) : "Music track to play on intermission screen" : 3
 	spawnflags(flags) =
 	[
 		1: "No intermission" : 0
