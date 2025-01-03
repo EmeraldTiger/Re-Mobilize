@@ -282,9 +282,12 @@ void() execute_changelevel =
 	else
 		intermission_exittime = time + 2;
 
-	WriteByte (MSG_ALL, SVC_CDTRACK);
-	WriteByte (MSG_ALL, self.sounds);
-	WriteByte (MSG_ALL, self.sounds);
+	if (self.sounds > 1)
+	{
+		WriteByte (MSG_ALL, SVC_CDTRACK);
+		WriteByte (MSG_ALL, self.sounds);
+		WriteByte (MSG_ALL, self.sounds);
+	}
 
 	pos = FindIntermission ();
 
