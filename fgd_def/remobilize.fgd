@@ -2093,7 +2093,9 @@ START_OFF wall doesn't block until triggered.
 
 noise is the sound to play when wall is turned off.
 noise1 is the sound to play when wall is blocking.
-dmg is the amount of damage to cause when touched."
+dmg is the amount of damage to cause when touched.
+
+Any entity targeted is toggled as well, allowing fully functional buttons, doors, etc. to pop from nowhere, suddenly disappear, or be replaced by slightly different variants mid-game."
 [
 	noise(string) : "Power off sound"
 	noise1(string) : "Sound when touched"
@@ -2102,6 +2104,10 @@ dmg is the amount of damage to cause when touched."
 	[
 		1 : "Start Off" : 0
 	]
+	target(target_destination) : "Target"
+	target2(target_destination) : "Target2"
+	target3(target_destination) : "Target3"
+	target4(target_destination) : "Target4"
 ]
 @SolidClass base(Appearflags, Targetname) = func_particlefield : "Creates a brief particle flash roughly the size of the defining
 brush each time it is triggered.
