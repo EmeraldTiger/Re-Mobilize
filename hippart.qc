@@ -376,8 +376,10 @@ void() func_togglewall =
 		self.state = 0;
 		self.punchangle = '8000 8000 8000';
 		
-		// move master entity and its targets by self.punchangle
-		MovePack();
+		// Move master entity and its targets by self.punchangle
+		// (NB: this can't be done until all of the targets have been spawned, hence the micro delay)
+		self.think = MovePack;
+		self.nextthink = self.ltime + 0.1;		
 	}
 	else
 	{
