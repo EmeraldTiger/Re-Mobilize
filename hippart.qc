@@ -319,13 +319,13 @@ void () blocker_use =
 	if ( !self.state )
 	{
 		self.state = 1;
-		self.punchangle = '-8000 -8000 -8000';
+		self.punchangle = -1 * self.view_ofs;
 		// sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	}
 	else
 	{
 		self.state = 0;
-		self.punchangle = '8000 8000 8000';
+		self.punchangle = self.view_ofs;
 		sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
 	
@@ -369,12 +369,19 @@ void() func_togglewall =
 	precache_sound( self.noise );
 	precache_sound( self.noise1 );
 
+	//func_togglewall doesn't "toggle", strictly speaking; what it really does is dynamically moving its origin far away off the map boundaries.
+	//While there is no reason to do so in normal circumstances, overriding self.view_ofs with an in-boundaries offset value would allow
+	//a toggle here/there situation instead of a there/not there situation, from the player's perspective.
+	//That may allow interesting setups like an item dashing away from the player when they approach, or whatever twisted idea you may have…
+	if (self.view_ofs == '0 0 0')
+		self.view_ofs = '8000 8000 8000';
+		
 	self.solid = SOLID_BSP;
 	self.model = string_null;
 	if ( self.spawnflags & START_OFF )
 	{
 		self.state = 0;
-		self.punchangle = '8000 8000 8000';
+		self.punchangle = self.view_ofs;
 		
 		// Move master entity and its targets by self.punchangle
 		// (NB: this can't be done until all of the targets have been spawned, hence the micro delay)
