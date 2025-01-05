@@ -312,7 +312,7 @@ void() door_touch =
 
 	self.owner.attack_finished = time + 2;
 
-	if (self.owner.message != "")
+	if (self.owner.message != "" && !keylock_has_key_set ())
 	{
 		centerprint (other, self.owner.message);
 		sound (other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
@@ -324,7 +324,7 @@ void() door_touch =
 
 	if(keylock_has_key_set ())
 		//Key door
-		keylock_try_to_unlock (other, "", self.owner.message2, door_unlock, SUB_UsePain2);
+		keylock_try_to_unlock (other, self.owner.message, self.owner.message2, door_unlock, SUB_UsePain2);
 	else
 		//Keyless actionable door
 		door_unlock();
