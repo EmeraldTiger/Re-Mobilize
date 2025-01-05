@@ -2323,6 +2323,8 @@ void() trigger_enterleave =
     InitTrigger ();
     self.touch = trigger_enterleave_enter;
     self.wait = 0; // 0 is left, 1 is touched
+	
+	SUB_CheckWaiting();
 };
 
 /*QUAKED trigger_random_time
