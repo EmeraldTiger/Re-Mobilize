@@ -51,6 +51,11 @@ void() func_swingbar =
 	{	
 		self.style = 0;
 	}
+	
+	if (!self.lip)
+	{
+		self.lip = 30;
+	}
 
 
 	self.angles = '0 0 0';
@@ -59,7 +64,6 @@ void() func_swingbar =
 	setorigin (self, self.origin);
 	setmodel (self, self.model);
 	local entity trigger;
-	local vector t1, t2;
 	
 	trigger = spawn();
 	trigger.movetype = MOVETYPE_NONE;
@@ -67,8 +71,10 @@ void() func_swingbar =
 	trigger.owner = self;
 	trigger.touch = swingbar_touch;
 	
-	t1 = self.mins;
-	t2 = self.maxs;
+	vector fieldsize;
+	fieldsize[0] = self.lip;
+	fieldsize[1] = self.lip;
+	fieldsize[2] = self.lip;
 	
-	setsize(trigger, self.mins - '30 30 30', self.maxs + '30 30 30');
+	setsize(trigger, self.mins - fieldsize, self.maxs + fieldsize);
 };
