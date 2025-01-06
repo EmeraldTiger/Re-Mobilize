@@ -249,21 +249,89 @@ void () blocker_touch =
 	sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
    };
 
-void () blocker_use =
+void MoveEntityOrigin(entity t, vector offset)
+{
+	setorigin(t, t.origin + offset);
+}
+
+void MoveTargetOrigin(string value, .string tname_field)
+{
+	entity t = find(world, tname_field, value);
+
+	while(t != world)
 	{
-   if ( !self.state )
-      {
-      self.state = 1;
-      setorigin( self, self.origin - '8000 8000 8000' );
-      // sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
-      }
-   else
-      {
-      self.state = 0;
-      setorigin( self, self.origin + '8000 8000 8000' );
-      sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-      }
-   };
+		MoveEntityOrigin(t,self.punchangle);
+		t = find(t, tname_field, value);
+	}
+}
+
+void MovePack()
+{
+	//
+	// move master entity
+	//
+
+	MoveEntityOrigin(self,self.punchangle);
+	
+	//
+	// move targets
+	//
+
+	// target 1
+	if (self.target != "")
+	{
+		MoveTargetOrigin(self.target, targetname);
+		MoveTargetOrigin(self.target, targetname2);
+		MoveTargetOrigin(self.target, targetname3);
+		MoveTargetOrigin(self.target, targetname4);
+	}
+
+	// target 2
+	if (self.target2 != "")
+	{
+		MoveTargetOrigin(self.target2, targetname);
+		MoveTargetOrigin(self.target2, targetname2);
+		MoveTargetOrigin(self.target2, targetname3);
+		MoveTargetOrigin(self.target2, targetname4);
+	}
+
+	// target 3
+	if (self.target3 != "")
+	{
+		MoveTargetOrigin(self.target3, targetname);
+		MoveTargetOrigin(self.target3, targetname2);
+		MoveTargetOrigin(self.target3, targetname3);
+		MoveTargetOrigin(self.target3, targetname4);
+	}
+
+	// target 4
+	if (self.target4 != "")
+	{
+		MoveTargetOrigin(self.target4, targetname);
+		MoveTargetOrigin(self.target4, targetname2);
+		MoveTargetOrigin(self.target4, targetname3);
+		MoveTargetOrigin(self.target4, targetname4);
+	}
+}
+
+void () blocker_use =
+{
+	if ( !self.state )
+	{
+		self.state = 1;
+		self.punchangle = -1 * self.view_ofs;
+		// sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	}
+	else
+	{
+		self.state = 0;
+		self.punchangle = self.view_ofs;
+		sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	}
+	
+	// move master entity and its targets by self.punchangle
+	MovePack();
+};
 
 /*QUAKED func_togglewall (0 .5 .8) ? START_OFF X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 
@@ -277,40 +345,52 @@ START_OFF wall doesn't block until triggered.
 */
 
 void() func_togglewall =
-	{
+{
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-   self.classname = "togglewall";
-   self.movetype = MOVETYPE_PUSH;
-   self.mdl = self.model;
-   setmodel (self, self.model);
-   setsize (self, self.mins, self.maxs);
-   setorigin (self, self.origin);
-   self.touch = blocker_touch;
-   self.use = blocker_use;
-   if ( !self.noise )
-      {
-      self.noise = ("misc/null.wav");
-      }
-   if ( !self.noise1 )
-      {
-      self.noise1 = ("misc/null.wav");
-      }
+	self.classname = "togglewall";
+	self.movetype = MOVETYPE_PUSH;
+	self.mdl = self.model;
+	setmodel (self, self.model);
+	setsize (self, self.mins, self.maxs);
+	setorigin (self, self.origin);
+	self.touch = blocker_touch;
+	self.use = blocker_use;
+	if ( !self.noise )
+	{
+		self.noise = ("misc/null.wav");
+	}
+	if ( !self.noise1 )
+	{
+		self.noise1 = ("misc/null.wav");
+	}
 
-   precache_sound( self.noise );
-   precache_sound( self.noise1 );
+	precache_sound( self.noise );
+	precache_sound( self.noise1 );
 
-   self.solid = SOLID_BSP;
-   self.model = string_null;
-   if ( self.spawnflags & START_OFF )
-      {
-      self.state = 0;
-      setorigin( self, self.origin + '8000 8000 8000' );
-      }
-   else
-      {
-      self.state = 1;
-      sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
-      }
-   };
+	//func_togglewall doesn't "toggle", strictly speaking; what it really does is dynamically moving its origin far away off the map boundaries.
+	//While there is no reason to do so in normal circumstances, overriding self.view_ofs with an in-boundaries offset value would allow
+	//a toggle here/there situation instead of a there/not there situation, from the player's perspective.
+	//That may allow interesting setups like an item dashing away from the player when they approach, or whatever twisted idea you may have…
+	if (self.view_ofs == '0 0 0')
+		self.view_ofs = '8000 8000 8000';
+		
+	self.solid = SOLID_BSP;
+	self.model = string_null;
+	if ( self.spawnflags & START_OFF )
+	{
+		self.state = 0;
+		self.punchangle = self.view_ofs;
+		
+		// Move master entity and its targets by self.punchangle
+		// (NB: this can't be done until all of the targets have been spawned, hence the micro delay)
+		self.think = MovePack;
+		self.nextthink = self.ltime + 0.1;		
+	}
+	else
+	{
+		self.state = 1;
+		sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	}
+};

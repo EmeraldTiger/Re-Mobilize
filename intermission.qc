@@ -282,9 +282,12 @@ void() execute_changelevel =
 	else
 		intermission_exittime = time + 2;
 
-	WriteByte (MSG_ALL, SVC_CDTRACK);
-	WriteByte (MSG_ALL, 3);
-	WriteByte (MSG_ALL, 3);
+	if (self.sounds > 1)
+	{
+		WriteByte (MSG_ALL, SVC_CDTRACK);
+		WriteByte (MSG_ALL, self.sounds);
+		WriteByte (MSG_ALL, self.sounds);
+	}
 
 	pos = FindIntermission ();
 
@@ -430,6 +433,9 @@ void() trigger_changelevel =
 	}
 	SUB_CheckWaiting();
 
+	if (!self.sounds)
+		self.sounds = 3;
+	
 	self.use = dt_exit_toggle;
 	if (!self.map)
 		objerror ("changelevel trigger doesn't have map");
