@@ -2095,7 +2095,9 @@ noise is the sound to play when wall is turned off.
 noise1 is the sound to play when wall is blocking.
 dmg is the amount of damage to cause when touched.
 
-Any entity targeted is toggled as well, allowing fully functional buttons, doors, etc. to pop from nowhere, suddenly disappear, or be replaced by slightly different variants mid-game."
+Any entity targeted is toggled as well, allowing fully functional buttons, doors, etc. to pop from nowhere, suddenly disappear, or be replaced by slightly different variants mid-game.
+Caution: Some restrictions apply to moving entities, see wiki for details.
+"
 [
 	noise(string) : "Power off sound"
 	noise1(string) : "Sound when touched"
@@ -2740,7 +2742,12 @@ count field that is the number of info_teleport_random entities you placed.
 
 STEALTH(8) eliminates the particle flash and noise when an entity is teleported.
 
-MONSTER_ONLY(16) will only teleport monsters"
+MONSTER_ONLY(16) will only teleport monsters
+
+You can get the player teleported to another samey looking place without realizing by targetting
+a trigger_multiple occupying the same place and volume at destination (see RM wiki);
+check the 'Slient' spawnflag so the player has no clue!
+"
 [
 	spawnflags(Flags) =
 	[
