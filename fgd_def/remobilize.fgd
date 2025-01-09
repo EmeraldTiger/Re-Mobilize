@@ -2745,8 +2745,8 @@ STEALTH(8) eliminates the particle flash and noise when an entity is teleported.
 MONSTER_ONLY(16) will only teleport monsters
 
 You can get the player teleported to another samey looking place without realizing by targetting
-a trigger_multiple occupying the same place and volume at destination (see RM wiki);
-check the 'Slient' spawnflag so the player has no clue!
+a func_illusionary occupying the same place and volume at destination (see RM wiki);
+don't forget to check the 'Slient' spawnflag so the player has no clue!
 "
 [
 	spawnflags(Flags) =
