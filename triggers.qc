@@ -621,10 +621,10 @@ local vector	org;
 	if (!t)
 		objerror ("couldn't find target");
 	
-	if (t.solid == SOLID_TRIGGER || t.solid == SOLID_NOT)
+	if (t.classname == "func_illusionary")
 	{
-		//If the destination is not a point entity as usual but a brush entity, then the teleportation automatically occurs in stealth mode,
-		//ignoring most of the usual teleportaion shennanigans:
+		//If the destination is not a point entity as usual but a func_illusionary, then the teleportation automatically occurs in stealth mode,
+		//ignoring most of the usual teleportation shennanigans:
 		//- no particle fog at origin or destination
 		//- no change in the player's facing angle & velocity
 		
