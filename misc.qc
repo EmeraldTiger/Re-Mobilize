@@ -997,7 +997,12 @@ void() func_illusionary =
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	setmodel (self, self.model);
-	makestatic (self);
+	
+	//If provided a targetname, it becomes invisible and serves as a reference for stealth teleportation
+	if (self.targetname)
+		self.model = "";
+	else
+		makestatic (self);
 };
 
 

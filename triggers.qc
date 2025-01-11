@@ -604,79 +604,110 @@ local vector	org;
 		}
 	}
 
-// only teleport living creatures
+	// only teleport living creatures
 	if (other.health <= 0 || other.solid != SOLID_SLIDEBOX)
 		return;
 
 	SUB_UseTargets ();
 
-	// put a tfog where the player was
-	// ### dhm - if stealth, don't spawn a fog
+	//dhm - if this is a random teleporter, pick a random spot!
+	if (self.spawnflags & RANDOM)
+		t = teleport_randomspot();
+	else if ((self.spawnflags & TELE_DD) && other.classname == "player")
+		t = find (world, targetname, self.noise);
+	else
+		t = find (world, targetname, self.target);
+
+	if (!t)
+		objerror ("couldn't find target");
+	
+	if (t.classname == "func_illusionary")
+	{
+		//If the destination is not a point entity as usual but a func_illusionary, then the teleportation automatically occurs in stealth mode,
+		//ignoring most of the usual teleportation shennanigans:
+		//- no particle fog at origin or destination
+		//- no change in the player's facing angle & velocity
+		
+		//NB: If the destination entity is a trigger_once, it removes itself after the first time so the teleportation may occur only once,
+		//or even never if the player happens to touch it even before it has occured!
+
+		//The destination point is located at the exact same distance from the destination's center of gravity as the distance between the player and teleporter's center of gravity when they touch it
+		//so that player is relatively at the same place before/after regarding the teleporter/destination entity
+		vector destpoint = (t.absmax+t.absmin)*0.5 + other.origin - (self.absmax+self.absmin)*0.5;
+
+		//Telefragging still occurs for mere safety reasons, but if anything would be telefragging the illusion would vanish, so better make sure the destination area is safe.
+		spawn_tdeath(destpoint, other);
+		
+		// move the player and lock him down for a little while
+		if (!other.health)
+		{
+			other.origin = destpoint;
+			other.velocity = (v_forward * other.velocity_x) + (v_forward * other.velocity_y);
+			return;
+		}
+		
+		setorigin (other, destpoint);
+		
+		fog_setFromEnt(other, t); // retrieves fog values from teleport destination, if any
+		
+		other.teleport_time = time + 0.7;
+		if (other.flags & FL_ONGROUND)
+			other.flags = other.flags - FL_ONGROUND;
+		
+		other.flags = other.flags - other.flags & FL_ONGROUND;
+	}
+	else
+	{
+		// put a tfog where the player was
+		// ### dhm - if stealth, don't spawn a fog
 		if (!(self.spawnflags & TELE_STEALTH))
 			spawn_tfog (other.origin);
-
-	//dhm - if this is a random teleporter, pick a random spot!
-		if (self.spawnflags & RANDOM)
-			t = teleport_randomspot();
-		else if ((self.spawnflags & TELE_DD) && other.classname == "player")
-			t = find (world, targetname, self.noise);
-		else
-			t = find (world, targetname, self.target);
-
-		if (!t)
-			objerror ("couldn't find target");
-			
+		
 		float dest_speed = t.speed;
 		if(!dest_speed) dest_speed = 300; //Default push speed at destination
 
-// // put a tfog where the player was
-// 	spawn_tfog (other.origin);
-//
-// 	t = find (world, targetname, self.target);
-// 	if (!t)
-// 		objerror ("couldn't find target");
+		// spawn a tfog flash in front of the destination
+		makevectors (t.mangle);
+		org = t.origin + 32 * v_forward;
 
-// spawn a tfog flash in front of the destination
-	makevectors (t.mangle);
-	org = t.origin + 32 * v_forward;
+		// ### dhm - if stealth, don't spawn a fog
+		if (!(self.spawnflags & TELE_STEALTH))
+			spawn_tfog (org);
 
-// ### dhm - if stealth, don't spawn a fog
-if (!(self.spawnflags & TELE_STEALTH))
-	spawn_tfog (org);
+		spawn_tdeath(t.origin, other);
 
-	spawn_tdeath(t.origin, other);
+		// move the player and lock him down for a little while
+		if (!other.health)
+		{
+			other.origin = t.origin;
+			other.velocity = (v_forward * other.velocity_x) + (v_forward * other.velocity_y);
+			return;
+		}
 
-// move the player and lock him down for a little while
-	if (!other.health)
-	{
-		other.origin = t.origin;
-		other.velocity = (v_forward * other.velocity_x) + (v_forward * other.velocity_y);
-		return;
+		setorigin (other, t.origin);
+		other.angles = t.mangle;
+		if (other.classname == "player")
+		{
+			fog_setFromEnt(other, t); // retrieves fog values from teleport destination, if any
+
+			other.fixangle = 1;		// turn this way immediately
+			other.teleport_time = time + 0.7;
+			if (other.flags & FL_ONGROUND)
+				other.flags = other.flags - FL_ONGROUND;
+			other.velocity = v_forward * dest_speed;
+		}
+		other.flags = other.flags - other.flags & FL_ONGROUND;
+
+		if ((self.spawnflags & MONSTER_ONLY) && other.classname != "player")
+		{
+			other.fixangle = 1;		// turn this way immediately
+			other.teleport_time = time + 0.7;
+			if (other.flags & FL_ONGROUND)
+				other.flags = other.flags - FL_ONGROUND;
+			other.velocity = v_forward * dest_speed;
+		}
+		other.flags = other.flags - other.flags & FL_ONGROUND;
 	}
-
-	setorigin (other, t.origin);
-	other.angles = t.mangle;
-	if (other.classname == "player")
-	{
-		fog_setFromEnt(other, t); // retrieves fog values from teleport destination, if any
-
-		other.fixangle = 1;		// turn this way immediately
-		other.teleport_time = time + 0.7;
-		if (other.flags & FL_ONGROUND)
-			other.flags = other.flags - FL_ONGROUND;
-		other.velocity = v_forward * dest_speed;
-	}
-	other.flags = other.flags - other.flags & FL_ONGROUND;
-
-	if ((self.spawnflags & MONSTER_ONLY) && other.classname != "player")
-	{
-		other.fixangle = 1;		// turn this way immediately
-		other.teleport_time = time + 0.7;
-		if (other.flags & FL_ONGROUND)
-			other.flags = other.flags - FL_ONGROUND;
-		other.velocity = v_forward * dest_speed;
-	}
-	other.flags = other.flags - other.flags & FL_ONGROUND;
 };
 // this is from Qmaster:
 
