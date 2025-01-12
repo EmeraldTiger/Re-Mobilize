@@ -1452,12 +1452,24 @@ void() onlookat_touch =
         }
         else
         {    // we can't just remove (self) here, because this is a touch function
-            // called wheil C code is looping through area links...
+            // called while C code is looping through area links...
             self.touch = SUB_Null;
             self.nextthink = time + 0.1;
             self.think = SUB_Remove;
         }
     }
+	else if (self.pain_target != "")
+	{
+		self.use = multi_trigger;
+		
+		SUB_UsePain2();
+
+		if (self.wait > 0)
+		{
+			self.think = multi_wait;
+			self.nextthink = time + self.wait;
+		}
+	}
 };
 /*QUAKED trigger_look (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 This will trigger when a player is within the brush trigger and looks directly at a target entity.
@@ -1627,16 +1639,23 @@ float SETSTATE_CLOSEALLDOORS = 2;
 float SETSTATE_DONTRESETBUTTON = 4;
 
 float(entity e) entity_get_state = {
-	if(e.classname == "func_door") return e.owner.estate;
-	else return e.estate;
+	if(e.classname == "func_door")
+		return e.owner.estate;
+	else if(e.classname == "func_togglevisiblewall")
+		return 1 - e.estate;
+	else
+		return e.estate;
 };
 
 void(entity e, float state, float flags) entity_set_state = {
+	local entity tempself;
 	float closealldoors;
 
 	if(e.classname == "trigger_teleport") {
 		if (state == STATE_ACTIVE)
 			sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
+		else
+			sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
 		e.estate = state;
 	}
 	else if(e.classname == "func_button") {
@@ -1648,6 +1667,38 @@ void(entity e, float state, float flags) entity_set_state = {
 
 		if (state == STATE_ACTIVE) door_estate_unlock(e, closealldoors);
 		else door_estate_lock(e, closealldoors);
+	}
+	else if(e.classname == "func_togglevisiblewall") {
+		tempself = self;
+		self = e;
+		e.estate = state;
+		func_togglevisiblewall_use();
+		self = tempself;
+	}
+	else if(e.classname == "light") {
+		tempself = self;
+		self = e;
+		if (state == STATE_ACTIVE) {
+			dprint("turning on light ");
+			dprint(self.targetname2);
+			dprint("\n");
+			self.spawnflags = self.spawnflags - START_OFF;
+			if (self.spawnflags & FADE_IN_OUT && !self.style2)
+				light_fade_in();
+			else
+				lightstyle(self.style, lightstyle_lookup(self.style2));
+		}
+		else {
+			dprint("turning off light ");
+			dprint(self.targetname2);
+			dprint("\n");
+			self.spawnflags = self.spawnflags + START_OFF;
+			if (self.spawnflags & FADE_IN_OUT && !self.style2)
+				light_fade_out();
+			else
+				lightstyle(self.style, "a");
+		}
+		self = tempself;
 	}
 	else e.estate = state;
 
