@@ -2,8 +2,6 @@
 // pmack
 // sept 96
 
-// float ltrailLastUsed;		-- now an entity field.
-
 float LT_TOGGLE =	1;
 float LT_ACTIVE = 	2;
 
@@ -74,13 +72,7 @@ void() ltrail_start_fire =
 			return;
 	}
 
-	if (self.classname ==  "ltrail_start")
-	{
-		self.items = time + self.weapon;
-		ltrail_fire();
-		self.ltrailLastUsed = time;
-	}
-	else if (self.classname == "ltrail_relay")
+	if (self.classname ==  "ltrail_start" || self.classname == "ltrail_relay")
 	{
 		self.items = time + self.weapon;
 		ltrail_fire();
@@ -110,8 +102,6 @@ void() ltrail_start =
 {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
-
-	self.ltrailLastUsed = time;
 
 	precache_sound ("weapons/lhit.wav");
 	self.movetype = MOVETYPE_NONE;

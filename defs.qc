@@ -882,7 +882,6 @@ void() SUB_UsePain; //dumptruck_ds
 .float color; //Hipnotic
 .float megahealth_rottime; // dumptruck_ds
 .float alpha; // from RennyC func_fall in dtmisc.qc
-.float ltrailLastUsed;  //from DOE lighnin
 .float style2; //c0burn's switchable lights
 .float sight_trigger; //dumptruck_ds
 .float keep_ammo; //dumptruck_ds

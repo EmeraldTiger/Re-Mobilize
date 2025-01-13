@@ -1643,6 +1643,12 @@ float(entity e) entity_get_state = {
 		return e.owner.estate;
 	else if(e.classname == "func_togglevisiblewall")
 		return 1 - e.estate;
+	else if(e.classname == "ltrail_start")
+		return !(e.spawnflags & LT_ACTIVE);
+	else if(e.classname == "light")
+		return e.spawnflags & START_OFF;
+	else if(e.classname == "togglewall")
+		return 1 - e.state;
 	else
 		return e.estate;
 };
@@ -1675,29 +1681,22 @@ void(entity e, float state, float flags) entity_set_state = {
 		func_togglevisiblewall_use();
 		self = tempself;
 	}
-	else if(e.classname == "light") {
+	else if(e.classname == "togglewall" && state != entity_get_state(e)) {
 		tempself = self;
 		self = e;
-		if (state == STATE_ACTIVE) {
-			dprint("turning on light ");
-			dprint(self.targetname2);
-			dprint("\n");
-			self.spawnflags = self.spawnflags - START_OFF;
-			if (self.spawnflags & FADE_IN_OUT && !self.style2)
-				light_fade_in();
-			else
-				lightstyle(self.style, lightstyle_lookup(self.style2));
-		}
-		else {
-			dprint("turning off light ");
-			dprint(self.targetname2);
-			dprint("\n");
-			self.spawnflags = self.spawnflags + START_OFF;
-			if (self.spawnflags & FADE_IN_OUT && !self.style2)
-				light_fade_out();
-			else
-				lightstyle(self.style, "a");
-		}
+		blocker_use();
+		self = tempself;
+	}
+	else if(e.classname == "ltrail_start" && e.spawnflags & LT_TOGGLE && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		ltrail_start_fire();
+		self = tempself;
+	}
+	else if(e.classname == "light" && e.targetname && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		light_use();
 		self = tempself;
 	}
 	else e.estate = state;
@@ -1717,8 +1716,10 @@ void(string matchstring, .string matchfield, float state, float flags) target_se
 	t = find (world, matchfield, matchstring);
 	while (t != world) {
 		if(state == -1){
-			if(entity_get_state(t) == STATE_ACTIVE) entity_set_state(t, STATE_INACTIVE, flags);
-			else entity_set_state(t, STATE_ACTIVE, flags);
+			if(entity_get_state(t) == STATE_ACTIVE)
+				entity_set_state(t, STATE_INACTIVE, flags);
+			else
+				entity_set_state(t, STATE_ACTIVE, flags);
 		}
 		else entity_set_state(t, state, flags);
 
