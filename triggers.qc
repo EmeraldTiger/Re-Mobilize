@@ -849,6 +849,8 @@ MONSTER_ONLY(16) will only teleport monsters
 		objerror ("no target");
 	self.use = teleport_use;
 
+	precache_sound ("misc/null.wav");
+	
 	if (!(self.spawnflags & SILENT))
 	{
 		precache_sound ("ambience/hum1.wav");
