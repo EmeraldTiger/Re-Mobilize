@@ -1412,26 +1412,85 @@ void() trigger_cdtrack =
 ///////////////////////////////////////////////////////////////
 void() onlookat_touch =
 {
+	float success = FALSE;
+	
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
 
-  if (self.nextthink > time)
-  {
-        return;        // allready been triggered
-  }
+	if (self.nextthink > time)
+	{
+		return;        // allready been triggered
+	}
 
     //added player view offset to make this more accurate to the player crosshairs
     local vector player_offset;
     player_offset = other.origin + other.view_ofs;
 
-    makevectors(other.v_angle);
+	if (self.spawnflags & /*Line of sight*/1)
+	{
+		//'Line of sight' mode: check whether there is a clear line of sight between the player and its target, no matter where the player is looking
+		
+        // Find all entities matching self.target
+		// The test is successful as soon as one of them has a clear los to the player.
+		
+		for (entity e = world; (e = find(e, targetname, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname2, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname3, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname4, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+	}
+	else
+	{
+		//Standard mode: check whether the player is directly looking at its target (target under their crosshair)
+	
+		makevectors(other.v_angle);
 
-    //using speed to determine the reach of the trace
-    if(!self.speed)
-        self.speed = 500;
-    traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+		//using speed to determine the reach of the trace
+		if(!self.speed)
+			self.speed = 500;
+		traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+		
+		success = (trace_ent.targetname == self.target);
+	}
 
-    if ((trace_ent.targetname == self.target))
+    if (success)
     {
         // Play message if available
         if (self.message != "")
@@ -1522,6 +1581,9 @@ void() trigger_look =
         precache_sound (self.noise1);
 				self.noise = self.noise1;
     }
+
+	if(!self.speed)
+		self.speed = 500;
 
     InitTrigger();
     self.touch = onlookat_touch;
