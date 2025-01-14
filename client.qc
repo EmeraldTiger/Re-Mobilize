@@ -1217,7 +1217,8 @@ else
 		CheckWaterJump ();
 	
 	//Display custom keys inventory
-	if(invPanel) invPanel.origin = self.origin + v_forward*(250) + v_up*(100);
+	if(invPanel) invPanel.origin = self.origin + v_forward*250 + v_up*100;
+	if(invEmpty) invEmpty.origin = self.origin + v_forward*200 + v_up*55;
 	if(self.skip_id1_overrides > 0)
 	{
 		float dist = world.distance;

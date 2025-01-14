@@ -89,6 +89,7 @@
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
 	mdl_head(string) : "Custom 'Puzzle items panel' sprite" :  : "Use this field to replace the default inventory plaque sprite"
+	mdl_body(string) : "Custom 'Inventory empty' sprite" :  : "Use this field to replace the default empty inventory caption sprite"
 	distance(integer) : "Distance between HUD items" : 70 : "Use this field to spread the HUD items, so that they can have wider captions"
 ]
 

@@ -1468,6 +1468,7 @@ void(entity player, float show) toggle_inventory =
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzle.wav", 1, ATTN_NONE);
 		if(invPanel) setmodel (invPanel, invPanel.mdl);
+		if(invEmpty && player.skip_id1_overrides <= 0) setmodel (invEmpty, invEmpty.mdl); else setmodel (invEmpty, "");
 		if(invItem1) setmodel (invItem1, invItem1.mdl);
 		if(invItem2) setmodel (invItem2, invItem2.mdl);
 		if(invItem3) setmodel (invItem3, invItem3.mdl);
@@ -1483,6 +1484,7 @@ void(entity player, float show) toggle_inventory =
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzleaway.wav", 1, ATTN_NONE);
 		if(invPanel) setmodel (invPanel, "");
+		if(invEmpty) setmodel (invEmpty, "");
 		if(invItem1) setmodel (invItem1, "");
 		if(invItem2) setmodel (invItem2, "");
 		if(invItem3) setmodel (invItem3, "");
@@ -1599,6 +1601,13 @@ void() key_touch =
 		{
 			invPanel = spawn();
 			invPanel.mdl = self.obit_method;
+		}
+		
+		//Floating 'Inventory empty' panel
+		if(!invEmpty)
+		{
+			invEmpty = spawn();
+			invEmpty.mdl = self.obit_name;
 		}
 	}
 
@@ -1801,7 +1810,9 @@ void() item_key_custom =
 
 	//Floating 'Puzzle items' panel
 	if(world.mdl_head) self.obit_method = world.mdl_head; else self.obit_method = "gfx/puzzle.spr";
+	if(world.mdl_body) self.obit_name   = world.mdl_body; else self.obit_name   = "gfx/invempty.spr";
 	precache_model(self.obit_method);
+	precache_model(self.obit_name);
 	precache_sound("misc/puzzle.wav");
 	precache_sound("misc/puzzleaway.wav");
 	
