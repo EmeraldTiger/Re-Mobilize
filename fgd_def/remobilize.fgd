@@ -3991,7 +3991,13 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	killtarget2(target_destination) : "Killtarget2 (fired upon leaving the trigger)"
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []
+@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only
+
+Caution! It's not solid for monsters and the rest of the world, tho! For them, it has no blocking characteristics (they can freely see/pass through it)" []
+
+@SolidClass base(Appearflags, Targetname) = func_playernoclip : "A bbox entity which is not solid for the player only, but may serve as a pass-through trigger_look target
+
+Caution! It's still solid for monsters and the rest of the world, tho! For them, it keeps all its blocking characteristics (they can't see/pass through it)" []
 
 @PointClass base(Appearflags, Target, Targetname) size (16 16 16) color(192 0 192) = trigger_random_time : "Fire targets at random intervals
 

@@ -1410,18 +1410,12 @@ void() trigger_cdtrack =
 ///////////////////////////////////////////////////////////////
 //trigger_look (a.k.a. trigger_onlookat from NullPointPaladin!)
 ///////////////////////////////////////////////////////////////
-void() onlookat_touch =
+void() onlookat_think =
 {
 	float success = FALSE;
+
+	other = find(world, classname, "player");
 	
-	// from Copper -- dumptruck_ds
-	if (!CheckValidTouch()) return;
-
-	if (self.nextthink > time)
-	{
-		return;        // allready been triggered
-	}
-
     //added player view offset to make this more accurate to the player crosshairs
     local vector player_offset;
     player_offset = other.origin + other.view_ofs;
@@ -1540,7 +1534,23 @@ void() onlookat_touch =
 			self.nextthink = time + self.wait;
 		}
 	}
+	self.touch = onlookat_touch;
 };
+
+void() onlookat_touch =
+{
+	// from Copper -- dumptruck_ds
+	if (!CheckValidTouch()) return;
+
+	//Inhibit any further touch until this one has been fully proceeded by onlookat_think (restored at the end of it)
+	self.touch = SUB_Null;
+	
+	//Trigger implementation now relying on .think rather than .touch. This doesn't changes anything for regular target entities
+	//but now it allows for a func_playernoclip to be targeted as well, thanks to a small physics hack in client.hc.
+	self.think = onlookat_think;
+	self.nextthink = time + 0.1;
+};
+
 /*QUAKED trigger_look (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 This will trigger when a player is within the brush trigger and looks directly at a target entity.
 Use the first target key for the "looked at entity" and use the subsequent targets (2-4) to trigger other events.
