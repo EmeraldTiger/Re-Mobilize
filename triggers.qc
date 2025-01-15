@@ -112,7 +112,7 @@ void() multi_touch = //dumptruck_ds
 	if (self.movedir != '0 0 0')
 	{
 		makevectors (other.angles);
-		if (v_forward * self.movedir < 0)
+		if (!(v_forward * self.movedir >= self.homing)) //self.homing is the minimum accuracy; default is 0 (up to 90° away from the ideal direction); up to 1 (exactly the ideal direction, no compromise!)
 			return;		// not facing the right way
 	}
 

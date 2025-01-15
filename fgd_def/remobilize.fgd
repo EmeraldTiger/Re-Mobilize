@@ -2620,6 +2620,12 @@ Check each field's description for more details.
 	message(string) : "Message"
 ]
 
+@baseclass = Homing
+[
+	homing(float) : "Aiming accuracy" : "0" : "How accurately the player must be facing the direction set by .angle to fire this trigger: from 0 (default) allowing to look up to 90° away from the ideal direction to 1 (looking straight in the intended direction).
+1 is too precise and constraining, it rarely occurs in game because of imprecisions. 0.6 or 0.7 is usually a good compromise."
+]
+
 @SolidClass base(OneTarget, OneTargetname, Appearflags, TriggerWait, FilterTouch) = trigger_changelevel : "Trigger: Change level"
 [
 	map(string) : "Next map"
@@ -2636,7 +2642,7 @@ Check each field's description for more details.
 	target(string) : "Specific intermission camera to use (works only if matching an info_intermission's targetname), otherwise a regular target to fire"
 ]
 
-@SolidClass base(Trigger, Actionable) = trigger_once : "Trigger: Activate once"
+@SolidClass base(Trigger, Actionable, Homing) = trigger_once : "Trigger: Activate once"
 [
 	health(integer) : "Health (shootable)"
 	is_waiting(choices) : "Trigger" : 0 =
@@ -2694,7 +2700,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	pain_target(string) : "Target to fire when not having key"
 ]
 
-@SolidClass base(Trigger, Actionable) = trigger_multiple : "Trigger: Activate multiple"
+@SolidClass base(Trigger, Actionable, Homing) = trigger_multiple : "Trigger: Activate multiple"
 [
 	wait(string) : "Wait before reset" : "0.2"
 	health(integer) : "Health (shootable)"
@@ -2713,7 +2719,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 [
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
-@SolidClass base(Trigger, OneTargetname, TriggerWait) = trigger_secret : "Trigger: Secret"
+@SolidClass base(Trigger, OneTargetname, TriggerWait, Homing) = trigger_secret : "Trigger: Secret"
 [
 	sounds(choices) : "Sound" : 1 =
 	[
@@ -2781,7 +2787,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 @PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
 ]
-@SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_take_weapon : "
+@SolidClass base(Appearflags, TriggerWait, FilterTouch, Homing) = trigger_take_weapon : "
 Trigger: Remove weapon (and/or ammo) on touch.
 
 Classic progs_dump 3.0 behavior:
