@@ -1864,6 +1864,8 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		5 : "& (bitwise AND, valid for floats and flags)"
 		6 : "| (bitwise OR, valid for floats and flags)"
 		7 : "% (remainder of an integer division, valid for floats and flags)"
+		8 : "!= (not equal, valid for all fields)"
+		9 : "!& (bitwise AND returns false, valid for floats and flags)"
 	]
 	count(integer) : "Float value to test"
 	cnt(integer) : "Modulus used for the % operator"
