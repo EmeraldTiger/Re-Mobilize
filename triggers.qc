@@ -1487,7 +1487,7 @@ void() onlookat_touch =
 			self.speed = 500;
 		traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
 		
-		success = (trace_ent.targetname == self.target);
+		success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
 	}
 
     if (success)
@@ -1498,12 +1498,21 @@ void() onlookat_touch =
             centerprint (other, self.message);
         }
         self.use = multi_trigger;
-        SUB_UseTargets();
+        
+		if (self.spawnflags & /*Don't fire main target*/ 2)
+		{
+			string otarget = self.target;
+			self.target = "D0n't f1r3 m41n t4rg3t!";
+			SUB_UseTargets();
+			self.target = otarget;
+		}
+		else
+			SUB_UseTargets();
 
-				if (self.noise != "")
-				sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-				else
-				sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise != "")
+		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		else
+		sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 
         // added wait
         if (self.wait > 0)

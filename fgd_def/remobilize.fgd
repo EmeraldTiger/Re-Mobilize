@@ -3660,7 +3660,10 @@ sounds(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to pla
 * has a clear line of sight to a targeted brush entity even if not looking at it
 otherwise, trigger the pain_target(s), if any.
 
-Use the first target key for the looked at item and subsequent targets to trigger events. Add a wait key to make this a trigger_multiple.
+Use the first target key for the looked at item and subsequent targets to trigger events.
+Caution! The first target is triggered as well, unless the 'Don't fire main target' spawnflag is checked.
+
+Add a wait key to make this a trigger_multiple.
 "
 [
 	speed(integer) : "Distance from player to search for trigger, adjust if the target is too far from the trigger" : 500
@@ -3677,6 +3680,7 @@ Use the first target key for the looked at item and subsequent targets to trigge
 	spawnflags(Flags) =
 	[
 		1 : "Line of sight" : 0 : "A clear line of sight exists, no matter the distance or the player's looking direction"
+		2 : "Don't fire main target" : 0 : "target looked at isn't triggered by player gaze"
 	]
 	pain_target(string) : "Target(s) to fire when the looking/los check fails"
 ]
