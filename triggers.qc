@@ -2074,26 +2074,31 @@ void() trigger_filter_use = {
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
-		if 		(op == FILTER_OP_EQUALS) 		{if (targfloat == self.count) result = 1;}
-		else if (op == FILTER_OP_LT) 			{if (targfloat <  self.count) result = 1;}
-		else if (op == FILTER_OP_LTE) 			{if (targfloat <= self.count) result = 1;}
-		else if (op == FILTER_OP_GT) 			{if (targfloat >  self.count) result = 1;}
-		else if (op == FILTER_OP_GTE) 			{if (targfloat >= self.count) result = 1;}
-		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.count) result = 1;}
-		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.count) result = 1;}
-		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
-		else 									{if (targfloat == self.count) result = 1;}
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targfloat == self.count)  result = 1;}
+		else if (op == FILTER_OP_LT) 			{if   (targfloat <  self.count)  result = 1;}
+		else if (op == FILTER_OP_LTE) 			{if   (targfloat <= self.count)  result = 1;}
+		else if (op == FILTER_OP_GT) 			{if   (targfloat >  self.count)  result = 1;}
+		else if (op == FILTER_OP_GTE) 			{if   (targfloat >= self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_AND)	{if   (targfloat &  self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_OR)	{if   (targfloat |  self.count)  result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if   (self.count == mod(targfloat,self.cnt)) result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targfloat != self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_NAND)	{if (!(targfloat &  self.count)) result = 1;}
+		else 									{if   (targfloat == self.count)  result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_FLAG) {
-		if 		(op == FILTER_OP_EQUALS) 		{if (targfloat == self.aflag) result = 1;}
-		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.aflag) result = 1;}
-		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.aflag) result = 1;}
-		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
-		else 									{if (targfloat == self.aflag) result = 1;}
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targfloat == self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_AND)	{if   (targfloat &  self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_OR)	{if   (targfloat |  self.aflag)  result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if   (self.count == mod(targfloat,self.cnt)) result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targfloat != self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_NAND)	{if (!(targfloat &  self.aflag)) result = 1;}
+		else 									{if   (targfloat == self.aflag)  result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_STRING) {
-
-		if (targstring == self.type) result = 1;
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targstring == self.type)  result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targstring != self.type)  result = 1;}
+		else 									{if   (targstring == self.type)  result = 1;}
 	}
 	else {
 		objerror ("invalid fieldtype");
