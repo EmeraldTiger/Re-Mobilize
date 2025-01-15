@@ -3138,11 +3138,11 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 
 		noise(string) : "Sound file to play"
 		speed(choices) : "Attenuation of sound" : 1 =
-				[
+		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 		impulse(integer) : "Channel (0 - 7) Automatic" : 0
@@ -3168,9 +3168,9 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 		speed(choices) : "Attenuation of sound" : 1 =
 		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 		impulse(integer) : "Channel (0 - 7) Automatic" : 0
@@ -3186,11 +3186,11 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 	[
 		noise(string) : "Sound file to play"
 		speed(choices) : "Attenuation of sound" : 1 =
-				[
+		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 	]
