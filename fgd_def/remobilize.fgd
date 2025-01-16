@@ -2691,8 +2691,8 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	]
 	delay(float) : "Delay before trigger" : "0" : "Delay before trigger"
 	keyname(string) : "Sets the keyname of the item_key_custom which unlocks this entity. If any key spawnflag is selected (either silver or gold), this only changes the display name of the required key."
-	message(string) : "Custom message"
-	message2(string) : "Message when key used"
+	message(string) : "Message when key needed" : : "Set to '0' to print no message."
+	message2(string) : "Message when key used" : : "Set to '0' to print no message."
 	noise1(string) : "Sound file for the 'key required' sound (default is per worldtype)"
 	noise2(string) : "Sound file for the 'key used' sound (default is per worldtype)"
 	spawnflags(flags) =

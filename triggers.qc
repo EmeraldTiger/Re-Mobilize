@@ -301,13 +301,11 @@ void() counter_use =
 	if (other.aflag > 0 && other.aflag != self.cnt) 
 	  self.items = 1; //Wrong order
 	
-	/**/
+	//Re:Mobilize is for many reasons singleplayer-focused, so we won't bother with a loop to find "all the players", or about the player being he activator.
+	//As long as the counter is not flagged as 'No Message', a message is printed. Period.
 	entity msgEnt = world;
-	if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		msgEnt = activator;
-	else if (self.spawnflags & TRIGGER_CENTERPRINTALL)
-		msgEnt = find(world, classname, "player"); //Re:Mobilize is for many reasons singleplayer-focused, so let's not bother with a loop to find "all the players". Here the spawnflags simply means "send a message to player never mind they're the direct activator or not".
-	/**/
+	if (self.spawnflags & SPAWNFLAG_NOMESSAGE == 0)
+		msgEnt = find(world, classname, "player");
 	
 	if (self.count != 0)
 	{
