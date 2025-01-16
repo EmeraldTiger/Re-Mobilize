@@ -551,8 +551,13 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 	obit_name(string) : "Custom name for this armor." : : "Set a custom name for your armor. Just complete the sentence `You got` e.g. the Mega Armor! for `You got the Mega Armor!'"
 	]
 
-@BaseClass base(NonRespawnableItem) size(-16 -16 -24, 16 16 32) =
-	Key []
+@BaseClass base(NonRespawnableItem) size(-16 -16 -24, 16 16 32) = Key
+[
+	spawnflags(flags) =
+	[
+		2097152 : "Silent pickup" : 0 : "Programmatically add the item to the player's inventory"
+	]
+]
 
 // @PointClass base(Key) model({ "path": ":progs/w_s_key.mdl" }) =
 @PointClass base(Key, CustomMdlsSkin) model(

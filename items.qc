@@ -1519,15 +1519,18 @@ void() key_touch =
 	if (haskey && (other.cheater == 0))
 		return;
 	
-	if (other.flags & FL_CLIENT) {
-		sprint (other, "You got the ");
-		sprint (other, self.netname);
-		sprint (other,"\n");
-	}
+	if(!(self.spawnflags & /*Silent pickup*/ 2097152))
+	{
+		if (other.flags & FL_CLIENT) {
+			sprint (other, "You got the ");
+			sprint (other, self.netname);
+			sprint (other,"\n");
+		}
 
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	if (other.flags & FL_CLIENT) {
-		stuffcmd (other, "bf\n");
+		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+		if (other.flags & FL_CLIENT) {
+			stuffcmd (other, "bf\n");
+		}
 	}
 
 // support for item_key_custom -- iw
