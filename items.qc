@@ -60,7 +60,7 @@ void(entity whatitem, float defaultdelay) CheckItemRespawn =
 
 		if (whatitem.respawndelay)	// custom respawn delay?
 			whatitem.nextthink = time + whatitem.respawndelay;
-		else
+		else if (defaultdelay > 0)
 			whatitem.nextthink = time + defaultdelay;
 	}
 	else if(whatitem.ritem == 2)
@@ -1468,6 +1468,7 @@ void(entity player, float show) toggle_inventory =
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzle.wav", 1, ATTN_NONE);
 		if(invPanel) setmodel (invPanel, invPanel.mdl);
+		if(invEmpty && player.skip_id1_overrides <= 0) setmodel (invEmpty, invEmpty.mdl); else setmodel (invEmpty, "");
 		if(invItem1) setmodel (invItem1, invItem1.mdl);
 		if(invItem2) setmodel (invItem2, invItem2.mdl);
 		if(invItem3) setmodel (invItem3, invItem3.mdl);
@@ -1483,6 +1484,7 @@ void(entity player, float show) toggle_inventory =
 	{
 		if(player) sound (player, CHAN_VOICE, "misc/puzzleaway.wav", 1, ATTN_NONE);
 		if(invPanel) setmodel (invPanel, "");
+		if(invEmpty) setmodel (invEmpty, "");
 		if(invItem1) setmodel (invItem1, "");
 		if(invItem2) setmodel (invItem2, "");
 		if(invItem3) setmodel (invItem3, "");
@@ -1517,15 +1519,18 @@ void() key_touch =
 	if (haskey && (other.cheater == 0))
 		return;
 	
-	if (other.flags & FL_CLIENT) {
-		sprint (other, "You got the ");
-		sprint (other, self.netname);
-		sprint (other,"\n");
-	}
+	if(!(self.spawnflags & /*Silent pickup*/ 2097152))
+	{
+		if (other.flags & FL_CLIENT) {
+			sprint (other, "You got the ");
+			sprint (other, self.netname);
+			sprint (other,"\n");
+		}
 
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	if (other.flags & FL_CLIENT) {
-		stuffcmd (other, "bf\n");
+		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+		if (other.flags & FL_CLIENT) {
+			stuffcmd (other, "bf\n");
+		}
 	}
 
 // support for item_key_custom -- iw
@@ -1567,6 +1572,8 @@ void() key_touch =
 			if(label) setmodel(label, label.mdl);
 		}
 		
+		if(invEmpty) setmodel (invEmpty, "");
+		
 		//Assign it to the first available slot
 		if(!invItem1)
 		{
@@ -1600,8 +1607,19 @@ void() key_touch =
 			invPanel = spawn();
 			invPanel.mdl = self.obit_method;
 		}
+		
+		//Floating 'Inventory empty' panel
+		if(!invEmpty)
+		{
+			invEmpty = spawn();
+			invEmpty.mdl = self.obit_name;
+		}
 	}
 
+	// SP respawning items support
+	self.think	= SUB_regen;
+	CheckItemRespawn(self, 0);
+	
 	if (!coop)
 	{
 		self.solid = SOLID_NOT;
@@ -1610,9 +1628,7 @@ void() key_touch =
 	}
 
 	activator = other;
-// fix key items firing their targets multiple times in coop -- iw
-//	SUB_UseTargets();				// fire all targets / killtargets
-	SUB_UseAndForgetTargets();
+	SUB_UseTargets();
 };
 
 
@@ -1801,7 +1817,9 @@ void() item_key_custom =
 
 	//Floating 'Puzzle items' panel
 	if(world.mdl_head) self.obit_method = world.mdl_head; else self.obit_method = "gfx/puzzle.spr";
+	if(world.mdl_body) self.obit_name   = world.mdl_body; else self.obit_name   = "gfx/invempty.spr";
 	precache_model(self.obit_method);
+	precache_model(self.obit_name);
 	precache_sound("misc/puzzle.wav");
 	precache_sound("misc/puzzleaway.wav");
 	
@@ -2040,7 +2058,7 @@ void() item_artifact_invulnerability =
 	self.noise = "items/protect.wav";
 	// setmodel (self, "progs/invulner.mdl");
 	body_model ("progs/invulner.mdl");
-	self.netname = "Pentagram of Protection";
+	if (!self.netname) self.netname = "Pentagram of Protection";
 	self.items = IT_INVULNERABILITY;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2066,7 +2084,7 @@ void() item_artifact_envirosuit =
 	self.noise = "items/suit.wav";
 	// setmodel (self, "progs/suit.mdl");
 	body_model ("progs/suit.mdl");
-	self.netname = "Biosuit";
+	if (!self.netname) self.netname = "Biosuit";
 	self.items = IT_SUIT;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2094,7 +2112,7 @@ void() item_artifact_invisibility =
 	self.noise = "items/inv1.wav";
 	// setmodel (self, "progs/invisibl.mdl");
 	body_model ("progs/invisibl.mdl");
-	self.netname = "Ring of Shadows";
+	if (!self.netname) self.netname = "Ring of Shadows";
 	self.items = IT_INVISIBILITY;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2121,8 +2139,7 @@ void() item_artifact_super_damage =
 	self.noise = "items/damage.wav";
 	// setmodel (self, "progs/quaddama.mdl");
 	body_model ("progs/quaddama.mdl");
-	if !(self.netname) // custom name -- dumptruck_ds
-	self.netname = "Quad Damage";
+	if (!self.netname) self.netname = "Quad Damage";
 	self.items = IT_QUAD;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds

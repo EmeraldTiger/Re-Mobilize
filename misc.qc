@@ -1124,9 +1124,15 @@ A bbox entity which is solid for the player only
 */
 void() func_playerclip =
 {
-	self.targetname=self.targetname2=self.targetname3=self.targetname4=string_null;
-	self.spawnflags = /*Keep visible*/4;
-	func_togglevisiblewall();
+	func_wall();
+};
+
+/*QUAKED func_playernoclip
+A bbox entity which is solid for the player only
+*/
+void() func_playernoclip =
+{
+	func_wall();
 };
 
 /*****************

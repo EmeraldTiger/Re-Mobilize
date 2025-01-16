@@ -24,19 +24,15 @@ keytrigger_use function.  -- iw
 */
 void() keytrigger_unlock =
 {
-	// we can't just remove (self) here, because this is a touch function
-	// called while C code is looping through area links...
-	self.touch = SUB_Null;
-	self.use = SUB_Null;
-	self.nextthink = time + 0.1;
-	self.think = SUB_Remove;
-	self.message = "";
-
+	self.estate = STATE_INACTIVE;
 	SUB_UseTargets();
 };
 
 void() keytrigger_use =
 {
+	if (self.estate != STATE_ACTIVE)
+		return;
+		
 	if (self.attack_finished > time)
 		return;
 

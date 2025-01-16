@@ -806,7 +806,7 @@ void () fd_secret_use =
 
 	self.dest2 = self.dest1 + v_forward * (self.t_length - self.lip);
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move1);
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 };
 
 void(entity attacker, float damage) fd_secret_pain = { fd_secret_use(); };
@@ -817,7 +817,7 @@ void () fd_secret_move1 =
 	self.state = /*Half way*/1;
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move2;
-	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
 
 // Start moving sideways w/sound...
@@ -831,7 +831,7 @@ void () fd_secret_move2 =
 void () fd_secret_move3 =
 {
 	self.state = /*Open*/2;
-	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 	if (!(self.spawnflags & SECRET_OPEN_ONCE))
 	{
 		self.nextthink = self.ltime + self.wait;
@@ -852,12 +852,12 @@ void () fd_secret_move5 =
 	self.state = /*Half way back*/3;
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move6;
-	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
 
 void () fd_secret_move6 =
 {
-	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	SUB_CalcMove(self.oldorigin, self.speed, fd_secret_done);
 };
 
@@ -870,7 +870,10 @@ void () fd_secret_done =
 		self.takedamage = DAMAGE_YES;
 		self.th_pain = fd_secret_pain;
 	}
-	sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+	if (self.noise3 == "0")
+		sound(self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	else
+		sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
 
 void () secret_blocked =
@@ -929,6 +932,8 @@ If a secret door has a targetname, it will only be opened by it's botton or trig
 
 void () func_door_secret =
 {
+	local string default_noise1, default_noise2, default_noise3;
+
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
@@ -936,29 +941,28 @@ void () func_door_secret =
 		self.sounds = 3;
 	if (self.sounds == 1)
 	{
-		precache_sound ("doors/latch2.wav");
-		precache_sound ("doors/winch2.wav");
-		precache_sound ("doors/drclos4.wav");
-		self.noise1 = "doors/latch2.wav";
-		self.noise2 = "doors/winch2.wav";
-		self.noise3 = "doors/drclos4.wav";
+		default_noise1 = "doors/latch2.wav";
+		default_noise2 = "doors/winch2.wav";
+		default_noise3 = "doors/drclos4.wav";
 	}
 	if (self.sounds == 2)
 	{
-		precache_sound ("doors/airdoor1.wav");
-		precache_sound ("doors/airdoor2.wav");
-		self.noise2 = "doors/airdoor1.wav";
-		self.noise1 = "doors/airdoor2.wav";
-		self.noise3 = "doors/airdoor2.wav";
+		default_noise1 = "doors/airdoor2.wav";
+		default_noise2 = "doors/airdoor1.wav";
+		default_noise3 = "doors/airdoor2.wav";
 	}
 	if (self.sounds == 3)
 	{
-		precache_sound ("doors/basesec1.wav");
-		precache_sound ("doors/basesec2.wav");
-		self.noise2 = "doors/basesec1.wav";
-		self.noise1 = "doors/basesec2.wav";
-		self.noise3 = "doors/basesec2.wav";
+		default_noise1 = "doors/basesec2.wav";
+		default_noise2 = "doors/basesec1.wav";
+		default_noise3 = "doors/basesec2.wav";
 	}
+	if(self.noise1 == "") self.noise1 = default_noise1; //Secret door start noise
+	if(self.noise2 == "") self.noise2 = default_noise2; //Secret door move noise
+	if(self.noise3 == "") self.noise3 = default_noise3; //secret door stop noise
+	precache_sound (self.noise1);
+	precache_sound (self.noise2);
+	precache_sound (self.noise3);
 
 	if (!self.dmg)
 		self.dmg = 2;

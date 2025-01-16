@@ -882,7 +882,6 @@ void() SUB_UsePain; //dumptruck_ds
 .float color; //Hipnotic
 .float megahealth_rottime; // dumptruck_ds
 .float alpha; // from RennyC func_fall in dtmisc.qc
-.float ltrailLastUsed;  //from DOE lighnin
 .float style2; //c0burn's switchable lights
 .float sight_trigger; //dumptruck_ds
 .float keep_ammo; //dumptruck_ds
@@ -1120,7 +1119,7 @@ void(entity client, float density, vector color) csf_set;
 .float visitflag;
 
 //Inky 20221210 Custom keys inventory
-entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, invLabel2, invLabel3, invLabel4, invLabel5;
+entity invPanel, invEmpty, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, invLabel2, invLabel3, invLabel4, invLabel5;
 .string face_always;
 
 //Inky 20230407 External validator

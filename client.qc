@@ -925,19 +925,22 @@ void() CheckGrapple =
 
 }
 
-void(float makeSolid) MakePlayerClipSolid =
+void(string clname, float makeSolid) MakeClassSolid =
 {
     entity e = world;
-	entity oself = self;
-    while( (e = find(e, classname, "func_playerclip")) )
+    while( (e = find(e, classname, clname)) )
     {
-		if(e.estate != makeSolid)
+		if(makeSolid == TRUE)
 		{
-			self = e;
-			self.use();
-        }
+			e.solid = SOLID_BSP;
+			e.movetype = MOVETYPE_PUSH;
+		}
+		else
+		{
+			e.solid = SOLID_NOT;
+			e.movetype = MOVETYPE_NONE;
+		}
     }
-	self = oself;
 };
 
 /*
@@ -1010,7 +1013,8 @@ void() PlayerPreThink =
 	if (cleanUpClientStuff)
 		fog_setFromEnt(self, self);
 
-	MakePlayerClipSolid(TRUE);
+	MakeClassSolid("func_playerclip",TRUE);
+	MakeClassSolid("func_playernoclip",FALSE);
 	
 	makevectors (self.v_angle);		// is this still used
 
@@ -1217,7 +1221,8 @@ else
 		CheckWaterJump ();
 	
 	//Display custom keys inventory
-	if(invPanel) invPanel.origin = self.origin + v_forward*(250) + v_up*(100);
+	if(invPanel) invPanel.origin = self.origin + v_forward*250 + v_up*100;
+	if(invEmpty) invEmpty.origin = self.origin + v_forward*200 + v_up*55;
 	if(self.skip_id1_overrides > 0)
 	{
 		float dist = world.distance;
@@ -1416,7 +1421,8 @@ void() PlayerPostThink =
 	if (self.deadflag)
 		return;
 
-	MakePlayerClipSolid(FALSE);
+	MakeClassSolid("func_playerclip",FALSE);
+	MakeClassSolid("func_playernoclip",TRUE);
 	
 // do weapon stuff
 

@@ -89,6 +89,7 @@
 	a_ylw_mdl(string) : "Global Yellow Armor model" :  : "Use this field to replace all Yellow Armors with this model"
 	a_red_mdl(string) : "Global Red Armor model" :  : "Use this field to replace all Red Armors with this model"
 	mdl_head(string) : "Custom 'Puzzle items panel' sprite" :  : "Use this field to replace the default inventory plaque sprite"
+	mdl_body(string) : "Custom 'Inventory empty' sprite" :  : "Use this field to replace the default empty inventory caption sprite"
 	distance(integer) : "Distance between HUD items" : 70 : "Use this field to spread the HUD items, so that they can have wider captions"
 ]
 
@@ -488,7 +489,7 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 ]
 
 @BaseClass base(RespawnableItem, CustomMdlsAmmo, CustomMdlsSkin) size(-16 -16 -24, 16 16 32) =
-	Artifact []
+	Artifact [ netname(string) : "Custom name for the artifact when picked up" ]
 
 @PointClass base(Artifact) model({ "path": ":progs/suit.mdl" }) =
 	item_artifact_envirosuit : "Environmental protection suit" []
@@ -550,8 +551,13 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 	obit_name(string) : "Custom name for this armor." : : "Set a custom name for your armor. Just complete the sentence `You got` e.g. the Mega Armor! for `You got the Mega Armor!'"
 	]
 
-@BaseClass base(NonRespawnableItem) size(-16 -16 -24, 16 16 32) =
-	Key []
+@BaseClass base(NonRespawnableItem) size(-16 -16 -24, 16 16 32) = Key
+[
+	spawnflags(flags) =
+	[
+		2097152 : "Silent pickup" : 0 : "Programmatically add the item to the player's inventory"
+	]
+]
 
 // @PointClass base(Key) model({ "path": ":progs/w_s_key.mdl" }) =
 @PointClass base(Key, CustomMdlsSkin) model(
@@ -1441,7 +1447,7 @@ spawnflags(Flags) =
 // misc
 //
 
-@SolidClass base(Appearflags, ModelLight) = func_illusionary : "Static nonsolid model"  []
+@SolidClass base(Appearflags, ModelLight) = func_illusionary : "Static nonsolid model"  [ targetname(target_source) : "Name" : : "Useful for stealth teleportation only (see wiki)"]
 
 @PointClass base(Appearflags) color(0 150 220) model({ "path": ":progs/s_bubble.spr" }) = air_bubbles : "Air bubbles" []
 @PointClass base(Appearflags, Targetname) = event_lightning : "Chthon's lightning"
@@ -1839,7 +1845,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		5 : "classname (string, use 'type' field)"
 		6 : "estate (float, use 'count' field)"
 		8 : "targetname (string, use 'type' field; set shardvalue to 2-4 for targetname2-targetname4)"
-		10 : "items (flag, use 'aflags' field)"
+		10 : "items (flag, use 'aflag' field)"
 		11 : "count (float, use 'count' field)"
 		12 : "cnt (float, use 'count' field)"
 		13 : "type (string, use 'type' field)"
@@ -1863,6 +1869,8 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		5 : "& (bitwise AND, valid for floats and flags)"
 		6 : "| (bitwise OR, valid for floats and flags)"
 		7 : "% (remainder of an integer division, valid for floats and flags)"
+		8 : "!= (not equal, valid for all fields)"
+		9 : "!& (bitwise AND returns false, valid for floats and flags)"
 	]
 	count(integer) : "Float value to test"
 	cnt(integer) : "Modulus used for the % operator"
@@ -2032,6 +2040,9 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 		2: "Metal"
 		3: "Base"
 	]
+	noise1(string) : "Custom start noise"
+	noise2(string) : "Custom move noise"
+	noise3(string) : "Custom stop noise" : : "If set to '0', no stop noise is played, allowing noise2 to go on without being interrupted halfway."
 	message(string) : "Message"
 	spawnflags(flags) =
 	[
@@ -2617,6 +2628,12 @@ Check each field's description for more details.
 	message(string) : "Message"
 ]
 
+@baseclass = Homing
+[
+	homing(float) : "Aiming accuracy" : "0" : "How accurately the player must be facing the direction set by .angle to fire this trigger: from 0 (default) allowing to look up to 90° away from the ideal direction to 1 (looking straight in the intended direction).
+1 is too precise and constraining, it rarely occurs in game because of imprecisions. 0.6 or 0.7 is usually a good compromise."
+]
+
 @SolidClass base(OneTarget, OneTargetname, Appearflags, TriggerWait, FilterTouch) = trigger_changelevel : "Trigger: Change level"
 [
 	map(string) : "Next map"
@@ -2633,7 +2650,7 @@ Check each field's description for more details.
 	target(string) : "Specific intermission camera to use (works only if matching an info_intermission's targetname), otherwise a regular target to fire"
 ]
 
-@SolidClass base(Trigger, Actionable) = trigger_once : "Trigger: Activate once"
+@SolidClass base(Trigger, Actionable, Homing) = trigger_once : "Trigger: Activate once"
 [
 	health(integer) : "Health (shootable)"
 	is_waiting(choices) : "Trigger" : 0 =
@@ -2679,8 +2696,8 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	]
 	delay(float) : "Delay before trigger" : "0" : "Delay before trigger"
 	keyname(string) : "Sets the keyname of the item_key_custom which unlocks this entity. If any key spawnflag is selected (either silver or gold), this only changes the display name of the required key."
-	message(string) : "Custom message"
-	message2(string) : "Message when key used"
+	message(string) : "Message when key needed" : : "Set to '0' to print no message."
+	message2(string) : "Message when key used" : : "Set to '0' to print no message."
 	noise1(string) : "Sound file for the 'key required' sound (default is per worldtype)"
 	noise2(string) : "Sound file for the 'key used' sound (default is per worldtype)"
 	spawnflags(flags) =
@@ -2691,7 +2708,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	pain_target(string) : "Target to fire when not having key"
 ]
 
-@SolidClass base(Trigger, Actionable) = trigger_multiple : "Trigger: Activate multiple"
+@SolidClass base(Trigger, Actionable, Homing) = trigger_multiple : "Trigger: Activate multiple"
 [
 	wait(string) : "Wait before reset" : "0.2"
 	health(integer) : "Health (shootable)"
@@ -2710,7 +2727,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 [
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
-@SolidClass base(Trigger, OneTargetname, TriggerWait) = trigger_secret : "Trigger: Secret"
+@SolidClass base(Trigger, OneTargetname, TriggerWait, Homing) = trigger_secret : "Trigger: Secret"
 [
 	sounds(choices) : "Sound" : 1 =
 	[
@@ -2778,7 +2795,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 @PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
 ]
-@SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_take_weapon : "
+@SolidClass base(Appearflags, TriggerWait, FilterTouch, Homing) = trigger_take_weapon : "
 Trigger: Remove weapon (and/or ammo) on touch.
 
 Classic progs_dump 3.0 behavior:
@@ -3129,11 +3146,11 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 
 		noise(string) : "Sound file to play"
 		speed(choices) : "Attenuation of sound" : 1 =
-				[
+		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 		impulse(integer) : "Channel (0 - 7) Automatic" : 0
@@ -3159,9 +3176,9 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 		speed(choices) : "Attenuation of sound" : 1 =
 		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 		impulse(integer) : "Channel (0 - 7) Automatic" : 0
@@ -3177,11 +3194,11 @@ NOTE - Sound files must be in the SOUND folder (or a sub folder under the SOUND 
 	[
 		noise(string) : "Sound file to play"
 		speed(choices) : "Attenuation of sound" : 1 =
-				[
+		[
 			-1 : "No attenuation (heard everywhere)"
-			1  : "Normal"
-			2  : "Idle"
-			3  : "Static"
+			1  : "Normal (fades to zero at 1000 units)"
+			2  : "Idle (fades to zero at 512 units)"
+			3  : "Static (fades to zero at 341 units)"
 		]
 		volume(integer) : "Volume (0 - 1)" : 1
 	]
@@ -3654,7 +3671,16 @@ sounds(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to pla
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) color(200 128 0) = trigger_cdtrack : "Trigger that changes the currently playing music track. The number of the track to play goes in the count key." [
     count(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to play from within music folder"
 ]
-@SolidClass base(Appearflags, Trigger, Target, TriggerWait, FilterTouch) = trigger_look : "Trigger: Trigger something when a player enters this volume and looks directly at a targeted brush entity. Use the first target key for the looked at item and subsequent targets to trigger events. Add a wait key to make this a trigger_multiple"
+@SolidClass base(Appearflags, Trigger, Target, TriggerWait, FilterTouch) = trigger_look : "Trigger: Trigger something when a player enters this volume and either
+* looks directly at a targeted brush entity
+* has a clear line of sight to a targeted brush entity even if not looking at it
+otherwise, trigger the pain_target(s), if any.
+
+Use the first target key for the looked at item and subsequent targets to trigger events.
+Caution! The first target is triggered as well, unless the 'Don't fire main target' spawnflag is checked.
+
+Add a wait key to make this a trigger_multiple.
+"
 [
 	speed(integer) : "Distance from player to search for trigger, adjust if the target is too far from the trigger" : 500
 	wait(integer) : "Time between re-triggering"
@@ -3667,6 +3693,12 @@ sounds(integer) : "Track Number (ex 02->xx)" :  : "CD track or audio file to pla
 		4 : "Custom sound, requires a path set in noise1 key"
 	]
 	noise1(string) : "Path to custom sound. Use with sounds key set to 4"
+	spawnflags(Flags) =
+	[
+		1 : "Line of sight" : 0 : "A clear line of sight exists, no matter the distance or the player's looking direction"
+		2 : "Don't fire main target" : 0 : "target looked at isn't triggered by player gaze"
+	]
+	pain_target(string) : "Target(s) to fire when the looking/los check fails"
 ]
 //item-backpack
 @PointClass base(Appearflags, OneTargetname, Effects) size(-16 -16 0, 16 16 56) color(80 0 200)  model(
@@ -3975,7 +4007,13 @@ Example: 3 targets of impulse respectively 3, 2 and 1 --> Total cumulated impuls
 	killtarget2(target_destination) : "Killtarget2 (fired upon leaving the trigger)"
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only" []
+@SolidClass base(Appearflags, Targetname) = func_playerclip : "A bbox entity which is solid for the player only
+
+Caution! It's not solid for monsters and the rest of the world, tho! For them, it has no blocking characteristics (they can freely see/pass through it)" []
+
+@SolidClass base(Appearflags, Targetname) = func_playernoclip : "A bbox entity which is not solid for the player only, but may serve as a pass-through trigger_look target
+
+Caution! It's still solid for monsters and the rest of the world, tho! For them, it keeps all its blocking characteristics (they can't see/pass through it)" []
 
 @PointClass base(Appearflags, Target, Targetname) size (16 16 16) color(192 0 192) = trigger_random_time : "Fire targets at random intervals
 

@@ -223,7 +223,7 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			(client.customkeys & customkey_flags);
 			
 // Custom keys inventory
-	if(customkey_flags)
+	if(customkey_flags && client.classname == "player")
 	{
 		//Reassign the slots
 		if(invItem1.customkeys & customkey_flags)
@@ -282,9 +282,11 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 			invLabel5 = world;
 		}
 		
-		other.skip_id1_overrides -= 1;
+		client.skip_id1_overrides -= 1;
 
 		//Do player still have something in their custom keys inventory?
-		if (invItem1 == world && invItem2 == world && invItem3 == world && invItem4 == world && invItem5 == world) other.skip_id1_overrides = 0;
+		if (invItem1 == world && invItem2 == world && invItem3 == world && invItem4 == world && invItem5 == world) client.skip_id1_overrides = 0;
+		
+		if(invEmpty && client.skip_id1_overrides <= 0 && invPanel.model == invPanel.mdl) setmodel (invEmpty, invEmpty.mdl); else setmodel (invEmpty, "");
 	}
 };

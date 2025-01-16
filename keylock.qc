@@ -195,10 +195,13 @@ void(entity client, string failure_message, string success_message,
 	{
 		if (client.flags & FL_CLIENT)
 		{
-			if (failure_message != "")
-				centerprint (client, failure_message);
-			else
-				centerprint2 (client, "You need the ", self.netname);
+			if (failure_message != "0")
+			{
+				if (failure_message != "")
+					centerprint (client, failure_message);
+				else
+					centerprint2 (client, "You need the ", self.netname);
+			}
 			sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 		}
 		failure_func();
@@ -218,17 +221,20 @@ void(entity client, string failure_message, string success_message,
 
 	if (client.flags & FL_CLIENT)
 	{
-		if (success_message != "")
-		{
-			sprint (client, success_message);
-			sprint (client, "\n");
-		}
-		else
-		{
-			sprint (client, s);
-			sprint (client, self.netname);
-			sprint (client, "\n");
-		}
+			if (success_message != "0")
+			{
+				if (success_message != "")
+				{
+					sprint (client, success_message);
+					sprint (client, "\n");
+				}
+				else
+				{
+					sprint (client, s);
+					sprint (client, self.netname);
+					sprint (client, "\n");
+				}
+			}
 	}
 	sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 	

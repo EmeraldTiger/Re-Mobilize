@@ -112,7 +112,7 @@ void() multi_touch = //dumptruck_ds
 	if (self.movedir != '0 0 0')
 	{
 		makevectors (other.angles);
-		if (v_forward * self.movedir < 0)
+		if (!(v_forward * self.movedir >= self.homing)) //self.homing is the minimum accuracy; default is 0 (up to 90° away from the ideal direction); up to 1 (exactly the ideal direction, no compromise!)
 			return;		// not facing the right way
 	}
 
@@ -301,13 +301,11 @@ void() counter_use =
 	if (other.aflag > 0 && other.aflag != self.cnt) 
 	  self.items = 1; //Wrong order
 	
-	/**/
+	//Re:Mobilize is for many reasons singleplayer-focused, so we won't bother with a loop to find "all the players", or about the player being he activator.
+	//As long as the counter is not flagged as 'No Message', a message is printed. Period.
 	entity msgEnt = world;
-	if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		msgEnt = activator;
-	else if (self.spawnflags & TRIGGER_CENTERPRINTALL)
-		msgEnt = find(world, classname, "player"); //Re:Mobilize is for many reasons singleplayer-focused, so let's not bother with a loop to find "all the players". Here the spawnflags simply means "send a message to player never mind they're the direct activator or not".
-	/**/
+	if (self.spawnflags & SPAWNFLAG_NOMESSAGE == 0)
+		msgEnt = find(world, classname, "player");
 	
 	if (self.count != 0)
 	{
@@ -849,6 +847,8 @@ MONSTER_ONLY(16) will only teleport monsters
 		objerror ("no target");
 	self.use = teleport_use;
 
+	precache_sound ("misc/null.wav");
+	
 	if (!(self.spawnflags & SILENT))
 	{
 		precache_sound ("ambience/hum1.wav");
@@ -1408,28 +1408,81 @@ void() trigger_cdtrack =
 ///////////////////////////////////////////////////////////////
 //trigger_look (a.k.a. trigger_onlookat from NullPointPaladin!)
 ///////////////////////////////////////////////////////////////
-void() onlookat_touch =
+void() onlookat_think =
 {
-	// from Copper -- dumptruck_ds
-	if (!CheckValidTouch()) return;
+	float success = FALSE;
 
-  if (self.nextthink > time)
-  {
-        return;        // allready been triggered
-  }
-
+	other = find(world, classname, "player");
+	
     //added player view offset to make this more accurate to the player crosshairs
     local vector player_offset;
     player_offset = other.origin + other.view_ofs;
 
-    makevectors(other.v_angle);
+	if (self.spawnflags & /*Line of sight*/1)
+	{
+		//'Line of sight' mode: check whether there is a clear line of sight between the player and its target, no matter where the player is looking
+		
+        // Find all entities matching self.target
+		// The test is successful as soon as one of them has a clear los to the player.
+		
+		for (entity e = world; (e = find(e, targetname, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname2, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname3, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+		
+		if(!success)
+		for (entity e = world; (e = find(e, targetname4, self.target)); )
+		{
+			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if (trace_ent == e)
+			{
+				success = TRUE;
+				break;
+			}
+		}
+	}
+	else
+	{
+		//Standard mode: check whether the player is directly looking at its target (target under their crosshair)
+	
+		makevectors(other.v_angle);
 
-    //using speed to determine the reach of the trace
-    if(!self.speed)
-        self.speed = 500;
-    traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+		//using speed to determine the reach of the trace
+		if(!self.speed)
+			self.speed = 500;
+		traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+		
+		success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
+	}
 
-    if ((trace_ent.targetname == self.target))
+    if (success)
     {
         // Play message if available
         if (self.message != "")
@@ -1437,12 +1490,21 @@ void() onlookat_touch =
             centerprint (other, self.message);
         }
         self.use = multi_trigger;
-        SUB_UseTargets();
+        
+		if (self.spawnflags & /*Don't fire main target*/ 2)
+		{
+			string otarget = self.target;
+			self.target = "D0n't f1r3 m41n t4rg3t!";
+			SUB_UseTargets();
+			self.target = otarget;
+		}
+		else
+			SUB_UseTargets();
 
-				if (self.noise != "")
-				sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-				else
-				sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+		if (self.noise != "")
+		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		else
+		sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 
         // added wait
         if (self.wait > 0)
@@ -1452,13 +1514,47 @@ void() onlookat_touch =
         }
         else
         {    // we can't just remove (self) here, because this is a touch function
-            // called wheil C code is looping through area links...
+            // called while C code is looping through area links...
             self.touch = SUB_Null;
             self.nextthink = time + 0.1;
             self.think = SUB_Remove;
         }
     }
+	else if (self.pain_target != "")
+	{
+		self.use = multi_trigger;
+		
+		SUB_UsePain2();
+
+		if (self.wait > 0)
+		{
+			self.think = multi_wait;
+			self.nextthink = time + self.wait;
+		}
+	}
+	self.use = look_use;
+	self.touch = onlookat_touch;
 };
+
+void() look_use =
+{
+	//Trigger implementation now relying on .think rather than .touch like in progs_dump. This doesn't changes anything for regular target entities
+	//but now it allows for a func_playernoclip to be targeted as well, thanks to a small physics hack in client.hc.
+	self.think = onlookat_think;
+	self.nextthink = time + 0.1;
+};
+
+void() onlookat_touch =
+{
+	// from Copper -- dumptruck_ds
+	if (!CheckValidTouch()) return;
+
+	//Inhibit any further touch until this one has been fully proceeded by onlookat_think (restored at the end of it)
+	self.touch = SUB_Null;
+	
+	look_use();
+};
+
 /*QUAKED trigger_look (.5 .5 .5) ? X X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
 This will trigger when a player is within the brush trigger and looks directly at a target entity.
 Use the first target key for the "looked at entity" and use the subsequent targets (2-4) to trigger other events.
@@ -1509,7 +1605,11 @@ void() trigger_look =
 				self.noise = self.noise1;
     }
 
+	if(!self.speed)
+		self.speed = 500;
+
     InitTrigger();
+	self.use = look_use;
     self.touch = onlookat_touch;
 
     SUB_CheckWaiting();
@@ -1627,16 +1727,29 @@ float SETSTATE_CLOSEALLDOORS = 2;
 float SETSTATE_DONTRESETBUTTON = 4;
 
 float(entity e) entity_get_state = {
-	if(e.classname == "func_door") return e.owner.estate;
-	else return e.estate;
+	if(e.classname == "func_door")
+		return e.owner.estate;
+	else if(e.classname == "func_togglevisiblewall")
+		return 1 - e.estate;
+	else if(e.classname == "ltrail_start")
+		return !(e.spawnflags & LT_ACTIVE);
+	else if(e.classname == "light")
+		return e.spawnflags & START_OFF;
+	else if(e.classname == "togglewall")
+		return 1 - e.state;
+	else
+		return e.estate;
 };
 
 void(entity e, float state, float flags) entity_set_state = {
+	local entity tempself;
 	float closealldoors;
 
 	if(e.classname == "trigger_teleport") {
 		if (state == STATE_ACTIVE)
 			sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
+		else
+			sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
 		e.estate = state;
 	}
 	else if(e.classname == "func_button") {
@@ -1648,6 +1761,31 @@ void(entity e, float state, float flags) entity_set_state = {
 
 		if (state == STATE_ACTIVE) door_estate_unlock(e, closealldoors);
 		else door_estate_lock(e, closealldoors);
+	}
+	else if(e.classname == "func_togglevisiblewall") {
+		tempself = self;
+		self = e;
+		e.estate = state;
+		func_togglevisiblewall_use();
+		self = tempself;
+	}
+	else if(e.classname == "togglewall" && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		blocker_use();
+		self = tempself;
+	}
+	else if(e.classname == "ltrail_start" && e.spawnflags & LT_TOGGLE && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		ltrail_start_fire();
+		self = tempself;
+	}
+	else if(e.classname == "light" && e.targetname && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		light_use();
+		self = tempself;
 	}
 	else e.estate = state;
 
@@ -1666,8 +1804,10 @@ void(string matchstring, .string matchfield, float state, float flags) target_se
 	t = find (world, matchfield, matchstring);
 	while (t != world) {
 		if(state == -1){
-			if(entity_get_state(t) == STATE_ACTIVE) entity_set_state(t, STATE_INACTIVE, flags);
-			else entity_set_state(t, STATE_ACTIVE, flags);
+			if(entity_get_state(t) == STATE_ACTIVE)
+				entity_set_state(t, STATE_INACTIVE, flags);
+			else
+				entity_set_state(t, STATE_ACTIVE, flags);
 		}
 		else entity_set_state(t, state, flags);
 
@@ -1765,6 +1905,8 @@ float FILTER_OP_GTE = 4;
 float FILTER_OP_BITMASK_AND = 5;
 float FILTER_OP_BITMASK_OR = 6;
 float FILTER_OP_MODULO = 7;
+float FILTER_OP_NOT_EQUAL = 8;
+float FILTER_OP_BITMASK_NAND = 9;
 
 void() trigger_filter_use = {
 	self.state = 0;
@@ -1930,26 +2072,31 @@ void() trigger_filter_use = {
 	}
 
 	if (fieldtype == FILTER_FIELDTYPE_FLOAT) {
-		if 		(op == FILTER_OP_EQUALS) 		{if (targfloat == self.count) result = 1;}
-		else if (op == FILTER_OP_LT) 			{if (targfloat <  self.count) result = 1;}
-		else if (op == FILTER_OP_LTE) 			{if (targfloat <= self.count) result = 1;}
-		else if (op == FILTER_OP_GT) 			{if (targfloat >  self.count) result = 1;}
-		else if (op == FILTER_OP_GTE) 			{if (targfloat >= self.count) result = 1;}
-		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.count) result = 1;}
-		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.count) result = 1;}
-		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
-		else 									{if (targfloat == self.count) result = 1;}
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targfloat == self.count)  result = 1;}
+		else if (op == FILTER_OP_LT) 			{if   (targfloat <  self.count)  result = 1;}
+		else if (op == FILTER_OP_LTE) 			{if   (targfloat <= self.count)  result = 1;}
+		else if (op == FILTER_OP_GT) 			{if   (targfloat >  self.count)  result = 1;}
+		else if (op == FILTER_OP_GTE) 			{if   (targfloat >= self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_AND)	{if   (targfloat &  self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_OR)	{if   (targfloat |  self.count)  result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if   (self.count == mod(targfloat,self.cnt)) result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targfloat != self.count)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_NAND)	{if (!(targfloat &  self.count)) result = 1;}
+		else 									{if   (targfloat == self.count)  result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_FLAG) {
-		if 		(op == FILTER_OP_EQUALS) 		{if (targfloat == self.aflag) result = 1;}
-		else if (op == FILTER_OP_BITMASK_AND)	{if (targfloat &  self.aflag) result = 1;}
-		else if (op == FILTER_OP_BITMASK_OR)	{if (targfloat |  self.aflag) result = 1;}
-		else if (op == FILTER_OP_MODULO)		{if (self.count == mod(targfloat,self.cnt)) result = 1;}
-		else 									{if (targfloat == self.aflag) result = 1;}
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targfloat == self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_AND)	{if   (targfloat &  self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_OR)	{if   (targfloat |  self.aflag)  result = 1;}
+		else if (op == FILTER_OP_MODULO)		{if   (self.count == mod(targfloat,self.cnt)) result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targfloat != self.aflag)  result = 1;}
+		else if (op == FILTER_OP_BITMASK_NAND)	{if (!(targfloat &  self.aflag)) result = 1;}
+		else 									{if   (targfloat == self.aflag)  result = 1;}
 	}
 	else if (fieldtype == FILTER_FIELDTYPE_STRING) {
-
-		if (targstring == self.type) result = 1;
+		if 		(op == FILTER_OP_EQUALS) 		{if   (targstring == self.type)  result = 1;}
+		else if (op == FILTER_OP_NOT_EQUAL) 	{if   (targstring != self.type)  result = 1;}
+		else 									{if   (targstring == self.type)  result = 1;}
 	}
 	else {
 		objerror ("invalid fieldtype");
