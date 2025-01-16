@@ -1572,6 +1572,8 @@ void() key_touch =
 			if(label) setmodel(label, label.mdl);
 		}
 		
+		if(invEmpty) setmodel (invEmpty, "");
+		
 		//Assign it to the first available slot
 		if(!invItem1)
 		{

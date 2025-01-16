@@ -287,6 +287,6 @@ void(entity client, float item_flags, float customkey_flags) RemoveKeys =
 		//Do player still have something in their custom keys inventory?
 		if (invItem1 == world && invItem2 == world && invItem3 == world && invItem4 == world && invItem5 == world) client.skip_id1_overrides = 0;
 		
-		if(invEmpty && client.skip_id1_overrides <= 0) setmodel (invEmpty, invEmpty.mdl); else setmodel (invEmpty, "");
+		if(invEmpty && client.skip_id1_overrides <= 0 && invPanel.model == invPanel.mdl) setmodel (invEmpty, invEmpty.mdl); else setmodel (invEmpty, "");
 	}
 };
