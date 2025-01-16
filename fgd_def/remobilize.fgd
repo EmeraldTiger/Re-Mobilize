@@ -2035,6 +2035,9 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 		2: "Metal"
 		3: "Base"
 	]
+	noise1(string) : "Custom start noise"
+	noise2(string) : "Custom move noise"
+	noise3(string) : "Custom stop noise" : : "If set to '0', no stop noise is played, allowing noise2 to go on without being interrupted halfway."
 	message(string) : "Message"
 	spawnflags(flags) =
 	[
