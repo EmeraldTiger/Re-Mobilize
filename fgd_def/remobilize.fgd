@@ -1845,7 +1845,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		5 : "classname (string, use 'type' field)"
 		6 : "estate (float, use 'count' field)"
 		8 : "targetname (string, use 'type' field; set shardvalue to 2-4 for targetname2-targetname4)"
-		10 : "items (flag, use 'aflags' field)"
+		10 : "items (flag, use 'aflag' field)"
 		11 : "count (float, use 'count' field)"
 		12 : "cnt (float, use 'count' field)"
 		13 : "type (string, use 'type' field)"
