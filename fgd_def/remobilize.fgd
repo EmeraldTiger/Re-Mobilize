@@ -1442,7 +1442,7 @@ spawnflags(Flags) =
 // misc
 //
 
-@SolidClass base(Appearflags, ModelLight) = func_illusionary : "Static nonsolid model"  []
+@SolidClass base(Appearflags, ModelLight) = func_illusionary : "Static nonsolid model"  [ targetname(target_source) : "Name" : : "Useful for stealth teleportation only (see wiki)"]
 
 @PointClass base(Appearflags) color(0 150 220) model({ "path": ":progs/s_bubble.spr" }) = air_bubbles : "Air bubbles" []
 @PointClass base(Appearflags, Targetname) = event_lightning : "Chthon's lightning"
