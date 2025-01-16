@@ -2056,7 +2056,7 @@ void() item_artifact_invulnerability =
 	self.noise = "items/protect.wav";
 	// setmodel (self, "progs/invulner.mdl");
 	body_model ("progs/invulner.mdl");
-	self.netname = "Pentagram of Protection";
+	if (!self.netname) self.netname = "Pentagram of Protection";
 	self.items = IT_INVULNERABILITY;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2082,7 +2082,7 @@ void() item_artifact_envirosuit =
 	self.noise = "items/suit.wav";
 	// setmodel (self, "progs/suit.mdl");
 	body_model ("progs/suit.mdl");
-	self.netname = "Biosuit";
+	if (!self.netname) self.netname = "Biosuit";
 	self.items = IT_SUIT;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2110,7 +2110,7 @@ void() item_artifact_invisibility =
 	self.noise = "items/inv1.wav";
 	// setmodel (self, "progs/invisibl.mdl");
 	body_model ("progs/invisibl.mdl");
-	self.netname = "Ring of Shadows";
+	if (!self.netname) self.netname = "Ring of Shadows";
 	self.items = IT_INVISIBILITY;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds
@@ -2137,8 +2137,7 @@ void() item_artifact_super_damage =
 	self.noise = "items/damage.wav";
 	// setmodel (self, "progs/quaddama.mdl");
 	body_model ("progs/quaddama.mdl");
-	if !(self.netname) // custom name -- dumptruck_ds
-	self.netname = "Quad Damage";
+	if (!self.netname) self.netname = "Quad Damage";
 	self.items = IT_QUAD;
 	resize('-16 -16 -24', '16 16 32');
 	if !(self.particles_offset)  // t_fog fix for custom models dumptruck_ds

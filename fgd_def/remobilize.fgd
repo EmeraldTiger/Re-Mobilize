@@ -489,7 +489,7 @@ the bprint tends to stomp any other prints on screen in most quake clients, so u
 ]
 
 @BaseClass base(RespawnableItem, CustomMdlsAmmo, CustomMdlsSkin) size(-16 -16 -24, 16 16 32) =
-	Artifact []
+	Artifact [ netname(string) : "Custom name for the artifact when picked up" ]
 
 @PointClass base(Artifact) model({ "path": ":progs/suit.mdl" }) =
 	item_artifact_envirosuit : "Environmental protection suit" []
