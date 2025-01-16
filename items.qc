@@ -60,7 +60,7 @@ void(entity whatitem, float defaultdelay) CheckItemRespawn =
 
 		if (whatitem.respawndelay)	// custom respawn delay?
 			whatitem.nextthink = time + whatitem.respawndelay;
-		else
+		else if (defaultdelay > 0)
 			whatitem.nextthink = time + defaultdelay;
 	}
 	else if(whatitem.ritem == 2)
@@ -1616,6 +1616,10 @@ void() key_touch =
 		}
 	}
 
+	// SP respawning items support
+	self.think	= SUB_regen;
+	CheckItemRespawn(self, 0);
+	
 	if (!coop)
 	{
 		self.solid = SOLID_NOT;
@@ -1624,9 +1628,7 @@ void() key_touch =
 	}
 
 	activator = other;
-// fix key items firing their targets multiple times in coop -- iw
-//	SUB_UseTargets();				// fire all targets / killtargets
-	SUB_UseAndForgetTargets();
+	SUB_UseTargets();
 };
 
 
