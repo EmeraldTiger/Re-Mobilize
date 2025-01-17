@@ -1427,7 +1427,19 @@ void() onlookat_think =
 		
 		for (entity e = world; (e = find(e, targetname, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1438,7 +1450,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname2, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1449,7 +1473,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname3, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1460,7 +1496,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname4, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1477,9 +1525,20 @@ void() onlookat_think =
 		//using speed to determine the reach of the trace
 		if(!self.speed)
 			self.speed = 500;
+		
 		traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
 		
 		success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
+		
+		if(!success)
+		{
+			//Now let's redo the check including illusionaries
+			MakeClassSolid("func_illusionary",TRUE);
+			traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+			MakeClassSolid("func_illusionary",FALSE);
+			
+			success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
+		}
 	}
 
     if (success)
