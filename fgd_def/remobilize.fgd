@@ -2024,6 +2024,13 @@ Originally unused in the game. Plays the sound of thunder at a random interval. 
 		16: "Silver Key required" : 0
 		32: "Toggle" : 0
 		64: "Doom-style Unlock" : 0
+		128: "Staged targets" : 0 : "
+target fired when the door starts opening,
+target2 fired when the door is open,
+target3 fired when the door starts closing,
+target4 fired when the door is closed
+killtarget & killtarget2 never fired; use a relay instead.
+"
 	]
 	_switchableshadow(choices) : "Switchable shadow" : 0 : "Enables dynamic shadows that fade on/off when the door moves." = [
 		0: "No"

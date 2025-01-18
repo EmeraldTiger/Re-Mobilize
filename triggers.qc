@@ -2506,7 +2506,7 @@ void() trigger_enterleave_leave =
 		return;
 
     self.wait = 0;
-	if (self.target3!="" || self.target4!="")
+	if (self.target3!="" || self.target4!="" || self.killtarget2!="")
 	{
 		string otarget = self.target;
 		string otarget2 = self.target2;
@@ -2530,7 +2530,7 @@ void() trigger_enterleave_enter =
     if (self.wait == 0) // first touch?
     {
         self.wait = 1;
-		if (self.target!="" || self.target2!="")
+		if (self.target!="" || self.target2!="" || self.killtarget!="")
         {
 			string otarget3 = self.target3;
 			string otarget4 = self.target4;
