@@ -8,7 +8,7 @@
 
 void() play_sound_use =
    {
-   if (self.spawnflags & 1)
+   if (self.spawnflags & /*Toggle*/ 1)
       {
       if (self.state == 0)
          {
@@ -70,7 +70,7 @@ void() play_sound_triggered =
    if (self.speed == -1)
       // self.speed = 0;
       self.speed = ATTN_NONE;
-   if (self.spawnflags & 1)
+   if (self.spawnflags & /*Toggle*/ 1)
       if (self.impulse == 0)
          self.impulse = 7;
    self.use = play_sound_use;
