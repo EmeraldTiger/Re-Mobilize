@@ -2698,5 +2698,5 @@ void() trigger_startup =
 	self.think = startup_think;
 	// No need for a use function, as this entity does not need to be targeted due to being automatically activated
 	self.estate = STATE_ACTIVE;
-	self.nextthink = time;
+	self.nextthink = time + 0.2; //A slight delay is applied to be sure all the other entities have spawned
 };
