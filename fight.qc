@@ -379,6 +379,11 @@ float() ShamCheckAttack =
 		}
 	}
 
+	if (self.style == /*Melee only*/ 2)
+	{
+		return FALSE;
+	}
+
 	if (self.spawnflags & I_AM_TURRET)
 		{
 			self.attack_state = AS_MISSILE;
@@ -391,11 +396,6 @@ float() ShamCheckAttack =
 
 	if (!enemy_vis)
 		return FALSE;
-
-	if (self.style == /*Melee only*/ 2)
-	{
-		return FALSE;
-	}
 
 	targ = self.enemy;
 
