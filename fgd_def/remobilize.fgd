@@ -2794,6 +2794,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 		0 : "Default"
 		1 : "Wait for Trigger"
 	]
+	include(target_destination) : "Entity's targetname to teleport at destination, no matter its initial location (only 1 matching entity at a time, must have health >= 0)"
 ]
 
 @SolidClass base(Appearflags, TriggerWait, FilterTouch) = trigger_setskill : "Trigger: Set skill"

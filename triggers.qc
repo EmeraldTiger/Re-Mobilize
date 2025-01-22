@@ -813,9 +813,30 @@ void() info_teleport_random =
 
 void() teleport_use =
 {
+	entity e = world;
+
 	self.nextthink = time + 0.2;
-	force_retouch = 2;		// make sure even still objects get hit
 	self.think = SUB_Null;
+
+	if(self.include)
+	{
+		//Programmatically teleport someone no matter where they initially are
+		//Let's find the first entity matching the condition (no more than one, otherwise they'd telefrag)
+		if (!e)	for (e = world; (e = find(e, targetname,  self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname2, self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname3, self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname4, self.include)); ) if (e.health > 0) break;
+	}
+	
+	if (e)
+	{
+		other = e;
+		teleport_touch();
+	}
+	else
+	{
+		force_retouch = 2;		// make sure even still objects get hit
+	}
 };
 
 // -------------------------
