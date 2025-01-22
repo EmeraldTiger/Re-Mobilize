@@ -686,9 +686,9 @@ void() monster_shambler =
 	else
 	self.th_melee = sham_melee;
 	if (self.style == 1)
-	self.th_missile = sham_proj1;
-	else
-	self.th_missile = sham_magic1;
+		self.th_missile = sham_proj1;
+	else if (self.style != 2)
+		self.th_missile = sham_magic1;
 	if (self.style == 1)
 	self.th_turret = sham_turret_proj1;
 	else

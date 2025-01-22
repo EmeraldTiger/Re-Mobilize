@@ -930,6 +930,7 @@ style(Choices) : "Attack type" =
 	[
 		0 : "Default"
 		1	: "Lavaballs"
+		2	: "Melee only"
 	]
 ]
 @PointClass base(Monster, CustomMdls) size(-128 -128 -24, 128 128 256) model(
