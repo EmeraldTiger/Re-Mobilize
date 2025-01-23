@@ -3099,6 +3099,13 @@ keep_ammo(integer): "If 1, explosion entity remains even after finishing animati
 
 @PointClass base(Targetname, Appearflags) size(16 16 24) color(150 0 150) = play_spawnexpl : "When triggered, plays the Spawn death explosion. Causes damage."
 [
+	noise(string) : "Custom sound file to play (otherwise default spawn explosion sound)"
+	spawnflags(flags) =
+	[
+		1 : "No damage" : 0
+		2 : "Silent" : 0
+		4 : "No explosion" : 0
+	]
 ]
 
 @PointClass base(Targetname, Appearflags) size(16 16 24) color(255 128 0) = play_mflash : "When triggered, plays a brief muzzle flash effect.
