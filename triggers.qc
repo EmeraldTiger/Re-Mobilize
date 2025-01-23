@@ -1815,7 +1815,7 @@ float(entity e) entity_get_state = {
 		return !(e.spawnflags & LT_ACTIVE);
 	else if(e.classname == "light")
 		return e.spawnflags & START_OFF;
-	else if(e.classname == "togglewall")
+	else if(e.classname == "togglewall" || e.classname == "play_sound_triggered")
 		return 1 - e.state;
 	else
 		return e.estate;
@@ -1865,6 +1865,12 @@ void(entity e, float state, float flags) entity_set_state = {
 		tempself = self;
 		self = e;
 		light_use();
+		self = tempself;
+	}
+	else if(e.classname == "play_sound_triggered" && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		play_sound_use();
 		self = tempself;
 	}
 	else e.estate = state;
