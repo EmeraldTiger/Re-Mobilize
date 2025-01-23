@@ -393,11 +393,23 @@ void() SUB_UseTargets =
 	if (self.message != "" && !(self.flags & FL_NOCENTERPRINT) && self != world) {
 		if (self.spawnflags & TRIGGER_CENTERPRINTALL) {
 			t = find(world, classname, "player");
-			while (t) {
-				centerprint (t, self.message);
-				if (!self.noise)
-					sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
-				t = find(t, classname, "player");
+			if(t)
+				while (t)
+				{
+					centerprint (t, self.message);
+					if (!self.noise)
+						sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+					t = find(t, classname, "player");
+				}
+			else
+			{
+				t = find(world, classname, "camera");
+				if(t)
+				{
+					centerprint (t, self.message);
+					if (!self.noise)
+						sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+				}
 			}
 		}
 		
