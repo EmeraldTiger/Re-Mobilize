@@ -1826,10 +1826,13 @@ void(entity e, float state, float flags) entity_set_state = {
 	float closealldoors;
 
 	if(e.classname == "trigger_teleport") {
-		if (state == STATE_ACTIVE)
-			sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
-		else
-			sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
+		if (!(self.spawnflags & SILENT))
+		{
+			if (state == STATE_ACTIVE)
+				sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
+			else
+				sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
+		}
 		e.estate = state;
 	}
 	else if(e.classname == "func_button") {
