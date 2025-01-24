@@ -2875,7 +2875,11 @@ Don't forget that buttons targeting a counter should always be wait|-1 anyway, n
 ]
 @SolidClass base(Angle, Appearflags, Targetname, TriggerWait) = trigger_push : "Trigger: Push"
 [
-	spawnflags(flags) = [ 1: "Push once" : 0 ]
+	spawnflags(flags) =
+	[
+		1: "Push once" : 0
+		16: "Silent" : 0
+	]
 	speed(integer) : "Speed" : 1000
 ]
 @SolidClass base(Angle, Appearflags, Targetname, TriggerWait) = trigger_push_custom : "Trigger: Push (Custom): Can be toggled on and off, use a custom sound (noise) and be made silent.
