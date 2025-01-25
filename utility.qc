@@ -1,4 +1,4 @@
-void(string s, string ss) dprint2 = 
+void(string s, string ss) dprint2 =
 	{ dprint(s); dprint(ss); }
 void(string s, string ss, string sss) dprint3 = 
 	{ dprint(s); dprint(ss); dprint(sss); }
