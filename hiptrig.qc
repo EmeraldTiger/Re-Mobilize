@@ -24,8 +24,8 @@ keytrigger_use function.  -- iw
 */
 void() keytrigger_unlock =
 {
-	self.estate = STATE_INACTIVE;
 	SUB_UseTargets();
+	self.estate = STATE_INACTIVE;
 };
 
 void() keytrigger_use =
