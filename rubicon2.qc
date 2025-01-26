@@ -810,9 +810,9 @@ void() make_sparks =
 			spark.movetype = MOVETYPE_BOUNCE;
 			spark.solid = SOLID_TRIGGER;
 			spark.gravity = 0.3;
-			spark.velocity_x = -40 + random() * 80;
-			spark.velocity_y = -40 + random() * 80;
-			spark.velocity_z = -40 + random() * 80;
+			spark.velocity_x = self.movedir_x + random() * 80;
+			spark.velocity_y = self.movedir_y + random() * 80;
+			spark.velocity_z = self.movedir_z + random() * 80;
 			spark.avelocity = '3000 3000 3000';
 			spark.nextthink = time + 0.5 + 1.5*random();
 			spark.think = sparks_fade1;
@@ -880,7 +880,7 @@ void() misc_sparks =
 	precache_sound (self.noise);
 
 	if (!self.movedir)
-		self.movedir = '0 0 -30';
+		self.movedir = '-40 -40 -40';
 	if (!self.wait)
 		self.wait = 2;
 	if (!self.cnt)
