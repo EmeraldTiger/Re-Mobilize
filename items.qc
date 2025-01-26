@@ -6,6 +6,7 @@ BE .8 .3 .4 IN COLOR */
 float ITEM_SPAWNSILENT = 32;
 float ITEM_SPAWNED = 64;
 float ITEM_SUSPENDED = 128;
+float ITEM_AT_PLAYER_ORIGIN = 131072;
 float ITEM_RESPAWNDM = 16384;
 float ITEM_SPAWNFALL = 4194304;
 float ITEM_DONTDROP = 8388608;
@@ -93,6 +94,12 @@ void() DropToFloor = { droptofloor(); }
 
 void() DelaySpawnItem =
 {
+	if (self.spawnflags & ITEM_AT_PLAYER_ORIGIN)
+	{
+		entity player = find(world,classname,"player");
+		if (player) setorigin (self, player.origin);
+	}
+	
 	self.solid = SOLID_TRIGGER;
 	setmodel (self, self.mdl);
 	resize(self.pos1, self.pos2);
