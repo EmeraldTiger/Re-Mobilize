@@ -2875,12 +2875,13 @@ Don't forget that buttons targeting a counter should always be wait|-1 anyway, n
 	message2(string) : "Message when sequence completed in the wrong order"
 	pain_target(string) : "Fire this target when sequence completed in the wrong order"
 ]
-@SolidClass base(Angle, Appearflags, Targetname, TriggerWait) = trigger_push : "Trigger: Push"
+@SolidClass base(Angle, Appearflags, Targetname, TriggerWait, Homing) = trigger_push : "Trigger: Push"
 [
 	spawnflags(flags) =
 	[
 		1: "Push once" : 0
 		16: "Silent" : 0
+		32: "Don't hinder" : 0 : "Push the player or monster only if they facing the pushing direction. Adjust the accuracy with 'homing'"
 	]
 	speed(integer) : "Speed" : 1000
 ]

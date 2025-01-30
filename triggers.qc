@@ -1042,8 +1042,16 @@ void() trigger_push_touch =
 		other.velocity = self.speed * self.movedir * 10;
 	else if (other.health > 0)
 	{
+		// if the trigger has an angles field, check player's facing direction
+		if (self.spawnflags & /*Don't hinder*/ 32)
+		{
+			makevectors (other.angles);
+			if (!(v_forward * self.movedir >= self.homing)) //self.homing is the minimum accuracy; default is 0 (up to 90° away from the ideal direction); up to 1 (exactly the ideal direction, no compromise!)
+				return;		// not facing the right way
+		}
+	
 		other.velocity = self.speed * self.movedir * 10;
-		if (other.classname == "player")
+		
 		if (!(self.spawnflags & DT_SILENT))
 		{
 			if (other.fly_sound < time)
