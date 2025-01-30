@@ -1107,15 +1107,15 @@ void() rotate_door_use =
       start = self.dest1;
       self.dest = self.dest2;
       self.state = STATE_OPENING;
+	  sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
       }
    else
       {
       start = self.dest2;
       self.dest = self.dest1;
       self.state = STATE_CLOSING;
+	  sound(self, CHAN_VOICE, self.noise4, 1, ATTN_NORM);
       }
-
-   sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 
    self.rotate = ( self.dest - start ) * ( 1 / self.speed );
    self.think = rotate_door_think;
@@ -1208,9 +1208,11 @@ void() func_rotate_door = // added slinet option - sounds 4 -- dumptruck_ds
   {
       self.noise1 = self.noise2 = self.noise3 = "misc/null.wav";
   }
+  if (!self.noise4) self.noise4 = self.noise2;
    precache_sound (self.noise1);
    precache_sound (self.noise2);
    precache_sound (self.noise3);
+   precache_sound (self.noise4);
    
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
