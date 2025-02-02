@@ -15,7 +15,11 @@ void() magnet_touch =
 	{
 		return;
 	}
-		
+	
+	
+	if (other.flags & FL_ITEM && self.spawnflags & /*No items*/ 8)
+		return;
+	
 	local vector disp;
 	local float dist, inv_dist_squared, force;
 	
