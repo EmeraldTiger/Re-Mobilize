@@ -16,10 +16,23 @@ entity used_exit;
 This is the camera point for the intermission.
 Use mangle instead of angle, so you can set pitch or roll as well as yaw.  'pitch roll yaw'
 */
+void() SetIntermissionMangle =
+{
+	entity t = find(world,targetname,self.target);
+	self.mangle = vectoangles(t.origin - self.origin);
+	self.mangle_x = -self.mangle_x;
+};
+
 void() info_intermission =
 {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
+		
+	if (self.target)
+	{
+		self.think = SetIntermissionMangle;
+		self.nextthink = self.ltime + 0.2;
+	}
 };
 
 
@@ -416,6 +429,12 @@ void() dt_exit_toggle = //dumptruck_ds based on hipnotic blocker_use
 	}
 };
 
+void() exit_use =
+{
+	other = find(world,classname,"player");
+	if (!other) other = find(world,classname,"camera");
+	changelevel_touch();
+};
 
 float DT_EXITOFF = 8;
 /*QUAKED trigger_changelevel (0.5 0.5 0.5) ? NO_INTERMISSION X X X X X X X NOT_ON_EASY NOT_ON_NORMAL NOT_ON_HARD_OR_NIGHTMARE NOT_IN_DEATHMATCH NOT_IN_COOP NOT_IN_SINGLEPLAYER X NOT_ON_HARD_ONLY NOT_ON_NIGHTMARE_ONLY
@@ -436,12 +455,21 @@ void() trigger_changelevel =
 	if (!self.sounds)
 		self.sounds = 3;
 	
-	self.use = dt_exit_toggle;
 	if (!self.map)
 		objerror ("changelevel trigger doesn't have map");
 
 
 	InitTrigger ();
 	self.flags = self.flags | FL_NOCENTERPRINT;
-	self.touch = changelevel_touch;
+	
+	if (self.spawnflags & /*Triggered, not touched*/ 32)
+	{
+		self.touch = SUB_Null;
+		self.use = exit_use;
+	}
+	else
+	{
+		self.touch = changelevel_touch;
+		self.use = dt_exit_toggle;
+	}
 };

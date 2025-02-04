@@ -344,6 +344,7 @@ NOTE when a trigger_teleport has a targetname it must be triggered to operate, s
 [
 	mangle(string) : "Camera angle (Pitch Yaw Roll)"
 	targetname(string) : "Use to force this intermission camera by making it the target of a trigger_changelevel"
+	target(string) : "Entity to aim at (alternative way of setting the camera angle)"
 ]
 
 @PointClass = info_intermissiontext : "Intermission Text
@@ -2662,6 +2663,7 @@ Check each field's description for more details.
 		2: "Ignore intermissiontext" : 0
 		8: "Start Off" : 0
 		16: "Use info_player_start2" : 0
+		32: "Triggered, not touched" : 0
 	]
 	target(string) : "Specific intermission camera to use (works only if matching an info_intermission's targetname), otherwise a regular target to fire"
 ]
