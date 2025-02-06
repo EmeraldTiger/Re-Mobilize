@@ -1853,7 +1853,7 @@ void(entity e, float state, float flags) entity_set_state = {
 		if (state == STATE_ACTIVE) door_estate_unlock(e, closealldoors);
 		else door_estate_lock(e, closealldoors);
 	}
-	else if(e.classname == "func_togglevisiblewall") {
+	else if(e.classname == "func_togglevisiblewall" && state != entity_get_state(e)) {
 		tempself = self;
 		self = e;
 		e.estate = state;
