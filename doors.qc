@@ -1038,7 +1038,7 @@ void () func_door_secret =
 	if(self.noise3 == "") self.noise3 = default_noise3; //secret door stop noise
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	if(self.noise3 != "0") precache_sound (self.noise3);
 
 	if (!self.dmg)
 		self.dmg = 2;
