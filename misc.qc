@@ -1836,7 +1836,7 @@ void() target_textstory_helper_show = {
 
 	textstory_show(self.owner);
 
-	if (self.attack_finished < time) self.think = target_textstory_helper_hide;
+	if (self.attack_finished < time || self.owner.estate != STATE_ACTIVE) self.think = target_textstory_helper_hide;
 
 	self.nextthink = time + 0.1;
 };

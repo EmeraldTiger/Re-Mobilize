@@ -251,7 +251,8 @@ void () blocker_touch =
 
 void MoveEntityOrigin(entity t, vector offset)
 {
-	setorigin(t, t.origin + offset);
+	t.origin = t.origin + offset;
+	setorigin(t, t.origin);
 }
 
 void MoveTargetOrigin(string value, .string tname_field)

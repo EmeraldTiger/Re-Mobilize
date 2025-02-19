@@ -24,7 +24,23 @@ keytrigger_use function.  -- iw
 */
 void() keytrigger_unlock =
 {
+	float omessage0, omessage20;
+	if (self.message == "0")
+	{
+		omessage0 = TRUE;
+		self.message = "";
+	}
+	if (self.message2 == "0")
+	{
+		omessage20 = TRUE;
+		self.message2 = "";
+	}
+	
 	SUB_UseTargets();
+	
+	if (omessage0) self.message = "0";
+	if (omessage20) self.message2 = "0";
+
 	self.estate = STATE_INACTIVE;
 };
 

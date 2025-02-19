@@ -8,7 +8,7 @@
 
 void() play_sound_use =
    {
-   if (self.spawnflags & 1)
+   if (self.spawnflags & /*Toggle*/ 1)
       {
       if (self.state == 0)
          {
@@ -70,7 +70,7 @@ void() play_sound_triggered =
    if (self.speed == -1)
       // self.speed = 0;
       self.speed = ATTN_NONE;
-   if (self.spawnflags & 1)
+   if (self.spawnflags & /*Toggle*/ 1)
       if (self.impulse == 0)
          self.impulse = 7;
    self.use = play_sound_use;
@@ -226,33 +226,39 @@ When triggered, creates a Spawn death explosion at it's origin. Causes damage.
 
 */
 
-void () play_tbaby_fx = //thanks Khreathor -- dumptruck_ds
+void () play_tbaby_fx =
+{
+	if(!(self.spawnflags & /*No damage*/ 1))
+		T_RadiusDamage (self, self, 120, world);
 
-{
-  tbaby_die2();
-}
-void() play_tbabyexplode =
-{
-  if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
-    return;
-  precache_sound2 ("blob/death1.wav");
-  self.use = play_tbaby_fx;
+	if(!(self.spawnflags & /*Silent*/ 2))
+		sound_death (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+
+	if(!(self.spawnflags & /*No explosion*/ 4))
+		BecomeExplosion ();
+
+	DropStuff();
 };
 
+void() play_tbabyexplode = { play_spawnexpl(); }; //Kept for compatibility but not even documented; probably a former name for the same thing.
 
 /*QUAKED play_spawnexpl (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-
-When triggered, creates a Spawn death explosion at it's origin. Causes damage.
-
+When triggered, creates a Spawn death explosion at it's origin. Causes damage by default.
 */
-
 void() play_spawnexpl =
 {
-  if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
-    return;
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
 
-  precache_sound2 ("blob/death1.wav");
-  self.use = play_tbaby_fx;
+	if(!self.noise) self.noise = "blob/death1.wav";
+	precache_sound2 (self.noise);
+	self.use = play_tbaby_fx;
 };
 
 /*QUAKED play_lavasplash (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)

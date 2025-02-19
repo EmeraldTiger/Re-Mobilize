@@ -813,9 +813,30 @@ void() info_teleport_random =
 
 void() teleport_use =
 {
+	entity e = world;
+
 	self.nextthink = time + 0.2;
-	force_retouch = 2;		// make sure even still objects get hit
 	self.think = SUB_Null;
+
+	if(self.include)
+	{
+		//Programmatically teleport someone no matter where they initially are
+		//Let's find the first entity matching the condition (no more than one, otherwise they'd telefrag)
+		if (!e)	for (e = world; (e = find(e, targetname,  self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname2, self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname3, self.include)); ) if (e.health > 0) break;
+		if (!e)	for (e = world; (e = find(e, targetname4, self.include)); ) if (e.health > 0) break;
+	}
+	
+	if (e)
+	{
+		other = e;
+		teleport_touch();
+	}
+	else
+	{
+		force_retouch = 2;		// make sure even still objects get hit
+	}
 };
 
 // -------------------------
@@ -1021,8 +1042,16 @@ void() trigger_push_touch =
 		other.velocity = self.speed * self.movedir * 10;
 	else if (other.health > 0)
 	{
+		// if the trigger has an angles field, check player's facing direction
+		if (self.spawnflags & /*Don't hinder*/ 32)
+		{
+			makevectors (other.angles);
+			if (!(v_forward * self.movedir >= self.homing)) //self.homing is the minimum accuracy; default is 0 (up to 90° away from the ideal direction); up to 1 (exactly the ideal direction, no compromise!)
+				return;		// not facing the right way
+		}
+	
 		other.velocity = self.speed * self.movedir * 10;
-		if (other.classname == "player")
+		
 		if (!(self.spawnflags & DT_SILENT))
 		{
 			if (other.fly_sound < time)
@@ -1427,7 +1456,19 @@ void() onlookat_think =
 		
 		for (entity e = world; (e = find(e, targetname, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1438,7 +1479,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname2, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1449,7 +1502,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname3, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1460,7 +1525,19 @@ void() onlookat_think =
 		if(!success)
 		for (entity e = world; (e = find(e, targetname4, self.target)); )
 		{
+			if(e.classname == "func_illusionary")
+			{
+				//Make solid for the trace check
+				e.solid = SOLID_BSP;
+				e.movetype = MOVETYPE_PUSH;
+			}
 			traceline(player_offset, (e.mins + e.maxs) * 0.5, 1, other);
+			if(e.classname == "func_illusionary")
+			{
+				//Return to normal state
+				e.solid = SOLID_NOT;
+				e.movetype = MOVETYPE_NONE;
+			}
 			if (trace_ent == e)
 			{
 				success = TRUE;
@@ -1477,9 +1554,20 @@ void() onlookat_think =
 		//using speed to determine the reach of the trace
 		if(!self.speed)
 			self.speed = 500;
+		
 		traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
 		
 		success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
+		
+		if(!success)
+		{
+			//Now let's redo the check including illusionaries
+			MakeClassSolid("func_illusionary",TRUE);
+			traceline(player_offset, (player_offset + (v_forward * self.speed)), FALSE, other);
+			MakeClassSolid("func_illusionary",FALSE);
+			
+			success = (trace_ent.targetname == self.target || trace_ent.targetname2 == self.target || trace_ent.targetname3 == self.target || trace_ent.targetname4 == self.target);
+		}
 	}
 
     if (success)
@@ -1735,7 +1823,7 @@ float(entity e) entity_get_state = {
 		return !(e.spawnflags & LT_ACTIVE);
 	else if(e.classname == "light")
 		return e.spawnflags & START_OFF;
-	else if(e.classname == "togglewall")
+	else if(e.classname == "togglewall" || e.classname == "play_sound_triggered")
 		return 1 - e.state;
 	else
 		return e.estate;
@@ -1746,10 +1834,13 @@ void(entity e, float state, float flags) entity_set_state = {
 	float closealldoors;
 
 	if(e.classname == "trigger_teleport") {
-		if (state == STATE_ACTIVE)
-			sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
-		else
-			sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
+		if (!(self.spawnflags & SILENT))
+		{
+			if (state == STATE_ACTIVE)
+				sound (e, CHAN_WEAPON, "ambience/hum1.wav", 0.5, ATTN_NORM);
+			else
+				sound (e, CHAN_WEAPON, "misc/null.wav", 0.5, ATTN_NORM);
+		}
 		e.estate = state;
 	}
 	else if(e.classname == "func_button") {
@@ -1762,7 +1853,7 @@ void(entity e, float state, float flags) entity_set_state = {
 		if (state == STATE_ACTIVE) door_estate_unlock(e, closealldoors);
 		else door_estate_lock(e, closealldoors);
 	}
-	else if(e.classname == "func_togglevisiblewall") {
+	else if(e.classname == "func_togglevisiblewall" && state != entity_get_state(e)) {
 		tempself = self;
 		self = e;
 		e.estate = state;
@@ -1785,6 +1876,12 @@ void(entity e, float state, float flags) entity_set_state = {
 		tempself = self;
 		self = e;
 		light_use();
+		self = tempself;
+	}
+	else if(e.classname == "play_sound_triggered" && state != entity_get_state(e)) {
+		tempself = self;
+		self = e;
+		play_sound_use();
 		self = tempself;
 	}
 	else e.estate = state;
@@ -2447,7 +2544,7 @@ void() trigger_enterleave_leave =
 		return;
 
     self.wait = 0;
-	if (self.target3!="" || self.target4!="")
+	if (self.target3!="" || self.target4!="" || self.killtarget2!="")
 	{
 		string otarget = self.target;
 		string otarget2 = self.target2;
@@ -2471,7 +2568,7 @@ void() trigger_enterleave_enter =
     if (self.wait == 0) // first touch?
     {
         self.wait = 1;
-		if (self.target!="" || self.target2!="")
+		if (self.target!="" || self.target2!="" || self.killtarget!="")
         {
 			string otarget3 = self.target3;
 			string otarget4 = self.target4;
@@ -2639,5 +2736,5 @@ void() trigger_startup =
 	self.think = startup_think;
 	// No need for a use function, as this entity does not need to be targeted due to being automatically activated
 	self.estate = STATE_ACTIVE;
-	self.nextthink = time;
+	self.nextthink = time + 0.2; //A slight delay is applied to be sure all the other entities have spawned
 };

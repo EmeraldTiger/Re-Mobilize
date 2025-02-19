@@ -770,7 +770,7 @@ local   entity  scrpt;
     self.script_delay = scrpt.script_delay;
     self.script_time = time + 1;
     self.script_count = self.script_count + 1;
-    centerprint (self, scrpt.message);
+    if (scrpt.message) centerprint (self, scrpt.message);
 
     if (self.script_count == self.script_delay)
     {

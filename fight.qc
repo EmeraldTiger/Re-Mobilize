@@ -379,6 +379,11 @@ float() ShamCheckAttack =
 		}
 	}
 
+	if (self.style == /*Melee only*/ 2)
+	{
+		return FALSE;
+	}
+
 	if (self.spawnflags & I_AM_TURRET)
 		{
 			self.attack_state = AS_MISSILE;
@@ -400,17 +405,17 @@ float() ShamCheckAttack =
 
 
 	if (self.style == 0)
-		{
-			if (vlen(spot1 - spot2) > 600)
-			return FALSE;
-		}
-		if (self.spawnflags & I_AM_TURRET)
-		{
-			if (vlen(spot1 - spot2) > 900)
-			return FALSE;
-		}
+	{
+		if (vlen(spot1 - spot2) > 600)
+		return FALSE;
+	}
+	if (self.spawnflags & I_AM_TURRET)
+	{
+		if (vlen(spot1 - spot2) > 900)
+		return FALSE;
+	}
 
-		// return FALSE;
+	// return FALSE;
 
 	traceline (spot1, spot2, FALSE, self);
 

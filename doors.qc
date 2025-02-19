@@ -47,11 +47,30 @@ void() door_blocked =
 	}
 };
 
-
 void() door_hit_top =
 {
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_TOP;
+	
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target2!="")
+		{
+			string otarget = self.target;
+			string otarget3 = self.target3;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target3 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target3 = otarget3;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	
 	if (self.spawnflags & DOOR_TOGGLE)
 		return;		// don't come down automatically
 	self.think = door_go_down;
@@ -62,6 +81,25 @@ void() door_hit_bottom =
 {
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_BOTTOM;
+	
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target4!="")
+		{
+			string otarget = self.target;
+			string otarget2 = self.target2;
+			string otarget3 = self.target3;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target2 = self.target3 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target2 = otarget2;
+			self.target3 = otarget3;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
 };
 
 void() door_go_down =
@@ -79,6 +117,25 @@ void() door_go_down =
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, door_hit_bottom);
 	
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target3!="")
+		{
+			string otarget = self.target;
+			string otarget2 = self.target2;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target2 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target2 = otarget2;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+
 	if(self.switchshadstyle) {
 		shadow = self.shadowcontroller;
 		oldself = self;
@@ -115,7 +172,26 @@ void() door_go_up =
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, door_hit_top);
 
-	SUB_UseTargets();
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target!="")
+		{
+			string otarget2 = self.target2;
+			string otarget3 = self.target3;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target2 = self.target3 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target2 = otarget2;
+			self.target3 = otarget3;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	else
+		SUB_UseTargets();
 	
 	if(self.switchshadstyle) {
 		shadow = self.shadowcontroller;
@@ -962,7 +1038,7 @@ void () func_door_secret =
 	if(self.noise3 == "") self.noise3 = default_noise3; //secret door stop noise
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	if(self.noise3 != "0") precache_sound (self.noise3);
 
 	if (!self.dmg)
 		self.dmg = 2;
