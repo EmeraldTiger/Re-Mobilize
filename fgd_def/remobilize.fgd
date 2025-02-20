@@ -4032,3 +4032,27 @@ at orthogonal angles (multiples of 90 degrees)"
 		1 : "Start Off" : 0
 	]
 ]
+
+@SolidClass base(Appearflags) = func_swingbar : "A bar that the player can jump onto to swing around. The player will continue swinging until they press the jump button again, after which the player will shortly be released and flung in the direction that they were looking upon pressing the jump button, with a slight boost in height as well. Direction of swinging/flinging is defined by the mangle key.
+
+Speed affects how quickly the player swings around the bar, while spread defines how far out the player swings. Height affects how much vertical boost is given to the player upon release, and impulse affects the forward momentum/speed upon release. Lip defines the size of the invisible trigger brush around the bar (similar to a func_door), which is the area in which the player will latch onto the bar if they touch it while in the jumping state. Style defines the type of swinging motion to use; the default 0 is a full 360-degree swing, while 1 is a 180-degree half-circle swing.
+"
+[
+	mangle(string) : "Swing direction/angle (Pitch Yaw Roll)" : "0 0 0"
+
+	speed(integer) : "How quickly the player swings around the bar, default 5." : 5
+	
+	spread(integer) : "How far out the player swings while using the swingbar, default 55." : 55
+	
+	height(integer) : "How much vertical boost is given to the player upon releasing, default 2" : 2
+	
+	impulse(integer) : "How much forward momentum/speed is given to the player upon releasing, default 150" : 150
+	
+	lip(integer) : "The size of the invisible trigger area around the brush in which the player will latch onto the bar while in the jumping state, default 30" : 30
+	
+	style(choices) : "Type of swinging motion to use" : 0 =
+	[
+		0: "Full circle (360 degrees)"
+		1: "Half-circle (180 degrees)"
+	]
+]
