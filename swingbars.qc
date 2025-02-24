@@ -20,6 +20,8 @@ void() swingbar_touch =
 	local vector bar_bounds = 0.5*(self.maxs - self.mins);
 	other.bar_origin = self.mins + bar_bounds;
 	other.bar_angles = self.owner.mangle;
+	
+	sound (self, CHAN_BODY, "swingbars/grab1.wav", 1, ATTN_NORM);
 };
 
 void() func_swingbar =
@@ -29,7 +31,7 @@ void() func_swingbar =
 		
 	if (!self.speed)
 	{
-		self.speed = 5;
+		self.speed = 7;
 	}
 	
 	if (!self.spread)

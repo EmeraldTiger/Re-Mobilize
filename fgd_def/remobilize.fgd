@@ -4040,7 +4040,7 @@ Speed affects how quickly the player swings around the bar, while spread defines
 [
 	mangle(string) : "Swing direction/angle (Pitch Yaw Roll)" : "0 0 0"
 
-	speed(integer) : "How quickly the player swings around the bar, default 5." : 5
+	speed(integer) : "How quickly the player swings around the bar, default 7." : 7
 	
 	spread(integer) : "How far out the player swings while using the swingbar, default 55." : 55
 	

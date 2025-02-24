@@ -527,6 +527,11 @@ void() worldspawn =
 	precache_model ("progs/s_null.spr");
 	
 	precache_model ("models/monsters/big_spike.mdl"); // for Civic Ascent
+	
+	precache_sound ("swingbars/swing1.wav");
+	precache_sound ("swingbars/fling1.wav");
+	precache_sound ("swingbars/grab1.wav");
+	precache_sound ("swingbars/rattle1.wav");
 
 
 //

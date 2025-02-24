@@ -955,6 +955,7 @@ void() BarCooldown = {
 }
 
 void(vector vel) FlingPlayer = {
+	sound (self, CHAN_BODY, "swingbars/fling1.wav", 1, ATTN_NORM);
 	// little bit of an upwards compensative boost 
 	vel[2] += self.currentbar.height;
 	self.think = ResetBar;
@@ -989,13 +990,25 @@ void() SwingPlayer = {
     
     v_forward *= -radius * disp1;
     v_up *= radius * disp2;
-    
+   
     currentpos = self.bar_origin + v_forward + v_up;
     
     self.origin = currentpos;
     
     vector dv;
     dv = (self.origin - self.oldorigin);
+    
+    if ((time > self.swing_finished) && (disp1 < 0)) {
+		sound (self, CHAN_AUTO, "swingbars/swing1.wav", 1, ATTN_NORM);
+		self.swing_finished = time + 5/fabs(rate);
+	}
+	
+	if ((time > self.spin_finished)) {
+		sound (self, CHAN_AUTO, "swingbars/rattle1.wav", 1, ATTN_NORM);
+		self.spin_finished = time + 0.5;
+	}
+    
+    //sound (self, CHAN_BODY, "swingbars/swing1.wav", 1, ATTN_NORM);
     
     // don't immediately let the player release, so their velocity prior to entering the bar doesn't carry over
     if (self.button2 && !self.jumpdelay)
@@ -1015,7 +1028,7 @@ void() SwingPlayer = {
     
     // get the dot product of the stored player forward angle and the current delta velocity/tangent vector
     self.alignment = normalize(dv) * self.releasedir;
-    
+
     // release automatically when the stored angle and the delta angle are parallel, so the player doesn't need to 
     // precisely time their jump off the bars themselves
     // in essence a "latched" jump
