@@ -999,6 +999,14 @@ void() PlayerPreThink =
 		self.gravity = 0.0000001;	// not zero, because zero means "default"
 		self.onWiremesh = 0;
 	}
+	else if (self.onSlippery) // Re:Mobilize
+	{
+		if (self.button2)
+		{
+			self.velocity[2] += vlen(self.velocity) / 10;
+		}
+		self.onSlippery = 0;
+	}
 	else
 	{
 		do_ladder_physics = FALSE;
