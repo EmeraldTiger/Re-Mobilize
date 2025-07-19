@@ -1144,3 +1144,9 @@ entity invPanel, invItem1, invItem2, invItem3, invItem4, invItem5, invLabel1, in
 .void() actiontouch;  // for ACTION key
 
 .float onSlippery;
+.float slickFinished;
+.float slicksounds;
+.string slicknoise;
+.string slicknoise2;
+.string slicknoise3;
+.string slicknoise4;

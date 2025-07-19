@@ -64,6 +64,7 @@ prototyping mobot.qc
 prototyping rm_mechanics.qc
 prototyping lighthook.qc
 prototyping magnets.qc
+prototyping slippery.qc
 compiling defs.qc
 compiling newflags.qc
 compiling math.qc
@@ -126,5 +127,6 @@ compiling mobot.qc
 compiling rm_mechanics.qc
 compiling lighthook.qc
 compiling magnets.qc
+compiling slippery.qc
 Compile finished: ../progs.dat (id format)
 Done. 0 warnings
