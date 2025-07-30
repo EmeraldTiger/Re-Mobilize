@@ -226,3 +226,9 @@ vector(float base, float rndmix, float plusminus) vecrand =
 	}
 	return vecmix;
 };
+
+float sqrt(float x) {
+    if (x <= 0) return 0; // No sqrt for negative numbers
+
+    return vlen([x, 0, 0]); // Compute sqrt(x^2) = |x|
+}

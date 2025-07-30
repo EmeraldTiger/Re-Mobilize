@@ -37,25 +37,19 @@ void() slippery_touch =
 		other.slicknoise4 = "";
 	}
 	
-	// How much "dampening" is applied to the increase in velocity over time
-	// 17 (the default) is the lowest value in which the player cannot achieve max speed simply by going in a straight line
-	float slipconstant = self.wait;
-	
-	// Maximum speed the player can attain
-	float maxspeed = self.speed;
-	
 	vector dir = normalize(other.velocity);
 	float speed = vlen(other.velocity);
 
-	if (vlen(other.velocity) > maxspeed)
-	{
-		other.velocity -= dir * slipconstant;
-	}
-	else
-	{
-		other.velocity += dir * speed / slipconstant;
-	}
+	other.velocity += dir * speed / 17;
 	
+	/*
+	vector down = '0 0 -50';
+	vector slope_check = other.origin + down;
+	
+	traceline(other.origin, slope_check, 0, 0);
+	
+	float dot = trace_plane_normal * (down/-50);
+	*/
 
 };
 
@@ -68,12 +62,7 @@ void() trigger_slippery =
 	
 	if (!self.speed)
 	{
-		self.speed = 1200;
-	}
-	
-	if (!self.wait)
-	{
-		self.wait = 17;
+		self.speed = 2;
 	}
 	
 	if (self.noise != "") {

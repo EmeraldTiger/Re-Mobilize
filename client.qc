@@ -1024,17 +1024,6 @@ void() PlayerPreThink =
 			}
 			else if (self.slicksounds==1) {
 				if (r > 0.75)
-					sound (self, CHAN_BODY, "slippery/oil1.wav", 0.5, ATTN_NORM);
-				else if (r > 0.5)
-					sound (self, CHAN_BODY, "slippery/oil2.wav", 0.5, ATTN_NORM);
-				else if (r > 0.25)
-					sound (self, CHAN_BODY, "slippery/oil3.wav", 0.5, ATTN_NORM);
-				else	
-					sound (self, CHAN_BODY, "slippery/oil4.wav", 0.5, ATTN_NORM);
-				self.slickFinished = time + 0.5;
-			}
-			else {
-				if (r > 0.75)
 					sound (self, CHAN_BODY, "slippery/ice1.wav", 0.5, ATTN_NORM);
 				else if (r > 0.5)
 					sound (self, CHAN_BODY, "slippery/ice2.wav", 0.5, ATTN_NORM);
@@ -1042,6 +1031,17 @@ void() PlayerPreThink =
 					sound (self, CHAN_BODY, "slippery/ice3.wav", 0.5, ATTN_NORM);
 				else	
 					sound (self, CHAN_BODY, "slippery/ice4.wav", 0.5, ATTN_NORM);
+				self.slickFinished = time + 0.5;
+			}
+			else {
+				if (r > 0.75)
+					sound (self, CHAN_BODY, "slippery/oil1.wav", 0.5, ATTN_NORM);
+				else if (r > 0.5)
+					sound (self, CHAN_BODY, "slippery/oil2.wav", 0.5, ATTN_NORM);
+				else if (r > 0.25)
+					sound (self, CHAN_BODY, "slippery/oil3.wav", 0.5, ATTN_NORM);
+				else	
+					sound (self, CHAN_BODY, "slippery/oil4.wav", 0.5, ATTN_NORM);
 				self.slickFinished = time + 0.5;
 			}
 		}
