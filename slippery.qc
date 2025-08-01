@@ -38,18 +38,9 @@ void() slippery_touch =
 	}
 	
 	vector dir = normalize(other.velocity);
-	float speed = vlen(other.velocity);
-
-	other.velocity += dir * speed / 17;
+	float vel = vlen(other.velocity);
 	
-	/*
-	vector down = '0 0 -50';
-	vector slope_check = other.origin + down;
-	
-	traceline(other.origin, slope_check, 0, 0);
-	
-	float dot = trace_plane_normal * (down/-50);
-	*/
+	other.velocity += (dir * vel * self.speed) / 17;
 
 };
 
@@ -62,7 +53,7 @@ void() trigger_slippery =
 	
 	if (!self.speed)
 	{
-		self.speed = 2;
+		self.speed = 1;
 	}
 	
 	if (self.noise != "") {
