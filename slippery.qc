@@ -41,6 +41,7 @@ void() slippery_touch =
 	float vel = vlen(other.velocity);
 	
 	other.velocity += (dir * vel * self.speed) / 17;
+	other.velocity[2] *= 0;
 
 };
 
