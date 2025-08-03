@@ -590,7 +590,7 @@ void() spikeshooter_use =
       lavaball.solid = SOLID_BBOX;
       lavaball.classname = "lavaball";
       // set lavaball speed
-      lavaball.velocity = self.movedir * 600;  //was 300 dms
+      lavaball.velocity = self.movedir * 600 * self.proj_speed_mod;  //was 300 dms
       lavaball.angles = vectoangles(lavaball.velocity);
       lavaball.owner = self;
       lavaball.touch = ShalMissileTouch;
@@ -611,7 +611,7 @@ void() spikeshooter_use =
 		 rockettrap.solid = SOLID_BBOX;
 		 rockettrap.classname = "rockettrap";
 		 // set rocket speed
-		 rockettrap.velocity = self.movedir * 1000;
+		 rockettrap.velocity = self.movedir * 1000 * self.proj_speed_mod;
 		 rockettrap.angles = vectoangles(rockettrap.velocity);
 		 rockettrap.owner = self;
 		 rockettrap.touch = T_MissileTouch;
@@ -631,7 +631,7 @@ void() spikeshooter_use =
 		 voreball.solid = SOLID_BBOX;
 		 voreball.classname = "voreball";
 		 // set voreball speed
-		 voreball.velocity = self.movedir * 600;  //was 300 dms
+		 voreball.velocity = self.movedir * 600 * self.proj_speed_mod;  //was 300 dms
 		 voreball.angles = vectoangles(voreball.velocity);
 		 voreball.owner = self;
 		 voreball.touch = ShalMissileTouch;
@@ -654,7 +654,7 @@ void() spikeshooter_use =
 		 gnade.classname = "gnade";
 		 // set grenade speed
 		 // gnade.velocity = self.movedir * 600;  //was 300 dms
-		 gnade.velocity = self.movedir * 600 + v_up * 200 + crandom()*v_right*10 + crandom()*v_up*10;
+		 gnade.velocity = self.movedir * 600 * self.proj_speed_mod + v_up * 200 * self.proj_speed_mod + crandom()*v_right*10 + crandom()*v_up*10;
 		 gnade.angles = vectoangles(gnade.velocity);
 		 gnade.owner = self;
 		 gnade.touch = GrenadeTouch;
@@ -678,7 +678,7 @@ void() spikeshooter_use =
 		setmodel (zgibs, "progs/zom_gib.mdl");
 		setsize (zgibs, '0 0 0', '0 0 0');
 		setorigin (zgibs, self.origin);
-	 	zgibs.velocity = self.movedir * 600 + v_up * 200 + crandom()*v_right*10 + crandom()*v_up*10;
+		zgibs.velocity = self.movedir * 600 * self.proj_speed_mod + v_up * 200 * self.proj_speed_mod + crandom()*v_right*10 + crandom()*v_up*10;
 	 	zgibs.avelocity = '3000 1000 2000';
 	 	zgibs.touch = ZombieGrenadeTouch;
 	 // set missile duration
@@ -691,7 +691,7 @@ void() spikeshooter_use =
   if (!(self.spawnflags & SPAWNFLAG_SILENT))
     sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, self.movedir);
-		newmis.velocity = self.movedir * 500;
+		newmis.velocity = self.movedir * 500 * self.proj_speed_mod;
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
 			newmis.touch = superspike_touch;
 	}
