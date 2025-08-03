@@ -1,21 +1,97 @@
-name: compile-progs
-on: [push]
+name: Create release files
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
 jobs:
   compile-progs:
+    name: Compile progs.dat
     runs-on: ubuntu-latest
+    container: ghcr.io/progs-dump-dev/fteqcc-docker:main
     steps:
-      - uses: actions/checkout@v4
-      - shell: bash
+      - uses: actions/checkout@v3
+      - name: Set up folder structure
+        shell: bash
         run: |
-          sed -i 's#../progs.dat#progs.dat#g' progs.src
-          wget https://www.fteqcc.org/dl/fteqcc_linux64.zip
-          unzip fteqcc_linux64.zip
-          ./fteqcc64
-      - name: Upload output file
+          cd qc
+          fteqcc64
+      - name: Upload progs only
         uses: actions/upload-artifact@v4
         with:
           name: progs-dat
           path: |
             progs.dat
             progs.lno
-            fgd_def/
+  create-mod-template:
+    name: Create mod-template.zip
+    runs-on: ubuntu-latest
+    needs: compile-progs
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download compiled progs
+        uses: actions/download-artifact@v4
+        with:
+          name: progs-dat  
+      - name: Set up folder structure
+        shell: bash
+        run: |
+          mkdir -p mod-template/my_mod/maps
+          cp mod-template-readme.txt mod-template/my_mod/progs_dump-devkit-readme.txt
+          cp progs.dat mod-template/my_mod/
+          cp -r fgd_def/ mod-template/my_mod/
+          cp quake.rc mod-template/my_mod/
+          cp -r progs/ mod-template/my_mod/
+          cp -r maps/debris/ mod-template/my_mod/maps/
+          cp -r sound/ mod-template/my_mod/
+          cp -r music/ mod-template/my_mod/
+          cp -r qc/ mod-template/my_mod/
+      - name: Upload mod template
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-template
+          path: mod-template/
+  create-full-devkit:
+    name: Create full devkit 
+    runs-on: ubuntu-latest
+    needs: create-mod-template
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download compiled progs
+        uses: actions/download-artifact@v4
+        with:
+          name: progs-dat 
+      - name: Download mod template
+        uses: actions/download-artifact@v4
+        with:
+          name: mod-template
+          path: mod-template/
+      - name: Make mod template zip
+        shell: bash
+        run: |
+          cd mod-template
+          zip -r mod-template.zip my_mod
+          mv mod-template.zip ../
+          cd ../
+      - name: Set up folder structure
+        shell: bash
+        run: |
+          mkdir -p devkit/pd-devkit
+          cp mod-template.zip devkit/pd-devkit/
+          cp progs_dump_manual_300.pdf devkit/pd-devkit/
+          cp progs.dat devkit/pd-devkit/
+          cp -r fgd_def/ devkit/pd-devkit/
+          cp quake.rc devkit/pd-devkit/
+          cp -r progs/ devkit/pd-devkit/
+          cp -r maps/ devkit/pd-devkit/
+          cp -r mapsrc/ devkit/pd-devkit/
+          cp -r sound/ devkit/pd-devkit/
+          cp -r music/ devkit/pd-devkit/
+          cp -r qc/ devkit/pd-devkit/
+          cp -r wads/ devkit/pd-devkit/
+          cp -r readme.txt devkit/pd-devkit/progs_dump_devkit_readme.txt
+      - name: Upload devkit
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-devkit
+          path: devkit/
