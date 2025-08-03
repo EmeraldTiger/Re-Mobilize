@@ -224,7 +224,12 @@ void(vector st) ZombieFireGrenade =
 	makevectors (self.angles);
 
 	missile.velocity = normalize(self.enemy.origin - org);
-	missile.velocity = missile.velocity * 600;
+	// Emerald: for some reason just directly multiplying by proj_speed_mod affects all zombies, which doesn't happen with other enemies
+	// so we have to use this seemingly pointless if statement
+	if (self.proj_speed_mod)
+		missile.velocity = missile.velocity * 600 * self.proj_speed_mod;
+	else
+		missile.velocity = missile.velocity * 600;
 	missile.velocity_z = 200;
 
 	missile.avelocity = '3000 1000 2000';

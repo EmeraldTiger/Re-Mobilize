@@ -76,7 +76,7 @@ void() GruntFireGrenade =
 	makevectors (self.angles);
 
 	missile.velocity = normalize(self.enemy.origin - self.origin);
-	missile.velocity = missile.velocity * 600;
+	missile.velocity = missile.velocity * 600 * self.proj_speed_mod;
 	missile.velocity_z = 200;
 
 	missile.avelocity = '300 300 300';
