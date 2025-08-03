@@ -594,7 +594,10 @@ void() spikeshooter_use =
       lavaball.angles = vectoangles(lavaball.velocity);
       lavaball.owner = self;
       lavaball.touch = ShalMissileTouch;
-      setmodel (lavaball, "progs/lavaball.mdl"); //dms
+      if (self.mdl_proj)
+		setmodel(lavaball, self.mdl_proj);
+      else
+		setmodel (lavaball, "progs/lavaball.mdl"); //dms
       setsize (lavaball, '0 0 0', '0 0 0');
       setorigin (lavaball, self.origin);
       lavaball.avelocity = '0 0 400';
@@ -615,7 +618,10 @@ void() spikeshooter_use =
 		 rockettrap.angles = vectoangles(rockettrap.velocity);
 		 rockettrap.owner = self;
 		 rockettrap.touch = T_MissileTouch;
-		 setmodel (rockettrap, "progs/missile.mdl"); //dms
+		 if (self.mdl_proj)
+			setmodel(rockettrap, self.mdl_proj);
+		 else
+			setmodel (rockettrap, "progs/missile.mdl"); //dms
 		 setsize (rockettrap, '0 0 0', '0 0 0');
 		 setorigin (rockettrap, self.origin);
 		 // rockettrap.avelocity = '0 0 400';
@@ -635,7 +641,10 @@ void() spikeshooter_use =
 		 voreball.angles = vectoangles(voreball.velocity);
 		 voreball.owner = self;
 		 voreball.touch = ShalMissileTouch;
-		 setmodel (voreball, "progs/v_spike.mdl"); //dms
+		 if (self.mdl_proj)
+			setmodel(voreball, self.mdl_proj);
+		 else
+			setmodel (voreball, "progs/v_spike.mdl"); //dms
 		 setsize (voreball, '0 0 0', '0 0 0');
 		 setorigin (voreball, self.origin);
 		 voreball.avelocity = '0 0 400';
@@ -658,7 +667,10 @@ void() spikeshooter_use =
 		 gnade.angles = vectoangles(gnade.velocity);
 		 gnade.owner = self;
 		 gnade.touch = GrenadeTouch;
-		 setmodel (gnade, "progs/grenade.mdl"); //dms
+		 if (self.mdl_proj)
+			setmodel(gnade, self.mdl_proj);
+		 else
+			setmodel (gnade, "progs/grenade.mdl"); //dms
 		 setsize (gnade, '0 0 0', '0 0 0');
 		 setorigin (gnade, self.origin);
 		 gnade.avelocity = '300 300 300';
@@ -675,7 +687,10 @@ void() spikeshooter_use =
 	 	zgibs.movetype = MOVETYPE_BOUNCE;
 	 	zgibs.solid = SOLID_BBOX;
 		zgibs.classname = "zgibs";
-		setmodel (zgibs, "progs/zom_gib.mdl");
+		if (self.mdl_proj)
+			setmodel(zgibs, self.mdl_proj);
+		else
+			setmodel (zgibs, "progs/zom_gib.mdl");
 		setsize (zgibs, '0 0 0', '0 0 0');
 		setorigin (zgibs, self.origin);
 		zgibs.velocity = self.movedir * 600 * self.proj_speed_mod + v_up * 200 * self.proj_speed_mod + crandom()*v_right*10 + crandom()*v_up*10;
@@ -692,6 +707,8 @@ void() spikeshooter_use =
     sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500 * self.proj_speed_mod;
+		if (self.mdl_proj)
+			setmodel(newmis, self.mdl_proj);
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
 			newmis.touch = superspike_touch;
 	}
