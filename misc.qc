@@ -515,6 +515,7 @@ float SPAWNFLAG_VOREBALL = 16;
 float SPAWNFLAG_GRENADE = 32;
 float SPAWNFLAG_GIBS = 64;
 float SPAWNFLAG_SILENT = 128;
+float SPAWNFLAG_MULTIGRENADE = 16384;
 
 void() ShalMissileTouch = //moved from Shalrath to enable shooter version
 {
@@ -570,6 +571,7 @@ void() spikeshooter_use =
    local entity voreball;
    local entity rockettrap;
    local entity gnade;
+   local entity mgnade;
    local entity zgibs;
 
 	if (self.spawnflags & SPAWNFLAG_LASER)
@@ -700,6 +702,32 @@ void() spikeshooter_use =
 	 	zgibs.nextthink = time + 2.5;
 	 	zgibs.think = SUB_Remove;
 	 }
+	 
+	 else if (self.spawnflags & SPAWNFLAG_MULTIGRENADE)
+	 {
+		 if (!(self.spawnflags & SPAWNFLAG_SILENT))
+		 sound (self, CHAN_VOICE, "weapons/grenade.wav", 1, ATTN_NORM);
+		 mgnade = spawn();
+		 mgnade.movetype = MOVETYPE_BOUNCE;
+		 // gnade.movetype = MOVETYPE_FLYMISSILE;
+		 mgnade.solid = SOLID_BBOX;
+		 mgnade.classname = "mgnade";
+		 // set grenade speed
+		 // gnade.velocity = self.movedir * 600;  //was 300 dms
+		 mgnade.velocity = self.movedir * 600 * self.proj_speed_mod + v_up * 200 * self.proj_speed_mod + crandom()*v_right*10 + crandom()*v_up*10;
+		 mgnade.angles = vectoangles(mgnade.velocity);
+		 mgnade.owner = self;
+		 mgnade.touch = GrenadeTouch;
+		 if (self.mdl_proj)
+			setmodel(mgnade, self.mdl_proj);
+		 else
+			setmodel (mgnade, "progs/mervup.mdl"); //dms
+		 setsize (gnade, '0 0 0', '0 0 0');
+		 setorigin (mgnade, self.origin);
+		 mgnade.avelocity = '300 300 300';
+		 mgnade.nextthink = time + 2.5;
+	 	 mgnade.think = MultiGrenadeExplode;
+	 }
 
    else
 	{
@@ -775,6 +803,11 @@ void() trap_spikeshooter =
 		precache_sound ("zombie/z_shot1.wav");	// Zombie gibs
 		precache_sound ("zombie/z_miss.wav");
 		precache_sound ("zombie/z_hit.wav");
+	 }
+	 else if (self.spawnflags & SPAWNFLAG_MULTIGRENADE)
+	 {
+		precache_model ("progs/mervup.mdl");
+		precache_sound ("weapons/grenade.wav");	// grenade launcher
 	 }
 
    else

@@ -614,7 +614,10 @@ void(float offsetAngle) MiniGrenadeLaunch =
 	missile.angles = vectoangles(missile.velocity);
 	missile.touch = MultiGrenadeTouch;
 
-	setmodel (missile, "progs/mervup.mdl");
+	if (self.owner.mdl_proj)
+		setmodel(missile, self.owner.mdl_proj);
+	else
+		setmodel (missile, "progs/mervup.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin);
 
