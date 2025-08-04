@@ -1515,6 +1515,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
                                  "progs/spike.mdl"}}) = trap_spikeshooter : "Triggered shooter - use trigger_multiple to activate" [
 	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 	mdl_proj(string) : "Path to custom projectile model"
+	damage_mod(string): "Multiplier for damage" : 1
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1542,6 +1543,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 	wait(integer) : "Delay between firing" : 1
 	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 	mdl_proj(string) : "Path to custom projectile model"
+	damage_mod(string): "Multiplier for damage" : 1
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1569,6 +1571,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 			state(integer) : "0 initially off, 1 initially on" : 0
 			proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 			mdl_proj(string) : "Path to custom projectile model"
+			damage_mod(string): "Multiplier for damage" : 1
 			spawnflags(Flags) =	[
 				1 : "Spike" : 0
 				2 : "Laser" : 0
