@@ -759,6 +759,7 @@ style(Choices) : "Attack type" =
 		3 : "lasers"
 		4 : "nails (single fire)"
 		5 : "nails (rapid fire)"
+		6 : "bouncy lasers"
 	]
 ]
 // @PointClass base(Monster, Berserk, CustomMdlsWizSham) size(-32 -32 -24, 32 32 40) model({ "path": ":progs/dog.mdl" }) = monster_dog : "Nasty Doggie
@@ -977,6 +978,7 @@ style(Choices) : "Attack type" =
 		3 : "nails (single fire)"
 		4 : "lightning"
 		5 : "nails (rapid fire)"
+		6 : "bouncy lasers"
 	]
 snd_death(string) : "Path to custom death sound" : : "Path to custom death sound"
 snd_pain(string) : "Path to custom 1st pain sound" : : "Path to 1st custom pain sound"

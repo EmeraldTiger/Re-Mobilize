@@ -51,7 +51,10 @@ void() genforcer_fire =
 
 	org = self.origin + v_forward * 30 + v_right * 5 + '0 0 12';
 
-	LaunchLaser(org, self.enemy.origin - self.origin);
+	if (self.style == 6)
+		HIP_LaunchLaser(org, self.enemy.origin - self.origin, 1);
+	else
+		LaunchLaser(org, self.enemy.origin - self.origin);
 };
 /*
 ================
@@ -366,7 +369,7 @@ else if (self.style == 2)
 		GruntFireGrenade();
 	}
 
-else if (self.style == 3)
+else if (self.style == 3 || self.style == 6)
 
 	{
 		ai_face();
