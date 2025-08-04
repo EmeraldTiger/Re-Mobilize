@@ -647,7 +647,8 @@ void() HIP_LaserThink =
 void(vector org, vector vec, float light) HIP_LaunchLaser =
 {
 //   sound (self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
-   sound (self ,CHAN_WEAPON, "hipweap/laserg.wav", 1, ATTN_NORM);
+   if (!self.snd_attack)
+	sound (self ,CHAN_WEAPON, "hipweap/laserg.wav", 1, ATTN_NORM);
 
    vec = normalize(vec);
 
@@ -760,14 +761,24 @@ void() spikeshooter_use =
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
       if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		  sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+      {
+      	if (self.snd_attack)
+		sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+      	else
+		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+      }
 			LaunchLaser (self.origin, self.movedir);
       newmis.spawnflags = self.spawnflags;
 	}
    else if (self.spawnflags & SPAWNFLAG_LAVABALL)
    {
       if (!(self.spawnflags & SPAWNFLAG_SILENT))
-      sound (self, CHAN_VOICE, "boss1/throw.wav", 1, ATTN_NORM); //dms
+      {
+      if (self.snd_attack)
+		sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+      else
+		sound (self, CHAN_VOICE, "boss1/throw.wav", 1, ATTN_NORM); //dms
+      }
       // sound (self, CHAN_VOICE, "knight/sword2.wav", 1, ATTN_NORM); //dms
       // sound (self, CHAN_VOICE, "weapons/ax1.wav", 1, ATTN_NORM); //dms
       lavaball = spawn();
@@ -793,7 +804,12 @@ void() spikeshooter_use =
 	 else if (self.spawnflags & SPAWNFLAG_ROCKET)
 	 {
 		 if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		 sound (self, CHAN_VOICE, "weapons/sgun1.wav", 1, ATTN_NORM);
+		 {
+		 if (self.snd_attack)
+			sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+		 else
+			sound (self, CHAN_VOICE, "weapons/sgun1.wav", 1, ATTN_NORM);
+		 }
 		 rockettrap = spawn();
 		 rockettrap.movetype = MOVETYPE_FLYMISSILE;
 		 rockettrap.solid = SOLID_BBOX;
@@ -816,7 +832,12 @@ void() spikeshooter_use =
 	 else if (self.spawnflags & SPAWNFLAG_VOREBALL)
 	 {
 		 if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		 sound (self, CHAN_VOICE, "shalrath/attack2.wav", 1, ATTN_NORM);
+		 {
+		 	if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "shalrath/attack2.wav", 1, ATTN_NORM);
+		 }
 		 voreball = spawn();
 		 voreball.movetype = MOVETYPE_FLYMISSILE;
 		 voreball.solid = SOLID_BBOX;
@@ -840,7 +861,12 @@ void() spikeshooter_use =
 	 else if (self.spawnflags & SPAWNFLAG_GRENADE)
 	 {
 		 if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		 sound (self, CHAN_VOICE, "weapons/grenade.wav", 1, ATTN_NORM);
+		 {
+		 	if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "weapons/grenade.wav", 1, ATTN_NORM);
+		 }
 		 gnade = spawn();
 		 gnade.movetype = MOVETYPE_BOUNCE;
 		 // gnade.movetype = MOVETYPE_FLYMISSILE;
@@ -866,7 +892,12 @@ void() spikeshooter_use =
 	else if (self.spawnflags & SPAWNFLAG_GIBS)
 	 {
 	 	if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		sound (self, CHAN_VOICE, "zombie/z_shot1.wav", 1, ATTN_NORM);
+	 	{
+	 		if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "zombie/z_shot1.wav", 1, ATTN_NORM);
+		}
 	 	zgibs = spawn ();
 	 	zgibs.owner = self;
 	 	zgibs.movetype = MOVETYPE_BOUNCE;
@@ -889,7 +920,12 @@ void() spikeshooter_use =
 	 else if (self.spawnflags & SPAWNFLAG_MULTIGRENADE)
 	 {
 		 if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		 sound (self, CHAN_VOICE, "weapons/grenade.wav", 1, ATTN_NORM);
+		 {
+		 	if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "weapons/grenade.wav", 1, ATTN_NORM);
+		 }
 		 mgnade = spawn();
 		 mgnade.movetype = MOVETYPE_BOUNCE;
 		 // gnade.movetype = MOVETYPE_FLYMISSILE;
@@ -914,8 +950,12 @@ void() spikeshooter_use =
 	 
 	 else if (self.spawnflags & SPAWNFLAG_BOUNCY_LASER)
 	 {
-		if (!(self.spawnflags & SPAWNFLAG_SILENT))
-			sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+		if (!(self.spawnflags & SPAWNFLAG_SILENT)) {
+			if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+		}
 		HIP_LaunchLaser (self.origin, self.movedir, 1);
 		newmis.spawnflags = self.spawnflags;
 	 }
@@ -923,8 +963,12 @@ void() spikeshooter_use =
 	 else if (self.spawnflags & SPAWNFLAG_SHOTGUN)
 	 {
 
-		if (!(self.spawnflags & SPAWNFLAG_SILENT))
-			sound (self, CHAN_VOICE, "soldier/sattck1.wav", 1, ATTN_NORM);
+		if (!(self.spawnflags & SPAWNFLAG_SILENT)) {
+			if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_VOICE, "soldier/sattck1.wav", 1, ATTN_NORM);
+		}
 			
 		// spawn an invisible projectile to create a trail for the shotgun blast, so it's more easily seen by the player
 		shotty = spawn ();
@@ -946,7 +990,12 @@ void() spikeshooter_use =
    else
 	{
   if (!(self.spawnflags & SPAWNFLAG_SILENT))
-    sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+  {
+    if (self.snd_attack)
+	sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+    else
+	sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+}
 		launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500 * self.proj_speed_mod;
 		if (self.mdl_proj)

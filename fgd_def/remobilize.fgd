@@ -1516,6 +1516,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 	mdl_proj(string) : "Path to custom projectile model"
 	damage_mod(string): "Multiplier for damage" : 1
+	snd_attack(string): "Path to custom sound"
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1545,6 +1546,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 	mdl_proj(string) : "Path to custom projectile model"
 	damage_mod(string): "Multiplier for damage" : 1
+	snd_attack(string): "Path to custom sound"
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1574,6 +1576,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 			proj_speed_mod(integer): "Multiplier for projectile speed" : 1
 			mdl_proj(string) : "Path to custom projectile model"
 			damage_mod(string): "Multiplier for damage" : 1
+			snd_attack(string): "Path to custom sound"
 			spawnflags(Flags) =	[
 				1 : "Spike" : 0
 				2 : "Laser" : 0
