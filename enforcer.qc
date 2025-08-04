@@ -430,6 +430,20 @@ else if (self.style == 3 || self.style ==5)
 		EnfLaunchSpike(foo, self.enemy.origin - self.origin);
 		return;
 	}
+	
+else if (self.style == 6)
+
+	{
+		local vector goo;
+
+		self.effects = self.effects | EF_MUZZLEFLASH;
+		makevectors (self.angles);
+
+		goo = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
+
+		HIP_LaunchLaser(goo, self.enemy.origin - self.origin, 1);
+		return;
+	}
 
 else
 
@@ -727,7 +741,7 @@ void()	enf_die3	=[	$death3,	enf_die4	]
 		{
 			self.ammo_nails = 5;
 		}
-	if (self.style == 0 || self.style == 4) // style ammotype check -- dumptruck_ds
+	if (self.style == 0 || self.style == 4 || self.style == 6) // style ammotype check -- dumptruck_ds
 		{
 			self.ammo_cells = 5;
 		}
@@ -765,7 +779,7 @@ void()	enf_fdie3	=[	$fdeath3,	enf_fdie4	]
 		{
 			self.ammo_nails = 5;
 		}
-	if (self.style == 0 || self.style == 4) // style ammotype check -- dumptruck_ds
+	if (self.style == 0 || self.style == 4 || self.style == 6) // style ammotype check -- dumptruck_ds
 		{
 			self.ammo_cells = 5;
 		}
@@ -918,7 +932,7 @@ void() monster_enforcer =
 		remove(self);
 		return;
 	}
-	if (self.style >= 6)
+	if (self.style >= 7)
 		objerror("style key set too high\n");
 
 	precache_body_model2 ("progs/enforcer.mdl");  // custom_mdls function -- dumptruck_ds
@@ -981,7 +995,7 @@ void() monster_enforcer =
 				}
 			self.th_missile = enf_2atk1;
 		}
-	else if (self.style == 0 || self.style == 3 ) // new animation frame check -- dumptruck_ds
+	else if (self.style == 0 || self.style == 3 || self.style == 6) // new animation frame check -- dumptruck_ds
 		{
 			if (self.spawnflags & I_AM_TURRET)
 			{

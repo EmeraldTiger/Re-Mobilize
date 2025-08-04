@@ -745,6 +745,7 @@ void(vector org, vector vec) LaunchLaser;
 
 //MED 11/09/96 added lava ball and rocket
 //dumptruck_ds added voreball and grenades
+//Emerald added multi-grenades and Hipnotic bouncing lasers
 void() spikeshooter_use =
 {
    local entity lavaball;
