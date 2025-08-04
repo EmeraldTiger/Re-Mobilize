@@ -1149,3 +1149,6 @@ entity invPanel, invEmpty, invItem1, invItem2, invItem3, invItem4, invItem5, inv
 .string slicknoise2;
 .string slicknoise3;
 .string slicknoise4;
+
+.vector old_velocity;
+.entity lastvictim;

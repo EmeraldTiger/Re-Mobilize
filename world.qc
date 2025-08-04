@@ -537,6 +537,10 @@ void() worldspawn =
 	precache_sound ("slippery/oil2.wav");
 	precache_sound ("slippery/oil3.wav");
 	precache_sound ("slippery/oil4.wav");
+	
+	precache_sound ("hipweap/laserric.wav");
+	precache_sound ("hipweap/laserg.wav");
+	precache_model ("progs/lasrspik.mdl");
 
 
 //
