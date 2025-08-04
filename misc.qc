@@ -517,6 +517,7 @@ float SPAWNFLAG_GIBS = 64;
 float SPAWNFLAG_SILENT = 128;
 float SPAWNFLAG_MULTIGRENADE = 16384;
 float SPAWNFLAG_BOUNCY_LASER = 131072;
+float SPAWNFLAG_SHOTGUN = 262144;
 
 void() ShalMissileTouch = //moved from Shalrath to enable shooter version
 {
@@ -754,6 +755,7 @@ void() spikeshooter_use =
    local entity gnade;
    local entity mgnade;
    local entity zgibs;
+   local entity shotty;
 
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
@@ -916,6 +918,29 @@ void() spikeshooter_use =
 			sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
 		HIP_LaunchLaser (self.origin, self.movedir, 1);
 		newmis.spawnflags = self.spawnflags;
+	 }
+	 
+	 else if (self.spawnflags & SPAWNFLAG_SHOTGUN)
+	 {
+
+		if (!(self.spawnflags & SPAWNFLAG_SILENT))
+			sound (self, CHAN_VOICE, "soldier/sattck1.wav", 1, ATTN_NORM);
+			
+		// spawn an invisible projectile to create a trail for the shotgun blast, so it's more easily seen by the player
+		shotty = spawn ();
+	 	shotty.owner = self;
+	 	shotty.movetype = MOVETYPE_FLYMISSILE;
+	 	shotty.solid = SOLID_NOT;
+		shotty.classname = "shotty";
+		setmodel (shotty, "progs/grenade.mdl"); // could make a new model with the grenade trail effect but I'm lazy
+		shotty.alpha = 0.01; // just make it invisible
+		setsize (shotty, '0 0 0', '0 0 0');
+		setorigin (shotty, self.origin);
+		shotty.velocity = self.movedir * 100000;
+	 	shotty.nextthink = time + 2.5;
+	 	shotty.think = SUB_Remove;
+		
+		FireBullets (4, self.movedir, '0.1 0.1 0');
 	 }
 
    else
