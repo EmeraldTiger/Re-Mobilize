@@ -1511,6 +1511,8 @@ spawnflags & 4 ->	{"path":"progs/lavaball.mdl", "scale":0.6},
 spawnflags & 2 ->	{"path":"progs/laser.mdl"},
 spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
                                  "progs/spike.mdl"}}) = trap_spikeshooter : "Triggered shooter - use trigger_multiple to activate" [
+	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
+	mdl_proj(string) : "Path to custom projectile model"
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1520,6 +1522,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		32 : "Grenade" : 0
 		64 : "Gibs" : 0
 		128 : "Silent" : 0
+		16384: "Multi-Grenade" : 0
 		]
 ]
 @PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
@@ -1534,6 +1537,8 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
                                  "progs/spike.mdl"}}) = trap_shooter : "Continuous shooter" [
 	nextthink(integer) : "Delay before first spike"
 	wait(integer) : "Delay between firing" : 1
+	proj_speed_mod(integer): "Multiplier for projectile speed" : 1
+	mdl_proj(string) : "Path to custom projectile model"
 	spawnflags(Flags) = [
 		1 : "Spike" : 0
 		2 : "Laser" : 0
@@ -1542,7 +1547,8 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		16 : "Voreball" : 0
 		32 : "Grenade" : 0
 		64 : "Gibs" : 0
-		128 : "Silent" : 0]]
+		128 : "Silent" : 0
+		16384: "Multi-Grenade" : 0]]
 
 	@PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
 		//modified by dumptruck_ds adding Angle and Targetname to baseclass
@@ -1557,6 +1563,8 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 			nextthink(integer) : "Delay before first spike"
 			wait(integer) : "Delay between firing" : 1
 			state(integer) : "0 initially off, 1 initially on" : 0
+			proj_speed_mod(integer): "Multiplier for projectile speed" : 1
+			mdl_proj(string) : "Path to custom projectile model"
 			spawnflags(Flags) =	[
 				1 : "Spike" : 0
 				2 : "Laser" : 0
@@ -1566,6 +1574,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 				32 : "Grenade" : 0
 				64 : "Gibs" : 0
 				128 : "Silent" : 0
+				16384: "Multi-Grenade" : 0
 				]
 		]
 
@@ -4116,4 +4125,26 @@ at orthogonal angles (multiples of 90 degrees)"
 	[
 		1 : "Start Off" : 0
 	]
+]
+
+@SolidClass base(Appearflags, Target, FilterTouch) = trigger_slippery : "Invisible slick entity.
+
+Acts similarly to a frictionless surface like oil or ice, which can be used to accumulate speed for longer or higher jumps.
+"
+[
+	speed(string) : "Multiplier for speed, affecting how much the player's velocity is affected. Recommended to keep at 1." : "1"
+
+	sounds(choices) : "Sound" : 0 =
+	[
+		0: "Default (Oil)"
+		1: "Ice"
+	]
+	
+	noise(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise2, noise3, and noise4."
+	
+	noise2(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise3, and noise4."
+	
+	noise3(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise4."
+	
+	noise4(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise3."
 ]
