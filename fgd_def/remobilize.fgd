@@ -4141,6 +4141,19 @@ at orthogonal angles (multiples of 90 degrees)"
 	]
 ]
 
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trap_pendulum : "Swinging pendulum axe from Dissolution of Eternity. Must be placed
+at orthogonal angles (multiples of 90 degrees)"
+[
+	delay(integer) : "Amount of time (in seconds) before starting swinging. default 1." : 1
+	dmg(integer) : "Amount of damage for each contact. default 5." : 5
+	spawnflags(Flags) =
+	[
+		1 : "X-Axis" : 0
+		2 : "Y-Axis" : 0
+		8 : "Start Off" : 0
+	]
+]
+
 @SolidClass base(Appearflags, Target, FilterTouch) = trigger_slippery : "Invisible slick entity.
 
 Acts similarly to a frictionless surface like oil or ice, which can be used to accumulate speed for longer or higher jumps.

@@ -1152,3 +1152,5 @@ entity invPanel, invEmpty, invItem1, invItem2, invItem3, invItem4, invItem5, inv
 
 .vector old_velocity;
 .entity lastvictim;
+.float swinging;
+.void() oldthink;

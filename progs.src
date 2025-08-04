@@ -73,3 +73,4 @@ rm_mechanics.qc // Functions for Re:Mobilize mechanics
 lighthook.qc // Copied from Rogue's doegrapple and adapted for the lighthook
 magnets.qc
 slippery.qc
+pendulum.qc
