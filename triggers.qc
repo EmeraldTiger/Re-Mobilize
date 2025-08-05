@@ -2130,7 +2130,8 @@ void() trigger_filter_use = {
 			{
 				case 0:		targfloat = targ.origin_x; break;
 				case 1:		targfloat = targ.origin_y; break;
-				default:	targfloat = targ.origin_z; break;
+				case 2:		targfloat = targ.origin_z; break;
+				default:	targfloat = vlen(targ.origin); break;
 			}
 			break;
 		
@@ -2140,7 +2141,8 @@ void() trigger_filter_use = {
 			{
 				case 0:		targfloat = targ.angles_x; break;
 				case 1:		targfloat = targ.angles_y; break;
-				default:	targfloat = targ.angles_z; break;
+				case 2:		targfloat = targ.angles_z; break;
+				default:	targfloat = vlen(targ.angles); break;
 			}
 			break;
 		
@@ -2150,7 +2152,8 @@ void() trigger_filter_use = {
 			{
 				case 0:		targfloat = targ.velocity_x; break;
 				case 1:		targfloat = targ.velocity_y; break;
-				default:	targfloat = targ.velocity_z; break;
+				case 2:		targfloat = targ.velocity_z; break;
+				default:	targfloat = vlen(targ.velocity); break;
 			}
 			break;
 

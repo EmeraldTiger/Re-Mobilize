@@ -1919,6 +1919,7 @@ Also, the state of the last evaluation is stored in this entity's 'state' field 
 		0 : "X"
 		1 : "Y"
 		2 : "Z"
+		3 : "Vector Length (sqrt(x^2 + y^2 + z^2))"
 	]
 	pain_target(string) : "Target(s) to fire if the condition evaluated to false"
 ]
