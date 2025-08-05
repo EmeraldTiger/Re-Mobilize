@@ -541,6 +541,9 @@ void() worldspawn =
 	precache_sound ("hipweap/laserric.wav");
 	precache_sound ("hipweap/laserg.wav");
 	precache_model ("progs/lasrspik.mdl");
+	
+	precache_model ("progs/lspike.mdl");
+	precache_sound ("lavagun/snail.wav");
 
 
 //

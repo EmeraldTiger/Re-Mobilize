@@ -1155,6 +1155,10 @@ void() superspike_touch =
 };
 void() superduperspike_touch = //dumptruck_ds for Style 2 Ogre see ogre.qc
 {
+	local float old_armortype;
+	local float old_armorvalue;
+	local float old_armormask;
+	
 	if (other == self.owner)
 		return;
 
@@ -1168,11 +1172,24 @@ void() superduperspike_touch = //dumptruck_ds for Style 2 Ogre see ogre.qc
 	}
 
 // hit something that bleeds
+// Emerald: Reworked the lava nails to function more accurately to DoE (ignoring armor, not just simply higher damage)
 	if (other.takedamage)
 	{
 		spawn_touchblood (36);
-		T_Damage (other, self, self.owner, 36);
-		sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
+		if(other.classname == "player")
+		{
+			old_armortype = other.armortype;
+			old_armorvalue = other.armorvalue;
+			old_armormask = other.items & (IT_ARMOR1|IT_ARMOR2|IT_ARMOR3);
+			other.armortype = 0;
+			other.armorvalue = 0;
+			T_Damage (other, self, self.owner, 36);
+			other.armortype = old_armortype;
+			other.armorvalue = old_armorvalue;
+			other.items = other.items | old_armormask;
+			
+		}
+		sound(self, CHAN_VOICE, "lavagun/snail.wav", 1, ATTN_NORM);
 	}
 	else
 	{

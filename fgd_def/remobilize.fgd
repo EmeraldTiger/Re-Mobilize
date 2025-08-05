@@ -1529,6 +1529,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		16384: "Multi-Grenade" : 0
 		131072: "Bouncy Laser" : 0
 		262144: "Shotgun" : 0
+		524288: "Lava Spike" : 0
 		]
 ]
 @PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
@@ -1558,7 +1559,8 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		128 : "Silent" : 0
 		16384: "Multi-Grenade" : 0
 		131072: "Bouncy Laser" : 0
-		262144: "Shotgun" : 0]]
+		262144: "Shotgun" : 0
+		524288: "Lava Spike" : 0]]
 
 	@PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
 		//modified by dumptruck_ds adding Angle and Targetname to baseclass
@@ -1589,6 +1591,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 				16384: "Multi-Grenade" : 0
 				131072: "Bouncy Laser" : 0
 				262144: "Shotgun" : 0
+				524288: "Lava Spike" : 0
 				]
 		]
 

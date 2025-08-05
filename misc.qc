@@ -518,6 +518,7 @@ float SPAWNFLAG_SILENT = 128;
 float SPAWNFLAG_MULTIGRENADE = 16384;
 float SPAWNFLAG_BOUNCY_LASER = 131072;
 float SPAWNFLAG_SHOTGUN = 262144;
+float SPAWNFLAG_LAVANAIL = 524288;
 
 void() ShalMissileTouch = //moved from Shalrath to enable shooter version
 {
@@ -985,6 +986,24 @@ void() spikeshooter_use =
 	 	shotty.think = SUB_Remove;
 		
 		FireBullets (4, self.movedir, '0.1 0.1 0');
+	 }
+	 
+	 else if (self.spawnflags & SPAWNFLAG_LAVANAIL)
+	 {
+			if (!(self.spawnflags & SPAWNFLAG_SILENT))
+		{
+			    if (self.snd_attack)
+				sound (self, CHAN_VOICE, self.snd_attack, 1, ATTN_NORM);
+			    else
+				sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+		}
+			launch_spike (self.origin, self.movedir);
+			newmis.velocity = self.movedir * 500 * self.proj_speed_mod;
+			newmis.touch = superduperspike_touch;
+			if (self.mdl_proj)
+				setmodel(newmis, self.mdl_proj);
+			else
+				setmodel (newmis, "progs/lspike.mdl");
 	 }
 
    else
