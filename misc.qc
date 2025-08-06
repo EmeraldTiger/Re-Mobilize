@@ -1001,10 +1001,10 @@ void() spikeshooter_use =
 		// spawn an invisible projectile to create a trail for the shotgun blast, so it's more easily seen by the player
 		shotty = spawn ();
 	 	shotty.owner = self;
-	 	shotty.movetype = MOVETYPE_FLYMISSILE;
+	 	shotty.movetype = MOVETYPE_NOCLIP;
 	 	shotty.solid = SOLID_NOT;
 		shotty.classname = "shotty";
-		setmodel (shotty, "progs/grenade.mdl"); // could make a new model with the grenade trail effect but I'm lazy
+		setmodel (shotty, "progs/lspike.mdl"); // could make a new model with the grenade trail effect but I'm lazy
 		shotty.alpha = 0.01; // just make it invisible
 		setsize (shotty, '0 0 0', '0 0 0');
 		setorigin (shotty, self.origin);
