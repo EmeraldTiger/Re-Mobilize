@@ -4134,7 +4134,7 @@ For Quake 2 mappers, this functions like trigger_always.
 	]
 ]
 
-@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trap_buzzsaw : "Spinning sawblade based on Dissolution of Eternity's buzzsaws. Must be placed
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) model({ "path": ":progs/trap_sawblade.mdl" }) = trap_buzzsaw : "Spinning sawblade based on Dissolution of Eternity's buzzsaws. Must be placed
 at orthogonal angles (multiples of 90 degrees)"
 [
 	speed(integer) : "Speed of the buzzsaw as it moves" : 10
@@ -4145,7 +4145,7 @@ at orthogonal angles (multiples of 90 degrees)"
 	]
 ]
 
-@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) = trap_pendulum : "Swinging pendulum axe from Dissolution of Eternity. Must be placed
+@PointClass base(Appearflags, Targetname, Target) size (16 16 16) color(80 80 80) model({ "path": ":progs/pendulum.mdl" }) = trap_pendulum : "Swinging pendulum axe from Dissolution of Eternity. Must be placed
 at orthogonal angles (multiples of 90 degrees)"
 [
 	delay(integer) : "Amount of time (in seconds) before starting swinging. default 1." : 1
