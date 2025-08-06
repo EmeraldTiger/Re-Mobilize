@@ -758,6 +758,33 @@ void() spikeshooter_use =
    local entity mgnade;
    local entity zgibs;
    local entity shotty;
+   
+   if (self.target)
+   {
+   	entity t;
+   	if (self.target == "player")
+	{
+   		t = find (world, classname, "player");
+	}
+	else
+	{
+		t = find(world, targetname, self.target);
+		if ((t.flags & FL_MONSTER) && (t.health <= 0))
+		{
+			// if multiple monsters with the same targetname, 
+			// remove the corpse's targetname so it's no longer an eligible target; switch to a new one
+			t.targetname = "ignore_me_i_am_dead";
+		}
+	}
+	
+	if (!t)
+		return;
+		
+	vector targ_dir;
+	vector calc_org = (t.absmax + t.absmin)*0.5;
+	targ_dir = normalize(calc_org - self.origin);
+	self.movedir = targ_dir;
+   }
 
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
@@ -981,7 +1008,7 @@ void() spikeshooter_use =
 		shotty.alpha = 0.01; // just make it invisible
 		setsize (shotty, '0 0 0', '0 0 0');
 		setorigin (shotty, self.origin);
-		shotty.velocity = self.movedir * 100000;
+		shotty.velocity = self.movedir * 1000;
 	 	shotty.nextthink = time + 2.5;
 	 	shotty.think = SUB_Remove;
 		
