@@ -1106,19 +1106,18 @@ void() gas_think =
 			else
 			{
 				t = find(world, targetname, self.target);
-				if ((t.flags & FL_MONSTER) && (t.health <= 0))
+				while(t)
 				{
-					// if multiple monsters with the same targetname, 
-					// remove the corpse's targetname so it's no longer an eligible target; switch to a new one
-					t.targetname = "ignore_me_i_am_dead";
+					if (!((t.flags & FL_MONSTER) && (t.health <= 0)))
+					{
+						vector calc_org = (t.absmax + t.absmin)*0.5;
+						targ_dir = normalize(calc_org - self.origin);
+					
+					}
+					t = find(t, targetname, self.target);
 				}
 			}
-			
-			if (!t)
-				return;
 				
-			vector calc_org = (t.absmax + t.absmin)*0.5;
-			targ_dir = normalize(calc_org - self.origin);
 		   }
 		
 		entity new;
