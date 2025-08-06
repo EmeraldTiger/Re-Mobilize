@@ -1095,10 +1095,10 @@ void() gas_think =
 	{
 		
 	vector targ_dir;
+	entity t;
 		
 		if (self.target)
 		   {
-			entity t;
 			if (self.target == "player")
 			{
 				t = find (world, classname, "player");
@@ -1134,7 +1134,7 @@ void() gas_think =
 		setorigin (new, self.origin);
 		makevectors(self.mangle);
 		new.owner = self;
-		if (self.target)
+		if (targ_dir)
 			new.velocity = targ_dir * self.speed;
 		else
 			new.velocity = v_forward * self.speed;

@@ -781,9 +781,14 @@ void() spikeshooter_use =
 			}
 			t = find(t, targetname, self.target);
 		}
+		
+		
 	}
 		
    }
+   
+   if (!targ_dir)
+	SetMovedir ();
 
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
