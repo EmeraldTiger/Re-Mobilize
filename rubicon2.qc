@@ -1093,6 +1093,34 @@ void() gas_think =
 	}
 	else
 	{
+		
+	vector targ_dir;
+		
+		if (self.target)
+		   {
+			entity t;
+			if (self.target == "player")
+			{
+				t = find (world, classname, "player");
+			}
+			else
+			{
+				t = find(world, targetname, self.target);
+				if ((t.flags & FL_MONSTER) && (t.health <= 0))
+				{
+					// if multiple monsters with the same targetname, 
+					// remove the corpse's targetname so it's no longer an eligible target; switch to a new one
+					t.targetname = "ignore_me_i_am_dead";
+				}
+			}
+			
+			if (!t)
+				return;
+				
+			vector calc_org = (t.absmax + t.absmin)*0.5;
+			targ_dir = normalize(calc_org - self.origin);
+		   }
+		
 		entity new;
 		new = spawn();
 		if (self.style==2)
@@ -1107,7 +1135,10 @@ void() gas_think =
 		setorigin (new, self.origin);
 		makevectors(self.mangle);
 		new.owner = self;
-		new.velocity = v_forward * self.speed;
+		if (self.target)
+			new.velocity = targ_dir * self.speed;
+		else
+			new.velocity = v_forward * self.speed;
 		new.velocity_x += crandom() * self.spread;
 		new.velocity_y += crandom() * self.spread;
 		new.velocity_z += crandom() * self.spread;
