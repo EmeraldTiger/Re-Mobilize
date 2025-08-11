@@ -40,7 +40,8 @@ void() slippery_touch =
 	vector dir = normalize(other.velocity);
 	float vel = vlen(other.velocity);
 	
-	other.velocity += (dir * vel * self.speed) / 17;
+	other.velocity += (dir * vel * self.speed) / 17 * (frametime*72);
+	dprint2(ftos(frametime*72), "\n");
 
 };
 
