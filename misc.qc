@@ -761,10 +761,15 @@ void() spikeshooter_use =
    
    if (self.target)
    {
+   	vector targ_dir;
+   	vector calc_org;
    	local entity t;
    	if (self.target == "player")
 	{
    		t = find (world, classname, "player");
+		calc_org = (t.absmax + t.absmin)*0.5;
+		targ_dir = normalize(calc_org - self.origin);
+		self.movedir = targ_dir;
 	}
 	else
 	{
@@ -773,8 +778,7 @@ void() spikeshooter_use =
 		{
 			if (!((t.flags & FL_MONSTER) && (t.health <= 0)))
 			{
-				vector targ_dir;
-				vector calc_org = (t.absmax + t.absmin)*0.5;
+				calc_org = (t.absmax + t.absmin)*0.5;
 				targ_dir = normalize(calc_org - self.origin);
 				self.movedir = targ_dir;
 			
@@ -787,8 +791,11 @@ void() spikeshooter_use =
 		
    }
    
-   if (!targ_dir)
-	SetMovedir ();
+   if (self.target && !targ_dir)
+   {
+   	if (self.target != "player")
+		SetMovedir ();
+   }
 
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
