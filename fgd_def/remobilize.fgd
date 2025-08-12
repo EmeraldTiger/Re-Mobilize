@@ -1503,7 +1503,7 @@ You can add effects using the dropdown, use a custom model using the mdl_body ke
 	8 : "Invisible (mdl_body MUST be empty)"
 	]
 ]
-@PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
+@PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 //modified by dumptruck_ds adding Angle and Targetname to baseclass
 spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
@@ -1532,7 +1532,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		524288: "Lava Spike" : 0
 		]
 ]
-@PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
+@PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 //modified by dumptruck_ds adding Angle and Targetname to baseclass
 spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
@@ -1562,7 +1562,7 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 		262144: "Shotgun" : 0
 		524288: "Lava Spike" : 0]]
 
-	@PointClass base(Angle, Appearflags, Targetname) color(220 150 150) model({{
+	@PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 		//modified by dumptruck_ds adding Angle and Targetname to baseclass
 		spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 		spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
