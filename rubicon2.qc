@@ -1095,6 +1095,7 @@ void() gas_think =
 	{
 		
 	vector targ_dir;
+	vector calc_org;
 	entity t;
 		
 		if (self.target)
@@ -1102,6 +1103,8 @@ void() gas_think =
 			if (self.target == "player")
 			{
 				t = find (world, classname, "player");
+				calc_org = (t.absmax + t.absmin)*0.5;
+				targ_dir = normalize(calc_org - self.origin);
 			}
 			else
 			{
@@ -1110,7 +1113,7 @@ void() gas_think =
 				{
 					if (!((t.flags & FL_MONSTER) && (t.health <= 0)))
 					{
-						vector calc_org = (t.absmax + t.absmin)*0.5;
+						calc_org = (t.absmax + t.absmin)*0.5;
 						targ_dir = normalize(calc_org - self.origin);
 					
 					}
