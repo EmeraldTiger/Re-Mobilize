@@ -1505,6 +1505,9 @@ You can add effects using the dropdown, use a custom model using the mdl_body ke
 ]
 @PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 //modified by dumptruck_ds adding Angle and Targetname to baseclass
+spawnflags & 524288 ->	{"path":"progs/lspike.mdl"},
+spawnflags & 131072 ->	{"path":"progs/lasrspik.mdl"},
+spawnflags & 16384 ->	{"path":"progs/mervup.mdl"},
 spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
 spawnflags & 16 ->	{"path":"progs/v_spike.mdl"},
@@ -1534,6 +1537,9 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 ]
 @PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 //modified by dumptruck_ds adding Angle and Targetname to baseclass
+spawnflags & 524288 ->	{"path":"progs/lspike.mdl"},
+spawnflags & 131072 ->	{"path":"progs/lasrspik.mdl"},
+spawnflags & 16384 ->	{"path":"progs/mervup.mdl"},
 spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
 spawnflags & 16 ->	{"path":"progs/v_spike.mdl"},
@@ -1564,6 +1570,9 @@ spawnflags & 1 ->	{"path":"progs/s_spike.mdl"},
 
 	@PointClass base(Angle, Appearflags, Targetname, Target) color(220 150 150) model({{
 		//modified by dumptruck_ds adding Angle and Targetname to baseclass
+		spawnflags & 524288 ->	{"path":"progs/lspike.mdl"},
+		spawnflags & 131072 ->	{"path":"progs/lasrspik.mdl"},
+		spawnflags & 16384 ->	{"path":"progs/mervup.mdl"},
 		spawnflags & 64 ->	{"path":"progs/gib1.mdl"},
 		spawnflags & 32 ->	{"path":"progs/grenade.mdl"},
 		spawnflags & 16 ->	{"path":"progs/v_spike.mdl"},
