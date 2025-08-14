@@ -1010,7 +1010,10 @@ void(vector org, vector dir, float speed) launch_spike2 = {
 		newmis.think = SUB_Remove;
 		newmis.nextthink = time + 6;
 	}
-	setmodel (newmis, "progs/spike.mdl");
+	if (self.mdl_proj)
+		setmodel (newmis, self.mdl_proj);
+	else
+		setmodel (newmis, "progs/spike.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin (newmis, org);
 

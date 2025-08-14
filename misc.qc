@@ -1084,6 +1084,9 @@ void() trap_spikeshooter =
 {
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
+		
+	if (self.mdl_proj)
+		precache_model(self.mdl_proj);
 
 	if (self.proj_speed_mod <= 0)
 		self.proj_speed_mod = 1;
