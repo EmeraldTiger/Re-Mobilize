@@ -1087,6 +1087,9 @@ void() trap_spikeshooter =
 		
 	if (self.mdl_proj)
 		precache_model(self.mdl_proj);
+		
+	if (self.snd_attack)
+		precache_sound(self.snd_attack);
 
 	if (self.proj_speed_mod <= 0)
 		self.proj_speed_mod = 1;
