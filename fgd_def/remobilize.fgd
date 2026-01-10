@@ -4167,9 +4167,9 @@ at orthogonal angles (multiples of 90 degrees)"
 	]
 ]
 
-@SolidClass base(Appearflags, Target, FilterTouch) = trigger_slippery : "Invisible slick entity.
+@SolidClass base(Appearflags, Target, FilterTouch, TriggerWait) = trigger_slippery : "Invisible slick entity.
 
-Acts similarly to a frictionless surface like oil or ice, which can be used to accumulate speed for longer or higher jumps.
+Acts similarly to a frictionless surface like oil or ice, which can be used to accumulate speed for longer or higher jumps, or for deadly traps.
 "
 [
 	speed(string) : "Multiplier for speed, affecting how much the player's velocity is affected. Recommended to keep at 1." : "1"
@@ -4178,13 +4178,11 @@ Acts similarly to a frictionless surface like oil or ice, which can be used to a
 	[
 		0: "Default (Oil)"
 		1: "Ice"
+		2: "Custom (noise to noise4 must then be set, even if to the same value)"
 	]
 	
-	noise(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise2, noise3, and noise4."
-	
-	noise2(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise3, and noise4."
-	
-	noise3(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise4."
-	
-	noise4(string) : "Sound file for a 'sliding' sound (if set, overrides 'sounds') Plays randomly alongside noise, noise2, and noise3."
+	noise(string) :  "Sound file for a custom 'sliding' sound. Plays randomly alongside noise2, noise3, and noise4."
+	noise2(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise3, and noise4."
+	noise3(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise4."
+	noise4(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise3."
 ]

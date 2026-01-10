@@ -1,48 +1,22 @@
 void() slippery_touch =
 {
-	
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
 	
 	if (!(other.flags & FL_ONGROUND)) return;
 	
 	other.onSlippery = 1;
-	other.slicksounds = self.slicksounds;
-	
-	if (self.noise != "") {
-		other.slicknoise = self.noise;
-	}
-	else {
-		other.slicknoise = "";
-	}
-	
-	if (self.noise2 != "") {
-		other.slicknoise2 = self.noise2;
-	}
-	else {
-		other.slicknoise2 = "";
-	}
-	
-	if (self.noise3 != "") {
-		other.slicknoise3 = self.noise3;
-	}
-	else {
-		other.slicknoise3 = "";
-	}
-	
-	if (self.noise4 != "") {
-		other.slicknoise4 = self.noise4;
-	}
-	else {
-		other.slicknoise4 = "";
-	}
+	other.slicksounds = self.sounds;
+	other.slicknoise  = self.noise;
+	other.slicknoise2 = self.noise2;
+	other.slicknoise3 = self.noise3;
+	other.slicknoise4 = self.noise4;
 	
 	vector dir = normalize(other.velocity);
 	float vel = vlen(other.velocity);
 	
 	other.velocity += (dir * vel * self.speed) / 17 * (frametime*72);
 	dprint2(ftos(frametime*72), "\n");
-
 };
 
 void() trigger_slippery =
@@ -53,29 +27,40 @@ void() trigger_slippery =
 	InitTrigger ();
 	
 	if (!self.speed)
-	{
 		self.speed = 1;
+	
+	if (self.sounds==/*Custom*/2)
+	{
+		if (self.noise=="")
+			self.sounds=/*Oil*/0;
+		else
+		{
+			if (self.noise2=="") self.noise2=self.noise;
+			if (self.noise3=="") self.noise3=self.noise;
+			if (self.noise4=="") self.noise4=self.noise2;
+		}
 	}
-	
-	if (self.noise != "") {
-		precache_sound(self.noise);
+	if (self.sounds==/*Ice*/1)
+	{
+		self.noise  = "slippery/ice1.wav";
+		self.noise2 = "slippery/ice2.wav";
+		self.noise3 = "slippery/ice3.wav";
+		self.noise4 = "slippery/ice4.wav";
 	}
-	
-	if (self.noise2 != "") {
-		precache_sound(self.noise2);
+	else /*Oil*/
+	{
+		self.noise  = "slippery/oil1.wav";
+		self.noise2 = "slippery/oil2.wav";
+		self.noise3 = "slippery/oil3.wav";
+		self.noise4 = "slippery/oil4.wav";
 	}
-	
-	if (self.noise3 != "") {
-		precache_sound(self.noise3);
-	}
-	
-	if (self.noise4 != "") {
-		precache_sound(self.noise4);
-	}
-	
-	
-	self.slicksounds = self.sounds;
-	self.slicknoise = self.noise;
+
+	precache_sound(self.noise);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
+	precache_sound(self.noise4);
 	
 	self.touch = slippery_touch;
+	
+	SUB_CheckWaiting();
 };
