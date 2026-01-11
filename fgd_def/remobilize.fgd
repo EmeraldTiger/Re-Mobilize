@@ -1641,7 +1641,7 @@ targetname = Must be triggered"
 	fly_sound(integer) : "Play gib sound effects" : 0
 ]
 
-@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 200 300) = ltrail_start : "Starting point of a lightning trail. See the manual for set up steps.
+@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 200 255) = ltrail_start : "Starting point of a lightning trail. See the manual for set up steps.
 
 Set currentammo key to amount of damage you want the lightning to do.
 Default is 25.
@@ -1682,7 +1682,7 @@ Default is 0.3 seconds.
 	frags(float) : "Time before next trigger" : "0.3"
 ]
 
-@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 150 300) = ltrail_relay : "Relay point of a lightning trail.
+@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 150 255) = ltrail_relay : "Relay point of a lightning trail.
 
 Set currentammo to amount of damage you want the lightning to do.
 Default is 25.
