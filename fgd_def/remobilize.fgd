@@ -279,6 +279,7 @@ Can only use default health, models and sounds.
 		2: "Don't spawn angry" : 0
 		4: "Don't add to count" : 0
 		32: "Silent spawn" : 0
+		16384: "Gib on death" : 0
 		]
 style(Choices) =
 [
@@ -680,6 +681,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		32 : "No Sight Sound" : 0
 		64 : "Passive until attacked" : 0
 		128 : "Passive always" : 0
+		16384: "Gib on death" : 0
 		2097152 : "Spawn Silently" : 0
 		4194304 : "No bouncing" : 0
 	]

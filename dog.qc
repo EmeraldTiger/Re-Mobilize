@@ -240,7 +240,7 @@ void() dog_dieb9		=[	$deathb9,	dog_dieb9	] {};
 void() dog_die =
 {
 // check for gib
-	if (self.health < -35)
+	if (self.health < -35 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 

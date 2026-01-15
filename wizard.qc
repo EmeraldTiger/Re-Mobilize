@@ -364,7 +364,7 @@ void()	wiz_death8	=[	$death8,		wiz_death8	] {};
 void() wiz_die =
 {
 // check for gib
-	if (self.health < -40)
+	if (self.health < -40 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls

@@ -1202,7 +1202,7 @@ void()	ogre_bdie10	=[	$bdeath10,	ogre_bdie10	] {};
 void() ogre_die =
 {
 // check for gib
-	if (self.health < -80)
+	if (self.health < -80 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls

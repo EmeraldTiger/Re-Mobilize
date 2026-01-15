@@ -238,7 +238,7 @@ void()	hknight_dieb9	=[	$deathb9,	hknight_dieb9	] {};
 void() hknight_die =
 {
 // check for gib
-	if (self.health < -40)
+	if (self.health < -40 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls

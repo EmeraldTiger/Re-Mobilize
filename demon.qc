@@ -169,7 +169,7 @@ void()	demon1_die9		=[	$death9,		demon1_die9 ] {};
 void() demon_die =
 {
 // check for gib
-	if (self.health < -80)
+	if (self.health < -80 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
     if (self.mdl_head != "")
