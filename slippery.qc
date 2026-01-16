@@ -64,3 +64,84 @@ void() trigger_slippery =
 	
 	SUB_CheckWaiting();
 };
+
+void() snow0 =
+{
+	vector vel;
+	vel_x = self.angles_x*random();
+	vel_y = self.angles_y*random();
+	vel_z = -1*self.speed;
+
+	if(self.skin == /*Rain*/ 1)
+		te_particlerain(self.mins, self.maxs, vel, self.count, self.color);
+	else /*Snow*/
+		te_particlesnow(self.mins, self.maxs, vel, self.count, self.color);
+};
+
+void() snow1 =
+{
+	vector pos;
+	
+	vector vel;
+	vel_x = self.angles_x*random();
+	vel_y = self.angles_y*random();
+	vel_z = -1*self.speed;
+
+	for (float i = 0; i < self.count; i++)
+	{
+		pos_x = self.mins_x + (fabs(self.maxs_x-self.mins_x))*random();
+		pos_y = self.mins_y + (fabs(self.maxs_y-self.mins_y))*random();
+		pos_z = self.mins_z + (fabs(self.maxs_z-self.mins_z))*random();
+		
+		particle(pos, vel, self.color, 1);
+	}
+};
+
+void() weather_think =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.nextthink = -1;
+		return;
+	}
+	
+	if(self.style == 1) snow1(); else snow0();
+	
+	self.nextthink = time + self.delay;
+};
+
+void() func_weather =
+{
+	//style 0: using te_particle builtin functions (extended engines only: FTE, DP, QSS...)
+	//style 1: using custom QuakeC implementation above based on the particle() builtin function
+	
+	self.style = 0;
+	if (self.spawnflags & /*QC*/ 1)
+		self.style = 1;
+	else if (!cvar("pr_checkextension"))
+		self.style = 1;
+	else if(self.skin == /*Rain*/ 1 && !checkextension("DP_TE_PARTICLERAIN"))
+		self.style = 1;
+	else if(!checkextension("DP_TE_PARTICLESNOW"))
+		self.style = 1; /* using a housemade workaround */
+
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	InitTrigger ();
+	
+	if(!self.delay) self.delay = 0.05;
+	if(!self.count) self.count = 50;
+	if(!self.color) self.color = 13;
+	if(!self.speed) self.speed = 2;
+	if(!self.angles) self.angles = '0 0 0';
+	
+	SUB_CheckWaiting();
+	
+	self.think = weather_think;
+	
+	if(self.estate == STATE_ACTIVE)
+		self.nextthink = time + self.delay;
+	else
+		self.use = weather_think;
+};

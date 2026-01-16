@@ -4188,3 +4188,21 @@ Acts similarly to a frictionless surface like oil or ice, which can be used to a
 	noise3(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise4."
 	noise4(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise3."
 ]
+
+@SolidClass base(Appearflags, TriggerWait) = func_weather : "Brush volume inside which rain or snow is falling"
+[
+	angles(string) : "Approximate randomized wind direction (x y 0)" : "0 0 0"
+	color(float) : "Palette index for color" : 13
+	count(float) : "Fall density" : 50
+	delay(float) : "Fall pacing" : 0.05
+//	skin(choices) : "Weather style" : 0 =
+//	[
+//		0 : "Snow"
+//		1 : "Rain (extended engines only)"
+//	]
+	spawnflags(flags) =
+	[
+		1: "QC" : 0 : "Force QuakeC implementation even in extended engines (FTE, DP, QSS...)"
+	]
+	speed(integer) : "Vertical fall speed (the higher the closer to rain fall; negative speed falls up)" : 2
+]
