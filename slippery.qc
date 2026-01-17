@@ -65,26 +65,20 @@ void() trigger_slippery =
 	SUB_CheckWaiting();
 };
 
-void() snow0 =
+void() weather_think =
 {
-	vector vel;
-	vel_x = self.angles_x*random();
-	vel_y = self.angles_y*random();
-	vel_z = -1*self.speed;
-
-	if(self.skin == /*Rain*/ 1)
-		te_particlerain(self.mins, self.maxs, vel, self.count, self.color);
-	else /*Snow*/
-		te_particlesnow(self.mins, self.maxs, vel, self.count, self.color);
-};
-
-void() snow1 =
-{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.nextthink = -1;
+		return;
+	}
+	
 	vector pos;
 	
 	vector vel;
-	vel_x = self.angles_x*random();
-	vel_y = self.angles_y*random();
+	if(self.angles_x != 0) vel_x = self.angles_x+20*(random()-0.5);
+	if(self.angles_y != 0) vel_y = self.angles_y+20*(random()-0.5);
+	vel = normalize(vel)*self.speed;
 	vel_z = -1*self.speed;
 
 	for (float i = 0; i < self.count; i++)
@@ -95,46 +89,25 @@ void() snow1 =
 		
 		particle(pos, vel, self.color, 1);
 	}
-};
-
-void() weather_think =
-{
-	if (self.estate != STATE_ACTIVE)
-	{
-		self.nextthink = -1;
-		return;
-	}
-	
-	if(self.style == 1) snow1(); else snow0();
 	
 	self.nextthink = time + self.delay;
 };
 
 void() func_weather =
 {
-	//style 0: using te_particle builtin functions (extended engines only: FTE, DP, QSS...)
-	//style 1: using custom QuakeC implementation above based on the particle() builtin function
-	
-	self.style = 0;
-	if (self.spawnflags & /*QC*/ 1)
-		self.style = 1;
-	else if (!cvar("pr_checkextension"))
-		self.style = 1;
-	else if(self.skin == /*Rain*/ 1 && !checkextension("DP_TE_PARTICLERAIN"))
-		self.style = 1;
-	else if(!checkextension("DP_TE_PARTICLESNOW"))
-		self.style = 1; /* using a housemade workaround */
-
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	InitTrigger ();
+	self.solid = SOLID_NOT;
+	setmodel (self, self.model);	// set size and link into world
+	self.movetype = MOVETYPE_NONE;
+	self.modelindex = 0;
+	self.model = "";
 	
 	if(!self.delay) self.delay = 0.05;
 	if(!self.count) self.count = 50;
 	if(!self.color) self.color = 13;
 	if(!self.speed) self.speed = 2;
-	if(!self.angles) self.angles = '0 0 0';
 	
 	SUB_CheckWaiting();
 	
