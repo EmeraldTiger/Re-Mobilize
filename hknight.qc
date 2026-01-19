@@ -706,7 +706,7 @@ void() monster_hell_knight =
 	self.th_pain = hknight_pain;
 	else
 	self.th_pain = SUB_NullPain;
-	self.th_die = hknight_die;
+	if (!self.th_die) self.th_die = hknight_die;
 
 	walkmonster_start ();
 };

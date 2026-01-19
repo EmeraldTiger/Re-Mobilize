@@ -986,7 +986,7 @@ void() monster_enforcer =
 		self.th_pain = enf_pain;
 	else
 		self.th_pain = SUB_NullPain;
-	self.th_die = enf_die;
+	if (!self.th_die) self.th_die = enf_die;
 	if (self.style == 1 || self.style == 2 || self.style == 5) // new animation frame check -- dumptruck_ds
 		{
 			if (self.spawnflags & I_AM_TURRET)

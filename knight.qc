@@ -366,7 +366,7 @@ void() monster_knight =
 	self.th_pain = knight_pain;
 	else
 	self.th_pain = SUB_NullPain;
-	self.th_die = knight_die;
+	if (!self.th_die) self.th_die = knight_die;
 
 	walkmonster_start ();
 };

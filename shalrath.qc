@@ -392,7 +392,7 @@ void() monster_shalrath =
 		self.th_run = shal_run1;
 	}
 
-	self.th_die = shalrath_die;
+	if (!self.th_die) self.th_die = shalrath_die;
 	if !(self.berserk) //Berserk test from http://celephais.net/board/view_thread.php?id=4&start=3465 -- dumptruck_ds
 	self.th_pain = shalrath_pain;
 	else

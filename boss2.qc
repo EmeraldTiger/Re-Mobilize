@@ -429,7 +429,7 @@ void() boss2_awake =
 	self.th_run = boss2_missile1;
 
 	self.th_pain = boss2_pain_go;
-	self.th_die = boss2_die;
+	if (!self.th_die) self.th_die = boss2_die;
 
 // give the boss a couple of seconds to finish rising before allowing it
 // to go into its pain animation -- iw

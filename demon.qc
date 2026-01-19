@@ -319,7 +319,7 @@ void() monster_demon1 =
 	self.th_stand = demon1_stand1;
 	self.th_walk = demon1_walk1;
 	self.th_run = demon1_run1;
-	self.th_die = demon_die;
+	if (!self.th_die) self.th_die = demon_die;
 	self.th_melee = Demon_MeleeAttack;		// one of two attacks
 	self.th_missile = demon1_jump1;			// jump attack
   if !(self.berserk) //Berserk test from http://celephais.net/board/view_thread.php?id=4&start=3465 -- dumptruck_ds

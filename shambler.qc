@@ -680,7 +680,7 @@ void() monster_shambler =
 	{
 		self.th_run = sham_run1;
 	}
-	self.th_die = sham_die;
+	if (!self.th_die) self.th_die = sham_die;
 	if (self.style == 1)
 	self.th_melee = sham_melee2;
 	else

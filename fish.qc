@@ -292,7 +292,7 @@ void() monster_fish =
 	self.th_walk = f_walk1;
 	self.th_run = f_run1;
 	// self.th_die = f_death1;
-	self.th_die = fish_die;
+	if (!self.th_die) self.th_die = fish_die;
 	if !(self.berserk) //Berserk from http://celephais.net/board/view_thread.php?id=4&start=3465 -- dumptruck_ds
 	self.th_pain = fish_pain;
 	else

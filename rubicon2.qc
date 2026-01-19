@@ -126,9 +126,9 @@ void() make_breakable_templates_debris = {
 			new = spawn();
 			new.alpha = self.alpha;
 			new.model = self.break_template1;
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+			new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+			new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+			new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 			setmodel (new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
@@ -156,9 +156,9 @@ void() make_breakable_templates_debris = {
 			new = spawn();
 			new.alpha = self.alpha;
 			new.model = self.break_template2;
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+			new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+			new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+			new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 			setmodel (new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
@@ -186,9 +186,9 @@ void() make_breakable_templates_debris = {
 			new = spawn();
 			new.alpha = self.alpha;
 			new.model = self.break_template3;
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+			new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+			new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+			new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 			setmodel (new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
@@ -216,9 +216,9 @@ void() make_breakable_templates_debris = {
 			new = spawn();
 			new.alpha = self.alpha;
 			new.model = self.break_template4;
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+			new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+			new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+			new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 			setmodel (new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
@@ -246,9 +246,9 @@ void() make_breakable_templates_debris = {
 			new = spawn();
 			new.alpha = self.alpha;
 			new.model = self.break_template5;
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
+			new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+			new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+			new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 			setmodel (new, new.model); //dumptruck_ds
 			setsize (new, '0 0 0', '0 0 0');
 			new.velocity = VelocityForDamage (self.health*2);
@@ -283,16 +283,9 @@ void() make_breakable_debris = {
 
 		new = spawn();
 		new.alpha = self.alpha;
-		if(self.origin != '0 0 0')
-		{
-			new.origin = self.origin;
-		}
-		else
-		{
-			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
-			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
-			new.origin_z = (self.maxs_z - self.mins_z)*random() + self.mins_z;
-		}
+		new.origin_x = self.origin_x + (self.maxs_x - self.mins_x)*(random() - 0.5);
+		new.origin_y = self.origin_y + (self.maxs_y - self.mins_y)*(random() - 0.5);
+		new.origin_z = self.origin_z + (self.maxs_z - self.mins_z)*(random() - 0.5);
 		// setmodel (new, "progs/debris.mdl"); this was originally just an mdl from Rubicon2, now you set custom model via spawnflag or use the builtin from Rubicon2 -- dumptruck_ds
 		setmodel (new, self.mdl_debris); //dumptruck_ds
 		setsize (new, '0 0 0', '0 0 0');
@@ -323,12 +316,16 @@ void() make_breakable_debris = {
 };
 
 void () func_breakable_die = {
+
+	if(self.origin == '0 0 0') self.origin = ((self.mins + self.maxs) * 0.5);
+	setorigin (self, self.origin);
+
 	//dumptruck_ds -- set the spawnflag for cosmetic explosion effect; use "dmg" value to hurt the player
 	{
 		local entity ent; //thanks to Qmaster!!! He helped me sort out noise1 playing from 0 0 0 with this temp entity - dumptruck_ds
 
 		ent = spawn();
-		ent.origin = ((self.absmin + self.absmax) * 0.5);
+		ent.origin = self.origin;
 		setsize (ent, '0 0 0', '0 0 0');
 		ent.solid = SOLID_NOT;
 		ent.think = SUB_Remove;
@@ -350,29 +347,23 @@ void () func_breakable_die = {
 	}
 	DislodgeManager.nextthink = time + 1;
 
-	if (self.visitflag & BREAK_EXPLODE) {
-		if (self.visitflag & BREAK_CUSTOM) {
-			make_breakable_templates_debris ();
-		} else {
-			make_breakable_debris ();
-		}
-		func_explobox_explode_silent();  // to let us use noise2
-		// sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM); this is broken as of 1.1.0 no custom explosion sound for now -- dumptruck_ds
-		remove (self);
-	} else {
-		if(self.origin == '0 0 0') self.origin = ((self.absmin + self.absmax) * 0.5);
-		setorigin (self, self.origin);
-		DropStuff();
-		if (self.visitflag & BREAK_CUSTOM) {
-			if (self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
-			make_breakable_templates_debris ();
-			remove (self);
-		} else {
-			if (self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
-			make_breakable_debris ();
-			remove (self);
-		}
+	DropStuff();
+
+	if (self.visitflag & BREAK_CUSTOM)
+	{
+		if (self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
+		make_breakable_templates_debris ();
 	}
+	else
+	{
+		if (self.switchshadstyle) lightstyle(self.switchshadstyle, "m");
+		make_breakable_debris ();
+	}
+
+	if (self.visitflag & BREAK_EXPLODE)
+		func_explobox_explode_silent();  // to let us use noise2
+	
+	remove (self);
 };
 
 void () func_breakable_killed =

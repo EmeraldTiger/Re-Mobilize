@@ -466,7 +466,7 @@ void() monster_dog =
 		self.th_pain = dog_pain;
 	else
 		self.th_pain = SUB_NullPain;
-	self.th_die = dog_die;
+	if (!self.th_die) self.th_die = dog_die;
 	self.th_melee = dog_atta1;
 	self.th_missile = dog_leap1;
 

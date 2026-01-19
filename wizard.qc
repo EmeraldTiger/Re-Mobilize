@@ -543,7 +543,7 @@ void() monster_wizard =
 	self.th_pain = Wiz_Pain;
 	else
 	self.th_pain = SUB_NullPain;
-	self.th_die = wiz_die;
+	if (!self.th_die) self.th_die = wiz_die;
 
 	flymonster_start ();
 };

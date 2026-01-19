@@ -663,7 +663,7 @@ void() monster_army =
 	self.th_pain = army_pain;
 	else
 	self.th_pain = SUB_NullPain;
-	self.th_die = army_die;
+	if (!self.th_die) self.th_die = army_die;
 
 	walkmonster_start ();
 };
