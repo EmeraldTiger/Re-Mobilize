@@ -774,9 +774,6 @@ void(entity e) setspawnparms		= #78;		// set parm1... to the
 												// for coop respawn
 
 //============================================================================
-float(string extname) checkextension = #99;
-void(vector mincorner, vector maxcorner, vector vel, float howmany, float color) te_particlerain = #409; /* Part of DP_TE_PARTICLERAIN*/
-void(vector mincorner, vector maxcorner, vector vel, float howmany, float color) te_particlesnow = #410; /* Part of DP_TE_PARTICLESNOW*/
 
 //
 // subs.qc
