@@ -278,7 +278,7 @@ void() monster_tarbaby =
 	self.th_run = tbaby_run1;
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
-	self.th_die = tbaby_die1;
+	if (!self.th_die) self.th_die = tbaby_die1;
 
 	walkmonster_start ();
 };

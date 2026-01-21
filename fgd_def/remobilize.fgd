@@ -279,6 +279,7 @@ Can only use default health, models and sounds.
 		2: "Don't spawn angry" : 0
 		4: "Don't add to count" : 0
 		32: "Silent spawn" : 0
+		16384: "Gib on death" : 0
 		]
 style(Choices) =
 [
@@ -680,6 +681,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		32 : "No Sight Sound" : 0
 		64 : "Passive until attacked" : 0
 		128 : "Passive always" : 0
+		16384: "Gib on death" : 0
 		2097152 : "Spawn Silently" : 0
 		4194304 : "No bouncing" : 0
 	]
@@ -1641,7 +1643,7 @@ targetname = Must be triggered"
 	fly_sound(integer) : "Play gib sound effects" : 0
 ]
 
-@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 200 300) = ltrail_start : "Starting point of a lightning trail. See the manual for set up steps.
+@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 200 255) = ltrail_start : "Starting point of a lightning trail. See the manual for set up steps.
 
 Set currentammo key to amount of damage you want the lightning to do.
 Default is 25.
@@ -1682,7 +1684,7 @@ Default is 0.3 seconds.
 	frags(float) : "Time before next trigger" : "0.3"
 ]
 
-@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 150 300) = ltrail_relay : "Relay point of a lightning trail.
+@PointClass base(Appearflags, OneTarget, OneTargetname) size(16 16 16) color(0 150 255) = ltrail_relay : "Relay point of a lightning trail.
 
 Set currentammo to amount of damage you want the lightning to do.
 Default is 25.
@@ -4185,4 +4187,19 @@ Acts similarly to a frictionless surface like oil or ice, which can be used to a
 	noise2(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise3, and noise4."
 	noise3(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise4."
 	noise4(string) : "Sound file for a custom 'sliding' sound. Plays randomly alongside noise, noise2, and noise3."
+]
+
+@SolidClass base(Appearflags, TriggerWait) = func_weather : "Brush volume inside which rain or snow is falling.
+
+By adjusting the particle count, color and speed, you can decently mimic snow, rain, dust, fire sparks, upwards magic bubbling, etc.
+
+If the brush is oriented (i.e. has its angles property set, materialized in TrenchBroom by the white triangle inside the brush) it indicates in which direction the particles are pushed by the wind.
+Only the x y coordinates are taken into account for the wind. angles_z is ignored.
+"
+[
+	angles(string) : "Wind direction (x y 0)" : "0 0 0"
+	color(float) : "Palette index for color" : 13
+	count(float) : "Fall density" : 50
+	delay(float) : "Fall pacing" : 0.05
+	speed(integer) : "Vertical fall speed (the higher the closer to rain fall; negative speed falls up)" : 2
 ]

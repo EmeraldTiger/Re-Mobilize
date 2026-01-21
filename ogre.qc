@@ -1202,7 +1202,7 @@ void()	ogre_bdie10	=[	$bdeath10,	ogre_bdie10	] {};
 void() ogre_die =
 {
 // check for gib
-	if (self.health < -80)
+	if (self.health < -80 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls
@@ -1388,7 +1388,7 @@ void() monster_ogre =
 	{
 		self.th_run = ogre_run1;
 	}
-	self.th_die = ogre_die;
+	if (!self.th_die) self.th_die = ogre_die;
 	self.th_melee = ogre_melee;
 	self.th_missile = ogre_nail1;
 	self.th_turret = ogre_turret_attack1; //dumptruck_ds
@@ -1513,7 +1513,7 @@ void() monster_ogre_marksman =
 	{
 		self.th_run = ogre_run1;
 	}
-	self.th_die = ogre_die;
+	if (!self.th_die) self.th_die = ogre_die;
 	self.th_melee = ogre_melee;
 	self.th_missile = ogre2_nail1;
 	self.th_turret = ogre2_turret_attack1; //dumptruck_ds

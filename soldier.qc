@@ -477,7 +477,7 @@ void()	army_cdie11	=[	$deathc11,	army_cdie11	] {};
 void() army_die =
 {
 // check for gib
-	if (self.health < -35)
+	if (self.health < -35 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls
@@ -663,7 +663,7 @@ void() monster_army =
 	self.th_pain = army_pain;
 	else
 	self.th_pain = SUB_NullPain;
-	self.th_die = army_die;
+	if (!self.th_die) self.th_die = army_die;
 
 	walkmonster_start ();
 };

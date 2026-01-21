@@ -1884,6 +1884,13 @@ void(entity e, float state, float flags) entity_set_state = {
 		play_sound_use();
 		self = tempself;
 	}
+	else if(e.classname == "func_weather" && state != entity_get_state(e)) {
+		e.estate = state;
+		tempself = self;
+		self = e;
+		weather_think();
+		self = tempself;
+	}
 	else e.estate = state;
 
 	if (e.is_waiting > 0 && state == STATE_ACTIVE) {

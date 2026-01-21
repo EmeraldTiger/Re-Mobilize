@@ -48,8 +48,11 @@ local entity bot, spawn_spot;
 	bot.fixangle = TRUE;
 	bot.proj_speed_mod = 1;
 	if (!(self.spawnflags & MOBOT_SILENT_SPAWN)) 			// SILENT
-	spawn_tfog (bot.origin);
+		spawn_tfog (bot.origin);
 	spawn_tdeath (bot.origin, bot);
+
+	if (self.spawnflags & /*Gib on death*/ 16384)
+		bot.spawnflags = 16384;
 
 	if (self.style == 1) // spawn a Doggo
 	{

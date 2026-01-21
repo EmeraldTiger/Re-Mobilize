@@ -843,7 +843,7 @@ void() monster_zombie =
 	}
 
 	self.th_pain = zombie_pain;
-	self.th_die = zombie_die;
+	if (!self.th_die) self.th_die = zombie_die;
 	self.th_turret = zombie_turret_missile;
 	self.th_missile = zombie_missile;
 	self.solid = SOLID_SLIDEBOX;

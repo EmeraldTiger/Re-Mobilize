@@ -169,7 +169,7 @@ void()	demon1_die9		=[	$death9,		demon1_die9 ] {};
 void() demon_die =
 {
 // check for gib
-	if (self.health < -80)
+	if (self.health < -80 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
     if (self.mdl_head != "")
@@ -319,7 +319,7 @@ void() monster_demon1 =
 	self.th_stand = demon1_stand1;
 	self.th_walk = demon1_walk1;
 	self.th_run = demon1_run1;
-	self.th_die = demon_die;
+	if (!self.th_die) self.th_die = demon_die;
 	self.th_melee = Demon_MeleeAttack;		// one of two attacks
 	self.th_missile = demon1_jump1;			// jump attack
   if !(self.berserk) //Berserk test from http://celephais.net/board/view_thread.php?id=4&start=3465 -- dumptruck_ds

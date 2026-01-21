@@ -64,3 +64,57 @@ void() trigger_slippery =
 	
 	SUB_CheckWaiting();
 };
+
+void() weather_think =
+{
+	if (self.estate != STATE_ACTIVE)
+	{
+		self.nextthink = -1;
+		return;
+	}
+	
+	vector pos;
+	
+	vector vel;
+	if(self.angles_x != 0) vel_x = self.angles_x+20*(random()-0.5);
+	if(self.angles_y != 0) vel_y = self.angles_y+20*(random()-0.5);
+	vel = normalize(vel)*self.speed;
+	vel_z = -1*self.speed;
+
+	for (float i = 0; i < self.count; i++)
+	{
+		pos_x = self.mins_x + (fabs(self.maxs_x-self.mins_x))*random();
+		pos_y = self.mins_y + (fabs(self.maxs_y-self.mins_y))*random();
+		pos_z = self.mins_z + (fabs(self.maxs_z-self.mins_z))*random();
+		
+		particle(pos, vel, self.color, 1);
+	}
+	
+	self.nextthink = time + self.delay;
+};
+
+void() func_weather =
+{
+	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
+		return;
+
+	self.solid = SOLID_NOT;
+	setmodel (self, self.model);	// set size and link into world
+	self.movetype = MOVETYPE_NONE;
+	self.modelindex = 0;
+	self.model = "";
+	
+	if(!self.delay) self.delay = 0.05;
+	if(!self.count) self.count = 50;
+	if(!self.color) self.color = 13;
+	if(!self.speed) self.speed = 2;
+	
+	SUB_CheckWaiting();
+	
+	self.think = weather_think;
+	
+	if(self.estate == STATE_ACTIVE)
+		self.nextthink = time + self.delay;
+	else
+		self.use = weather_think;
+};

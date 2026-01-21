@@ -128,7 +128,7 @@ void(entity attacker, float damage) shalrath_pain =
 void() shalrath_die =
 {
 // check for gib
-	if (self.health < -90)
+	if (self.health < -90 || self.spawnflags & /*Gib on death*/ 16384)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		if (self.mdl_head != "") //dumptruck_ds custom_mdls
@@ -392,7 +392,7 @@ void() monster_shalrath =
 		self.th_run = shal_run1;
 	}
 
-	self.th_die = shalrath_die;
+	if (!self.th_die) self.th_die = shalrath_die;
 	if !(self.berserk) //Berserk test from http://celephais.net/board/view_thread.php?id=4&start=3465 -- dumptruck_ds
 	self.th_pain = shalrath_pain;
 	else
