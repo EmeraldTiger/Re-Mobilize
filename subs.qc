@@ -376,6 +376,7 @@ void() SUB_UseTargets =
 		t.nextthink = time + self.delay;
 		t.think = DelayThink;
 		t.enemy = activator;
+		t.noise = self.noise;
 		t.message = self.message;
 		t.killtarget = self.killtarget;
 		t.killtarget2 = self.killtarget2;
@@ -397,7 +398,9 @@ void() SUB_UseTargets =
 				while (t)
 				{
 					centerprint (t, self.message);
-					if (!self.noise)
+					if (self.noise)
+						sound (t, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+					else
 						sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 					t = find(t, classname, "player");
 				}
@@ -407,7 +410,9 @@ void() SUB_UseTargets =
 				if(t)
 				{
 					centerprint (t, self.message);
-					if (!self.noise)
+					if (self.noise)
+						sound (t, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+					else
 						sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 				}
 			}
@@ -415,8 +420,10 @@ void() SUB_UseTargets =
 		
 		else if (activator.classname == "player") {
 			centerprint (activator, self.message);
-			if (!self.noise)
-				sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+				if (self.noise)
+					sound (t, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+				else
+					sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 		}	
 	}
 

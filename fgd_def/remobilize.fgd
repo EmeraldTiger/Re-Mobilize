@@ -2322,6 +2322,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 		2 : "Metallic clink"
 		3 : "In-out"
 	]
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 	wait(string) : "Wait before reset" : "1"
 	delay(string) : "Delay before trigger"
 	message(string) : "Message"
@@ -2851,6 +2852,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 ]
 @PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 ]
 @SolidClass base(Appearflags, TriggerWait, FilterTouch, Homing) = trigger_take_weapon : "
 Trigger: Remove weapon (and/or ammo) on touch.
