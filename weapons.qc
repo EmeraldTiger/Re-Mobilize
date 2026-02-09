@@ -487,11 +487,10 @@ void() s_explode7
 {
 	// Can be set on play_explosion to prevent it from self-deleting
 	// Useful for repeated explosions that have a delay longer than 6 frames
-	if (!self.keep_ammo) 
-	{
+	if (self.keep_ammo) 
+		setmodel (self, "progs/s_null.spr");
+	else
 		remove(self);
-	}
-	setmodel (self, "progs/s_null.spr");
 };
 
 void() BecomeExplosion =
