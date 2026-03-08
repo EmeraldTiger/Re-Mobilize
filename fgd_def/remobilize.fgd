@@ -2326,7 +2326,7 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 	wait(choices) : "Wait before reset" : 1 =
 	[
 		-1 : "Stay pressed forever"
-		-2 : "Stay pressed inactive, can return to active/unpressed and usable again by means of trigger_setstate"
+		-2 : "Stay pressed inactive; can be reset by means of trigger_setstate"
 	]
 	delay(string) : "Delay before trigger"
 	message(string) : "Message"
