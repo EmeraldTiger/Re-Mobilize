@@ -2323,7 +2323,11 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 		3 : "In-out"
 	]
 	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
-	wait(string) : "Wait before reset" : "1"
+	wait(choices) : "Wait before reset" : 1 =
+	[
+		-1 : "Stay pressed forever"
+		-2 : "Stay pressed inactive, can return to active/unpressed and usable again by means of trigger_setstate"
+	]
 	delay(string) : "Delay before trigger"
 	message(string) : "Message"
 	_shadow(integer) : "Shadows"
