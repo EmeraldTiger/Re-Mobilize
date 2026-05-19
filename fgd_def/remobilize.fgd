@@ -683,7 +683,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		128 : "Passive always" : 0
 		16384: "Gib on death" : 0
 		2097152 : "Spawn Silently" : 0
-		4194304 : "No bouncing" : 0
+		4194304 : "No bouncing on trampolines" : 0
 	]
 	delay(choices) : "Trigger spawn delay time" : : "Delay spawn in for this amount of time" =
 	[
@@ -2105,6 +2105,13 @@ killtarget & killtarget2 never fired; use a relay instead.
 		4 : "Move down first" : 0
 		8 : "Not shootable" : 0
         16 : "Always shootable" : 0
+		128: "Staged targets" : 0 : "
+target fired when the door starts opening,
+target2 fired when the door is open,
+target3 fired when the door starts closing,
+target4 fired when the door is closed
+killtarget & killtarget2 never fired; use a relay instead.
+"
 	]
 ]
 
@@ -2653,6 +2660,7 @@ Check each field's description for more details.
 
 @SolidClass base(Appearflags) = func_episodegate : "Episode Gate"
 [
+	message(string) : "Message (optional)"
 	spawnflags(Flags) =
 	[
 		1 : "Episode 1" : 1

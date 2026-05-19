@@ -1407,6 +1407,7 @@ void() func_episodegate =
 	self.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
+	self.touch = secret_touch;
 	setmodel (self, self.model);
 };
 
