@@ -421,9 +421,9 @@ void() SUB_UseTargets =
 		else if (activator.classname == "player") {
 			centerprint (activator, self.message);
 				if (self.noise)
-					sound (t, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+					sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 				else
-					sound (t, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+					sound (self, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 		}	
 	}
 
