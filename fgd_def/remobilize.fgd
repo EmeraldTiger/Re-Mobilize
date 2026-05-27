@@ -634,6 +634,8 @@ The behavior of an item_key_custom should be as the player expects (based on the
 	) =
 	item_sigil : "Sigil"
 [
+	message(string) : "Custom pickup message"
+	noise(string) : "Custom pickup sound file"
 	spawnflags(Flags) =
 	[
 		1 : "Episode 1" : 1
