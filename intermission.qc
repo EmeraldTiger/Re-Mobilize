@@ -133,12 +133,23 @@ entity() FindIntermission =
 	spot = find (world, targetname, self.target);
 	if (spot != world && spot.classname == "info_intermission")
 		return spot;
+
+	//Count how many info_intermissions there are in the map
+	float cnt = 0;
+	spot = world;
+	do
+	{
+		spot = find (spot, classname, "info_intermission");
+		if (!spot) break;
+		if(spot.estate == STATE_INACTIVE) continue;
+		cnt++;
+	} while (1);
 	
-// look for info_intermission first
+	// check there is at least 1 info_intermission
 	spot = find (world, classname, "info_intermission");
 	if (spot)
 	{	// pick a random one
-		cyc = random() * 4;
+		cyc = random() * cnt;
 		while (cyc > 1)
 		{
 			spot = find (spot, classname, "info_intermission");
@@ -149,7 +160,7 @@ entity() FindIntermission =
 		return spot;
 	}
 
-// then look for the start position
+	// Otherwise, look for the start position
 	spot = find (world, classname, "info_player_start");
 	if (spot)
 		return spot;
