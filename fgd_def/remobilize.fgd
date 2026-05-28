@@ -2661,7 +2661,7 @@ Check each field's description for more details.
 	]
 ]
 
-@SolidClass base(Appearflags) = func_episodegate : "Episode Gate"
+@SolidClass base(Appearflags, Target) = func_episodegate : "Episode Gate"
 [
 	message(string) : "Message (optional)"
 	spawnflags(Flags) =

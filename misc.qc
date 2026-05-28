@@ -1409,6 +1409,10 @@ void() func_episodegate =
 	self.use = func_wall_use;
 	self.touch = secret_touch;
 	setmodel (self, self.model);
+	//Fire targets if any
+	self.flags = FL_NOCENTERPRINT;
+	self.think = SUB_UseTargets;
+	self.nextthink = time + 0.2;
 };
 
 /*QUAKED func_bossgate (0 .5 .8) ? X X X X REVERSE_FUNCTIONALITY
