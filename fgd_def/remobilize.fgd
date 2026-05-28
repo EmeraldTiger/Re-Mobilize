@@ -2810,7 +2810,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
 
-@SolidClass base(Appearflags, OneTarget, Targetname, TriggerWait) = trigger_teleport : "Trigger: Teleporter
+@SolidClass base(Appearflags, OneTarget, Targetname, TriggerWait, Homing) = trigger_teleport : "Trigger: Teleporter
 
 Any object touching this will be transported to the corresponding
 info_teleport_destination entity. Or if RANDOM is chosen, info_teleport_random
@@ -2845,6 +2845,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 		4 : "Random" : 0
 		8 : "Stealth" : 0
 		16 : "Monster only" : 0
+		32 : "Directional" : 0
 	]
 	count(integer) : "Number of info_teleport_random entities" : : "Number of info_teleport_random entities"
 	is_waiting(choices) : "Trigger" : 0 =
