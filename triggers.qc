@@ -235,6 +235,9 @@ void() trigger_relay =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
+	if (self.noise)
+		precache_sound (self.noise);
+
 	self.use = SUB_UseTargets;
 };
 
@@ -405,7 +408,6 @@ float	SILENT = 2;
 float RANDOM = 4;
 float TELE_STEALTH = 8;
 float MONSTER_ONLY = 16;
-float TELE_DD = 32;
 
 void() play_teleport =
 {
@@ -606,13 +608,19 @@ local vector	org;
 	if (other.health <= 0 || other.solid != SOLID_SLIDEBOX)
 		return;
 
+	// if the trigger is directional has an angles field, check player's facing direction
+	if (self.spawnflags & /*Directional*/32 && self.movedir != '0 0 0')
+	{
+		makevectors (other.angles);
+		if (!(v_forward * self.movedir >= self.homing)) //self.homing is the minimum accuracy; default is 0 (up to 90° away from the ideal direction); up to 1 (exactly the ideal direction, no compromise!)
+			return;		// not facing the right way
+	}
+
 	SUB_UseTargets ();
 
 	//dhm - if this is a random teleporter, pick a random spot!
 	if (self.spawnflags & RANDOM)
 		t = teleport_randomspot();
-	else if ((self.spawnflags & TELE_DD) && other.classname == "player")
-		t = find (world, targetname, self.noise);
 	else
 		t = find (world, targetname, self.target);
 

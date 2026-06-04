@@ -133,12 +133,23 @@ entity() FindIntermission =
 	spot = find (world, targetname, self.target);
 	if (spot != world && spot.classname == "info_intermission")
 		return spot;
+
+	//Count how many info_intermissions there are in the map
+	float cnt = 0;
+	spot = world;
+	do
+	{
+		spot = find (spot, classname, "info_intermission");
+		if (!spot) break;
+		if(spot.estate == STATE_INACTIVE) continue;
+		cnt++;
+	} while (1);
 	
-// look for info_intermission first
+	// check there is at least 1 info_intermission
 	spot = find (world, classname, "info_intermission");
 	if (spot)
 	{	// pick a random one
-		cyc = random() * 4;
+		cyc = random() * cnt;
 		while (cyc > 1)
 		{
 			spot = find (spot, classname, "info_intermission");
@@ -149,7 +160,7 @@ entity() FindIntermission =
 		return spot;
 	}
 
-// then look for the start position
+	// Otherwise, look for the start position
 	spot = find (world, classname, "info_player_start");
 	if (spot)
 		return spot;
@@ -246,9 +257,13 @@ void() ExitIntermission =
 		}
 		if ( (serverflags&15) == 15)
 		{
-			ShowIntermissionMessage("Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
+			if(used_exit.obit_name == "0")
+				return;
+			else if(used_exit.obit_name != "")
+				ShowIntermissionMessage(used_exit.obit_name);
+			else
+				ShowIntermissionMessage("Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
 			return;
-
 		}
 
 	}

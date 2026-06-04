@@ -1864,7 +1864,7 @@ void() sigil_touch =
 	// from Copper -- dumptruck_ds
 	if (!CheckValidTouch()) return;
 
-	centerprint (other, "You got the rune!");
+	centerprint (other, self.message);
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
@@ -1922,8 +1922,10 @@ void() item_sigil =
 	if (!self.spawnflags)
 		objerror ("no spawnflags");
 
-	precache_sound ("misc/runekey.wav");
-	self.noise = "misc/runekey.wav";
+	if(!self.noise) self.noise = "misc/runekey.wav";
+	precache_sound (self.noise);
+	
+	if(!self.message) self.message = "You got the rune!";
 
 	if (self.spawnflags & 1)
 	{

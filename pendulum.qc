@@ -411,7 +411,6 @@ void() trap_pendulum =
 		self.delay = 1;
 		
 	impactVelocity = 0;
-	self.takedamage = DAMAGE_YES;
 	self.touch = pend_touch;
 	self.use = pend_use;
 	

@@ -11,11 +11,20 @@ void() button_wait =
 	activator = self.enemy;
 	self.frame = 1;			// use alternate textures
 
+	//wait -2 must be treated specifically:
+	//when reaching this line, the button has already been set inactive even before the button has finished moving
+	//if must be set active again temporarily, so that its targets can be fired
+	if (self.wait == -2)
+		self.estate = STATE_ACTIVE;
+		
 	if (self.estate != STATE_ACTIVE)
 		return;
 	
 	SUB_UseTargets();
-	
+
+	//button with wait -2 can now safely be set inactive for good
+	if (self.wait == -2)
+		self.estate = STATE_INACTIVE;	
 };
 
 void() button_done =
@@ -42,15 +51,24 @@ void() button_blocked =
 
 void() button_fire =
 {
-	if (self.estate != STATE_ACTIVE) return;
+	if (self.wait == -2) //Button stays pressed and switches itself inactive, waiting to be returned later for further use
+	{
+		if (self.estate != STATE_ACTIVE) return;
+		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		button_lock(self);
+	}
+	else
+	{
+		if (self.estate != STATE_ACTIVE) return;
 
-	if (self.state == STATE_UP || self.state == STATE_TOP)
-		return;
+		if (self.state == STATE_UP || self.state == STATE_TOP)
+			return;
 
-	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
-	self.state = STATE_UP;
-	SUB_CalcMove (self.pos2, self.speed, button_wait);
+		self.state = STATE_UP;
+		SUB_CalcMove (self.pos2, self.speed, button_wait);
+	}
 };
 
 
@@ -152,25 +170,32 @@ void() func_button =
 	if (SUB_Inhibit ())  // new spawnflags for all entities -- iw
 		return;
 
-	if (self.sounds == 0)
+	if (!self.noise)
 	{
-		precache_sound ("buttons/airbut1.wav");
-		self.noise = "buttons/airbut1.wav";
+		if (self.sounds == 0)
+		{
+			precache_sound ("buttons/airbut1.wav");
+			self.noise = "buttons/airbut1.wav";
+		}
+		if (self.sounds == 1)
+		{
+			precache_sound ("buttons/switch21.wav");
+			self.noise = "buttons/switch21.wav";
+		}
+		if (self.sounds == 2)
+		{
+			precache_sound ("buttons/switch02.wav");
+			self.noise = "buttons/switch02.wav";
+		}
+		if (self.sounds == 3)
+		{
+			precache_sound ("buttons/switch04.wav");
+			self.noise = "buttons/switch04.wav";
+		}
 	}
-	if (self.sounds == 1)
+	else
 	{
-		precache_sound ("buttons/switch21.wav");
-		self.noise = "buttons/switch21.wav";
-	}
-	if (self.sounds == 2)
-	{
-		precache_sound ("buttons/switch02.wav");
-		self.noise = "buttons/switch02.wav";
-	}
-	if (self.sounds == 3)
-	{
-		precache_sound ("buttons/switch04.wav");
-		self.noise = "buttons/switch04.wav";
+		precache_sound (self.noise);
 	}
 
 	SetMovedir ();

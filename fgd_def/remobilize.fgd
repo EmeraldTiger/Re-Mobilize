@@ -634,6 +634,8 @@ The behavior of an item_key_custom should be as the player expects (based on the
 	) =
 	item_sigil : "Sigil"
 [
+	message(string) : "Custom pickup message"
+	noise(string) : "Custom pickup sound file"
 	spawnflags(Flags) =
 	[
 		1 : "Episode 1" : 1
@@ -683,7 +685,7 @@ The behavior of an item_key_custom should be as the player expects (based on the
 		128 : "Passive always" : 0
 		16384: "Gib on death" : 0
 		2097152 : "Spawn Silently" : 0
-		4194304 : "No bouncing" : 0
+		4194304 : "No bouncing on trampolines" : 0
 	]
 	delay(choices) : "Trigger spawn delay time" : : "Delay spawn in for this amount of time" =
 	[
@@ -2105,6 +2107,13 @@ killtarget & killtarget2 never fired; use a relay instead.
 		4 : "Move down first" : 0
 		8 : "Not shootable" : 0
         16 : "Always shootable" : 0
+		128: "Staged targets" : 0 : "
+target fired when the door starts opening,
+target2 fired when the door is open,
+target3 fired when the door starts closing,
+target4 fired when the door is closed
+killtarget & killtarget2 never fired; use a relay instead.
+"
 	]
 ]
 
@@ -2322,7 +2331,12 @@ NOTE: To have a continuous stream use a func_counter as the target, then set the
 		2 : "Metallic clink"
 		3 : "In-out"
 	]
-	wait(string) : "Wait before reset" : "1"
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
+	wait(choices) : "Wait before reset" : 1 =
+	[
+		-1 : "Stay pressed forever"
+		-2 : "Stay pressed inactive; can be reset by means of trigger_setstate"
+	]
 	delay(string) : "Delay before trigger"
 	message(string) : "Message"
 	_shadow(integer) : "Shadows"
@@ -2388,6 +2402,7 @@ The flags above are mutually exclusive and will cause an objerror when selected 
 	noise2(string) : "Custom corner sound, for when the train crosses a path_corner without stopping"
 	spawnflags(flags) =
 	[
+		1: "(unused)" : 0
 		2: "Move on trigger" : 0
 		4: "Stop on trigger" : 0
 		8: "Non-solid" : 0
@@ -2646,8 +2661,9 @@ Check each field's description for more details.
 	]
 ]
 
-@SolidClass base(Appearflags) = func_episodegate : "Episode Gate"
+@SolidClass base(Appearflags, Target) = func_episodegate : "Episode Gate"
 [
+	message(string) : "Message (optional)"
 	spawnflags(Flags) =
 	[
 		1 : "Episode 1" : 1
@@ -2694,6 +2710,7 @@ Check each field's description for more details.
 	map(string) : "Next map"
 	//target(target_destination) : "Target"
 	message(string) : "Message to show on intermission screen."
+	obit_name(string) : "Message to show once all runes collected (set to 0 for no message)."
 	sounds(integer) : "Music track to play on intermission screen" : 3
 	spawnflags(flags) =
 	[
@@ -2794,7 +2811,7 @@ NOTE: You must specify either the silver or gold key by setting the relevant spa
 	spawnflags(flags) = [ 1: "Not touchable" : 0 ]
 ]
 
-@SolidClass base(Appearflags, OneTarget, Targetname, TriggerWait) = trigger_teleport : "Trigger: Teleporter
+@SolidClass base(Appearflags, OneTarget, Targetname, TriggerWait, Homing) = trigger_teleport : "Trigger: Teleporter
 
 Any object touching this will be transported to the corresponding
 info_teleport_destination entity. Or if RANDOM is chosen, info_teleport_random
@@ -2829,6 +2846,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 		4 : "Random" : 0
 		8 : "Stealth" : 0
 		16 : "Monster only" : 0
+		32 : "Directional" : 0
 	]
 	count(integer) : "Number of info_teleport_random entities" : : "Number of info_teleport_random entities"
 	is_waiting(choices) : "Trigger" : 0 =
@@ -2851,6 +2869,7 @@ don't forget to check the 'Slient' spawnflag so the player has no clue!
 ]
 @PointClass base(Trigger) color(0 192 192)= trigger_relay : "Trigger: Relay"
 [
+	noise(string) : "Custom sound file to play when triggered. Overrides sounds."
 ]
 @SolidClass base(Appearflags, TriggerWait, FilterTouch, Homing) = trigger_take_weapon : "
 Trigger: Remove weapon (and/or ammo) on touch.

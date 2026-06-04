@@ -847,7 +847,26 @@ void () fd_secret_use =
 
 	self.message = string_null;		// no more message
 
-	SUB_UseTargets();				// fire all targets / killtargets
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target!="")
+		{
+			string otarget2 = self.target2;
+			string otarget3 = self.target3;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target2 = self.target3 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target2 = otarget2;
+			self.target3 = otarget3;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	else
+		SUB_UseTargets();				// fire all targets / killtargets
 
 	if (!(self.spawnflags & SECRET_NO_SHOOT))
 	{
@@ -880,6 +899,8 @@ void () fd_secret_use =
 	else
 		self.dest1 = self.origin + v_right * (self.t_width * temp);
 
+	self.frame = 1 - self.frame;
+	
 	self.dest2 = self.dest1 + v_forward * (self.t_length - self.lip);
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move1);
 	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
@@ -906,6 +927,25 @@ void () fd_secret_move2 =
 // Wait here until time to go back...
 void () fd_secret_move3 =
 {
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target2!="")
+		{
+			string otarget = self.target;
+			string otarget3 = self.target3;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target3 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target3 = otarget3;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	
 	self.state = /*Open*/2;
 	if (self.noise3 != "0") sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 	if (!(self.spawnflags & SECRET_OPEN_ONCE))
@@ -918,6 +958,25 @@ void () fd_secret_move3 =
 // Move backward...
 void () fd_secret_move4 =
 {
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target3!="")
+		{
+			string otarget = self.target;
+			string otarget2 = self.target2;
+			string otarget4 = self.target4;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target2 = self.target4 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target2 = otarget2;
+			self.target4 = otarget4;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	
 	sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move5);
 };
@@ -939,6 +998,26 @@ void () fd_secret_move6 =
 
 void () fd_secret_done =
 {
+	if (self.spawnflags & /*Staged targets*/ 128)
+	{
+		if (self.target4!="")
+		{
+			string otarget = self.target;
+			string otarget2 = self.target2;
+			string otarget3 = self.target3;
+			string okilltarget = self.killtarget;
+			string okilltarget2 = self.killtarget2;
+			self.target = self.target2 = self.target3 = self.killtarget = self.killtarget2 = "";
+			SUB_UseTargets();
+			self.target = otarget;
+			self.target2 = otarget2;
+			self.target3 = otarget3;
+			self.killtarget = okilltarget;
+			self.killtarget2 = okilltarget2;
+		}
+	}
+	
+	self.frame = 1 - self.frame;
 	self.state = /*Closed*/0;
 	if (!self.targetname || self.spawnflags&SECRET_YES_SHOOT)
 	{

@@ -850,15 +850,16 @@ void() CheckGrapple =
         dist = vlen(loc_trace_endpos - self.origin);
         new.angles = vectoangles(self.origin - loc_trace_endpos);
         
-        if (loc_trace_ent.volume) {
+        if (loc_trace_ent.volume)
             self.volume = 1;
-        }
-        else {
+        else
             self.volume = 0;
-        }
         
-        player_aim = player_offset + (v_forward * loc_trace_ent.lip);
-        new.origin = player_aim;
+		if(dist > loc_trace_ent.lip + 16)
+		{
+			player_aim = player_offset + (v_forward * loc_trace_ent.lip);
+			new.origin = player_aim;
+		}
         
         if(!(loc_trace_ent.spawnflags & /*Non rotating tracer*/4))
             new.angles[2] = (time * 100) % 360;

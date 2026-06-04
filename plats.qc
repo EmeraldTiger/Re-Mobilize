@@ -215,7 +215,7 @@ void() func_plat =
 void() train_next;
 void() func_train_find;
 
-float TRAIN_RETRIGGER = 1;
+//float TRAIN_RETRIGGER = 1; //TRAIN_RETRIGGER was a leftover of a pre-pd3.0 implementation. pd 3.0 introduced a breaking change around it, see pd3.0 manual.
 float TRAIN_MOVEONTRIGGER = 2; 
 float TRAIN_STOPONTRIGGER = 4;
 float TRAIN_NONSOLID = 8;
@@ -321,7 +321,7 @@ void() train_wait = {
 	self.think = train_next;
 
 	// train is moving normally and path_corner has a wait set, so pause for that time.
-	if (self.wait > 0 && self.plat2GoTo == TRAIN_NEXT_WAIT && !(self.spawnflags & TRAIN_RETRIGGER)) {
+	if (self.wait > 0 && self.plat2GoTo == TRAIN_NEXT_WAIT /*&& !(self.spawnflags & TRAIN_RETRIGGER)*/) { //TRAIN_RETRIGGER was a leftover of a pre-pd3.0 implementation. pd 3.0 introduced a breaking change around it, see pd3.0 manual.
 		// state: stopped
 		self.state = 0;
 		if (self.classname == "misc_modeltrain") SUB_CallAsSelf(self.animcontroller.think, self.animcontroller);
@@ -333,7 +333,7 @@ void() train_wait = {
 	}
 	// train is moving normally and path_corner has no wait time,
 	// or has been forced to move instantly through a triggering.
-	else if (self.plat2GoTo != TRAIN_NEXT_STOP && !self.wait && !(self.spawnflags & TRAIN_RETRIGGER)) {
+	else if (self.plat2GoTo != TRAIN_NEXT_STOP && !self.wait /*&& !(self.spawnflags & TRAIN_RETRIGGER)*/) { //TRAIN_RETRIGGER was a leftover of a pre-pd3.0 implementation. pd 3.0 introduced a breaking change around it, see pd3.0 manual.
 
 		//play "passing by" sound, if any. If path_corner has a custom one, play that instead
 		if (self.enemy.noise2 != "") sound(self, CHAN_WEAPON, self.enemy.noise2, 1, ATTN_NORM);

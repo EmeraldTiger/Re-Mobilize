@@ -1407,7 +1407,12 @@ void() func_episodegate =
 	self.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
+	self.touch = secret_touch;
 	setmodel (self, self.model);
+	//Fire targets if any
+	self.flags = FL_NOCENTERPRINT;
+	self.think = SUB_UseTargets;
+	self.nextthink = time + 0.2;
 };
 
 /*QUAKED func_bossgate (0 .5 .8) ? X X X X REVERSE_FUNCTIONALITY
