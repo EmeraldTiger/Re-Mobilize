@@ -257,9 +257,13 @@ void() ExitIntermission =
 		}
 		if ( (serverflags&15) == 15)
 		{
-			ShowIntermissionMessage("Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
+			if(used_exit.obit_name == "0")
+				return;
+			else if(used_exit.obit_name != "")
+				ShowIntermissionMessage(used_exit.obit_name);
+			else
+				ShowIntermissionMessage("Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
 			return;
-
 		}
 
 	}

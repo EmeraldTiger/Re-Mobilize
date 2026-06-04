@@ -2710,6 +2710,7 @@ Check each field's description for more details.
 	map(string) : "Next map"
 	//target(target_destination) : "Target"
 	message(string) : "Message to show on intermission screen."
+	obit_name(string) : "Message to show once all runes collected (set to 0 for no message)."
 	sounds(integer) : "Music track to play on intermission screen" : 3
 	spawnflags(flags) =
 	[
